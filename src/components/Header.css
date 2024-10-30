@@ -1,0 +1,44 @@
+/* src/components/Header.css */
+.header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-right: auto;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-btn {
+  margin: 0 15px;
+  text-decoration: none;
+  color: #fff;
+  transition: color 0.3s ease;
+}
+
+.nav-btn:hover {
+  color: #D96666;
+}
+
+.login-btn .login-signin {
+  background-color: #F2E9DB;
+  padding: 8px 16px;
+  border-radius: 5px;
+  color: black;
+  text-decoration: none;
+}
+
+.login-btn .login-signin:hover {
+  background-color: #D9A066;
+}

@@ -1,0 +1,38 @@
+/* src/pages/HomePage.css */
+.container {
+    background-image: url('/public/assets/images/home.jpg');
+    background-size: cover;
+    background-position: center;
+    width: 100vw; 
+    height: 100vh; 
+    color: white;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+  
+.content {
+    text-align: center;
+    margin-top: 70px;
+    padding-bottom: 50px;
+}
+  
+.quote {
+    color:black;
+    font-size: 1.5em;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+    text-align: right;
+}
+  
+.btn {
+    background-color: #D9A066;
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 20px;
+}
+  
