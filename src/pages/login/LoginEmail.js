@@ -1,50 +1,51 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import './LoginEmail.css';
 
-const LoginEmail = () => {
-  const handleLogin = () => {
-    // Thêm logic đăng nhập ở đây
+function LoginEmail() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    // Giả sử đăng nhập thành công
+    alert('Success');
+    navigate('/');
   };
 
   return (
-    <div className="background">
-      <div className="container">
-        {/* Phần Đăng nhập */}
-        <div className="login-section">
-          <h2 style={{ color: "black" }}>Đăng nhập</h2>
+    <div className="login-container">
+      <div className="login-form">
+        <h2>ĐĂNG NHẬP</h2>
+        <form onSubmit={handleLogin}>
           <input
             type="email"
             placeholder="Email"
-            className="input-field"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
           />
           <input
             type="password"
             placeholder="Mật khẩu"
-            className="input-field"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
           />
-          <div className="login-actions">
-            <Link to="/forgotpassword" style={{ color: "blue" }}>
-              Quên mật khẩu?
-            </Link>
+          <div className="forgot-password">
+            <Link to="/forgotpassword">Quên mật khẩu?</Link>
           </div>
-          <button className="login-button" onClick={handleLogin}>
-            Đăng nhập
-          </button>
-        </div>
-
-        {/* Phần Xin chào */}
-        <div className="welcome-section">
-          <h2 style={{ color: "black" }}>Xin chào</h2>
-          <p>
-            Nhập thông tin cá nhân của bạn và cùng chúng tôi khởi đầu hành trình thú vị này!
-          </p>
-          <Link to="/signup" style={{ color: "blue" }}>
-            Đăng ký
-          </Link>
-        </div>
+          <button type="submit" className="login-btn">ĐĂNG NHẬP</button>
+        </form>
+      </div>
+      <div className="welcome-section">
+        <h2>XIN CHÀO</h2>
+        <p>Nhập thông tin cá nhân của bạn và cùng chúng tôi khởi đầu hành trình thú vị này!</p>
+        <Link to="/signup" className="register-btn">ĐĂNG KÝ</Link>
       </div>
     </div>
   );
-};
+}
 
 export default LoginEmail;

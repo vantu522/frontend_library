@@ -103,68 +103,135 @@
     padding: 20px;
   }
   
-  .contact-title {
-    font-size: 24px;
-    font-weight: bold;
-    background-color: #d4a373;
-    color: black;
-    padding: 10px 20px;
-    border-radius: 8px;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .form-map-container {
-    display: flex;
-    justify-content: space-between;
-    width: 80%;
-    max-width: 1400px;
-  }
-  
-  .form-container {
-    display: flex;
-    flex-direction: column;
-    width: 45%;
-    background-color: #f5f5f5;
-    padding: 20px;
-    border-radius: 8px;
-  }
+.contact-title {
+  font-size: 24px;
+  font-weight: bold;
+  background-color: #d4a373;
+  color: black;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 20px;
+}
 
-  .input-field,
-  .textarea-field {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    background-color: #e0e0e0;
-  }
-  
-  .textarea-field {
-    height: 100px;
-  }
-  
-  .submit-button {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    background-color: #d4a373;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-  
-  .map-container {
-    width: 45%;
-    height: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #d3d3d3;
-    border-radius: 8px;
-    font-size: 24px;
-    font-weight: bold;
-    color: black;
-  }
+.form-map-container {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  max-width: 1400px;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.input-field,
+.textarea-field {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background-color: #e0e0e0;
+}
+
+.textarea-field {
+  height: 100px;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #d4a373;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.map-container {
+  width: 45%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #d3d3d3;
+  border-radius: 8px;
+  font-size: 24px;
+  font-weight: bold;
+  color: black;
+}
+
+/* css cho trang category */
+
+.category-page {
+  text-align: center;
+  padding: 20px;
+}
+
+.category-title {
+  background-color: #d1a575;
+  color: #000;
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.book-list {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.book-item {
+  text-align: center;
+}
+
+.book-image {
+  width: 120px;
+  height: 180px;
+  background-color: #dcdcdc;
+  margin-bottom: 10px;
+}
+
+.borrow-button {
+  background-color: #d1a575;
+  color: #000;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.borrow-button:hover {
+  background-color: #c3946c;
+}
+
+.load-more-button {
+  background-color: #d1a575;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.load-more-button .arrow {
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.load-more-button:hover {
+  background-color: #c3946c;
+}
