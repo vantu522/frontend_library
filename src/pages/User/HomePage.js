@@ -1,8 +1,8 @@
 import React from "react";
 import "./HomePage.css";
-import BarChart from "../components/BarChart";
-import LineChartComponent from "../components/LineChartComponent";
-import PieChartComponent from "../components/PieChartComponent";
+import BarChart from "../../components/user/BarChart";
+import LineChartComponent from "../../components/user/LineChartComponent"
+import PieChartComponent from "../../components/user/PieChartComponent";
 
 function HomePage() {
   return (

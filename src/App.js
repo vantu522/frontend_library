@@ -1,12 +1,13 @@
 import React from "react";
-import Header from "./components/Header";
+import Header from "./components/common/Header";
 // import Sidebar from "./components/Sidebar";
-import Footer from "./components/Footer";
+import Footer from "./components/common/Footer";
 import { Routes, Route } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import IntroducePage from "./pages/IntroducePage";
-import CategoryPage from "./pages/CategoryPage";
-import ManagePage from "./pages/ManagePage";
+import HomePage from "./pages/User/HomePage";
+import IntroducePage from "./pages/User/IntroducePage";
+import  CategoryPage  from "./pages/User/CategoryPage/CategoryPage";
+import SubCategoryPage from "./pages/User/CategoryPage/SubCategoryPage";
+import ManagePage from "./pages/User/ManagePage";
 import LoginEmail from "./pages/login/LoginEmail";
 import Signup from "./pages/login/Signup";
 import ForgotPassword from "./pages/login/ForgotPassword";
@@ -22,10 +23,11 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/introduce" element={<IntroducePage />} />
           <Route path="/category" element={<CategoryPage />} />
+          <Route path='/categories/:bigCategoryName' element={<SubCategoryPage/>}></Route>
           <Route path="/shopcart" element={<ManagePage />} />
-          <Route path="/loginemail" element={<LoginEmail />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/forgotpassword" element={<ForgotPassword />} />
+          <Route path="/login-email" element={<LoginEmail />} />
+          <Route path="/sign-up" element={<Signup />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
         </Routes>
       </div>
       <Footer />
