@@ -3,13 +3,13 @@ import "./ForgotPassword.css";
 
 const ForgotPassword = () => {
   return (
-    <div className="background">
-      <div className="container">
-        <div className="body">
-          <div className="login">
+    <div className="form-background">
+      <div className="form-container">
+        <div className="form-body">
+          <div className="forgot_password">
             <h2 className="title">Quên mật khẩu</h2>
-            <p className="description">
-              Chúng tôi sẽ gửi lại mật khẩu tài khoản của bạn vào email
+            <p className="script">
+              Chúng tôi sẽ gửi lại mật khẩu vào tài khoản email của bạn
             </p>
             <input
               type="email"

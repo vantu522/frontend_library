@@ -1,18 +1,27 @@
 /* Header.css */
-
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 5px;
   background-color: #f5f5f5;
 }
 
-/* Chia các thành phần thành 6 phần bằng nhau */
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-image {
+  width: 80px;
+  height: auto;
+  margin-right: 40px;
+}
+
 .logo,
 .nav-list,
 .login-btn {
-  flex: 1; /* Mỗi phần tử chiếm 2 phần trong tổng số 6 */
+  flex: 1; 
 }
 
 .logo {
@@ -21,10 +30,9 @@
   text-align: center;
 }
 
-/* Căn chỉnh nav-list */
 .nav-list {
   display: flex;
-  justify-content: center; /* Căn giữa các mục nav */
+  justify-content: center; 
   list-style: none;
   padding: 0;
   margin: 0;
@@ -35,34 +43,51 @@
 }
 
 .nav-btn {
+  color: #1a1a1a;
+  font-weight: bold;
   text-decoration: none;
-  color: #333;
+  font-size: 20px;
+}
+
+.active-nav-btn {
+  color: #000; 
   font-weight: bold;
 }
 
 .nav-btn:hover {
-  color: #ff4d00; 
+  color: #0865f1; 
 }
 
-.login-btn {
-  text-align: center;
+.login-icon {
+  border-radius: 50%;
+  width: 50px; 
+  height: auto;
+  margin-right: 10px; 
 }
 
 .login {
   text-decoration: none;
   color: #333;
   font-weight: bold;
+  font-size: 23px;
+  justify-content: center;
 }
 
 .login:hover {
   color: #007bff;
 }
 
+.login-btn .login {
+  display: flex;
+  align-items: center;
+}
+
+/* @hant css footer */
 footer {
   text-align: center;
-  background-color: #d1a575;
+  background-color: #D9A066;
   color: #000;
-  padding: 20px;
+  padding: 10px;
 }
 
 .footer-content {
@@ -75,12 +100,6 @@ footer {
   flex: 1;
 }
 
-.footer-section h3,
-.footer-contact h3 {
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
 .footer-section ul,
 .footer-contact ul {
   list-style-type: none;
@@ -90,11 +109,8 @@ footer {
 .footer-section ul li,
 .footer-contact ul li {
   margin-bottom: 8px;
+  font-size: 20px;
 }
-
-/* .footer-contact .footer-section {
-  text-align: center;
-} */
 
 .footer-copyright {
   text-align: center;

@@ -22,9 +22,9 @@ const UserRoutes = () => {
         element={<BooksBySubCategory />}
       />
       <Route path="/shopcart" element={<ManagePage />} />
-      <Route path="/login-email" element={<LoginEmail />} />
-      <Route path="/sign-up" element={<Signup />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/loginemail" element={<LoginEmail />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/forgotpassword" element={<ForgotPassword />} />
     </Routes>
   );
 };

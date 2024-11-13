@@ -1,29 +1,63 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import './Header.css';
+import { NavLink } from 'react-router-dom';
+import './common.css';
 
 const Header = () => {
   return (
     <header className="header">
-      <div className="logo">Wisdom's Beacon</div>
+      <div className="logo">
+        <img src="/assets/images/logomain.jpg" alt="Logo" className="logo-image" />
+        Wisdom's Beacon
+      </div>
       <nav>
         <ul className="nav-list">
           <li>
-            <Link to="/" className="nav-btn">Trang chủ</Link>
+            <NavLink 
+              exact 
+              to="/" 
+              className="nav-btn" 
+              activeClassName="active-nav-btn"
+            >
+              TRANG CHỦ
+            </NavLink>
           </li>
           <li>
-            <Link to="/introduce" className="nav-btn">Giới thiệu</Link>
+            <NavLink 
+              to="/introduce" 
+              className="nav-btn" 
+              activeClassName="active-nav-btn"
+            >
+              TIN TỨC
+            </NavLink>
           </li>
           <li>
-            <Link to="/category" className="nav-btn">Danh mục</Link>
+            <NavLink 
+              to="/category" 
+              className="nav-btn" 
+              activeClassName="active-nav-btn"
+            >
+              DANH MỤC
+            </NavLink>
           </li>
           <li>
-            <Link to="/shopcart" className="nav-btn">Giỏ sách</Link>
+            <NavLink 
+              to="/shopcart" 
+              className="nav-btn" 
+              activeClassName="active-nav-btn"
+            >
+              GIỎ SÁCH
+            </NavLink>
           </li>
         </ul>
       </nav>
       <div className="login-btn">
-        <Link to="/loginemail" className="login">Login</Link>
+        <NavLink 
+          to="/loginemail" 
+          className="login"
+          activeClassName="active-nav-btn"
+        >
+          <img src="/assets/images/loginlogo.jpg" alt="Login Icon" className="login-icon" /> Login
+        </NavLink>
       </div>
     </header>
   );

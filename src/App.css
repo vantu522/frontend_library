@@ -1,3 +1,18 @@
 .app {
   font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.header {
+  padding: 10px;
+}
+
+.bodyWeb {
+  flex: 1;
+  padding: 20px;
+}
+
+.footer {
+  padding: 10px;
 }

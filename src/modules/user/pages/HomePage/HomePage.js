@@ -1,8 +1,10 @@
 import React from "react";
-// import "./HomePage.css";
+import "./HomePage.css";
 import BarChart from "../../components/BarChart";
-import LineChartComponent from "../../components/LineChartComponent";
-import PieChartComponent from '../../components/PieChartComponent';
+import LineChartComponent from "../../components/LineChartComponent"
+import PieChartComponent from "../../components/PieChartComponent";
+import MapComponent from "../../components/MapComponent";
+
 
 function HomePage() {
   return (
@@ -22,7 +24,8 @@ function HomePage() {
           <div className="chart-container">
             <BarChart />
           </div>
-          <p className="description">
+          <div className="description">
+            <p>
             Thư viện luôn duy trì sự đa dạng của các thể loại sách để thu hút và
             phục vụ nhu cầu ngày càng phong phú của độc giả. Việc cung cấp nhiều
             thể loại như tiểu thuyết, sách khoa học, tài liệu nghiên cứu, và văn
@@ -30,14 +33,16 @@ function HomePage() {
             ra không gian khám phá cho mọi lứa tuổi và sở thích. Sự phong phú
             này không chỉ khuyến khích thói quen đọc sách mà còn giúp người đọc
             mở rộng kiến thức và hiểu biết về thế giới xung quanh.
-          </p>
+            </p>
+          </div>
         </div>
       </div>
       <div className="Line">
         <div className="linechart-container">
           <LineChartComponent />
         </div>
-        <p className="description">
+        <div className="description">
+          <p>
           Thư viện đang trong giai đoạn tăng trưởng mạnh, phản ánh qua sự gia
           tăng rõ rệt cả về số lượng tài liệu và bạn đọc. Các bộ sưu tập sách
           mới, tài liệu nghiên cứu, và các ấn phẩm số hóa được cập nhật thường
@@ -48,38 +53,38 @@ function HomePage() {
           văn hóa và học thuật, thu hút sự tham gia đông đảo của cộng đồng,
           qua đó nâng cao vị thế của mình trong việc cung cấp kiến thức và hỗ
           trợ học tập.
-        </p>
+          </p>
+        </div>
       </div>
       <div className="Pie">
         <div className="piechart-container">
           <PieChartComponent />
         </div>
-        <p className="description">
-          Số lượng mượn sách qua từng thể loại tại thư viện cũng có sự khác
-          biệt đáng kể, phản ánh nhu cầu và sở thích đa dạng của độc giả. Các
-          thể loại như tiểu thuyết và sách lãng mạn thường được mượn nhiều hơn
-          nhờ vào tính giải trí và khả năng thu hút người đọc ở mọi lứa tuổi.
-          Trong khi đó, sách nghiên cứu và tài liệu học thuật tuy không được
-          mượn nhiều bằng nhưng lại có giá trị cao đối với sinh viên và giới
-          nghiên cứu. Sách thiếu nhi và sách hướng dẫn kỹ năng sống cũng ghi
-          nhận mức mượn ổn định, đặc biệt là từ phụ huynh và người làm giáo
-          dục. Sự khác biệt này giúp thư viện hiểu rõ hơn về xu hướng đọc của
-          độc giả, từ đó điều chỉnh việc cung cấp tài liệu và phát triển dịch
-          vụ cho phù hợp.
-        </p>
+        <div className="description">
+          <p>
+          Số lượng sách mượn tại thư viện phản ánh nhu cầu đa dạng của độc giả. 
+          Các thể loại như tiểu thuyết và sách lãng mạn thường được ưa chuộng hơn
+           do tính giải trí cao, trong khi sách nghiên cứu và tài liệu học thuật 
+           lại quan trọng đối với sinh viên và nhà nghiên cứu. Sách thiếu nhi và 
+           sách kỹ năng sống cũng có mức mượn ổn định, đặc biệt từ phụ huynh và 
+           giáo viên. Những sự khác biệt này giúp thư viện điều chỉnh cung cấp tài 
+           liệu và phát triển dịch vụ cho phù hợp.
+          </p>
+        </div>
       </div>
       <div className="contact-form">
-        <h1 className="contact-title">LIÊN HỆ CHÚNG TÔI</h1>
+        <h1 className="contact-title">LIÊN HỆ VỚI CHÚNG TÔI</h1>
         <div className="form-map-container">
           <div className="form-container">
-            <input type="text" placeholder="Họ tên" className="input-field" />
-            <input type="text" placeholder="Số điện thoại" className="input-field" />
-            <input type="email" placeholder="Email" className="input-field" />
+            <input type="text" placeholder="Họ tên:" className="input-field" />
+            <input type="text" placeholder="Số điện thoại:" className="input-field" />
+            <input type="email" placeholder="Email:" className="input-field" />
             <textarea placeholder="Gửi cho chúng tôi:" className="textarea-field"></textarea>
             <button className="submit-button">Gửi đi</button>
           </div>
           <div className="map-container">
-            <p>Bản đồ</p>
+            {/* <p>Bản đồ</p> */}
+            <MapComponent />
           </div>
         </div>
       </div>

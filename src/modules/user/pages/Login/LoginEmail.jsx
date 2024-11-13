@@ -9,7 +9,6 @@ function LoginEmail() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Giả sử đăng nhập thành công
     alert('Success');
     navigate('/');
   };
@@ -36,13 +35,13 @@ function LoginEmail() {
           <div className="forgot-password">
             <Link to="/forgotpassword">Quên mật khẩu?</Link>
           </div>
-          <button type="submit" className="login-btn">ĐĂNG NHẬP</button>
+          <button type="submit" className="login-button">ĐĂNG NHẬP</button>
         </form>
       </div>
       <div className="welcome-section">
         <h2>XIN CHÀO</h2>
         <p>Nhập thông tin cá nhân của bạn và cùng chúng tôi khởi đầu hành trình thú vị này!</p>
-        <Link to="/signup" className="register-btn">ĐĂNG KÝ</Link>
+        <Link to="/signup" className="register-button">ĐĂNG KÝ</Link>
       </div>
     </div>
   );
