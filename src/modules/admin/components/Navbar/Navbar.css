@@ -1,0 +1,80 @@
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 250px; 
+    width: calc(100% - 285px); 
+    height: 60px;
+    background-color: #333;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+
+.navbar-left {
+    font-size: 1.2rem;
+}
+
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+
+.date-time {
+    font-size: 1rem;
+}
+
+
+.settings-icon {
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.settings-icon:hover {
+    color: #ddd;
+}
+
+
+.settings-menu {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background-color: #444;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+}
+
+
+.settings-menu button {
+    background: none;
+    border: none;
+    color: #fff;
+    padding: 5px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.settings-menu button:hover {
+    color: #ddd;
+}
+
+h1{
+    font-size: 20px;
+    margin-bottom: -20px;
+}

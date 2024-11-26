@@ -1,0 +1,26 @@
+.statistics-page {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+.chart-container {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+    flex-wrap: wrap; 
+}
+
+.chart {
+    width: 500px; 
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px; 
+}
+
+
+h3 {
+    text-align: center;
+}

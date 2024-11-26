@@ -1,0 +1,129 @@
+/* BookList.css */
+.book-list {
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.book-list h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.search-container {
+    flex-grow: 1;
+}
+
+.search-input {
+    width: 80%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.add-book-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.add-book-btn:hover {
+    background-color: #45a049;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.table th {
+    background-color: #f4f4f4;
+}
+
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 5px 10px;
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.pagination button:disabled {
+    background-color: #ddd;
+}
+
+.pagination span {
+    align-self: center;
+}
+
+/* Các button điều khiển */
+.delete-btn {
+    background-color: #f44336; /* Đỏ */
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.delete-btn:hover {
+    background-color: #e53935; /* Đỏ đậm khi hover */
+}
+
+.status-toggle-btn {
+    background-color: #fbc02d; /* Màu vàng */
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.status-toggle-btn:hover {
+    background-color: #f9a825; /* Màu vàng đậm khi hover */
+}
+
+/* Button chỉnh sửa */
+.edit-btn {
+    background-color: #4CAF50; /* Xanh lá */
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.edit-btn:hover {
+    background-color: #45a049; /* Xanh lá đậm khi hover */
+}
+
+/* Trạng thái sách */
+.status-available {
+    color: green; /* Còn hàng - Xanh */
+}
+
+.status-unavailable {
+    color: red; /* Hết hàng - Đỏ */
+}

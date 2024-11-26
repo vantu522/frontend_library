@@ -2,7 +2,7 @@ import React from "react";
 import Header from "./modules/user/components/common/Header";
 import Footer from "./modules/user/components/common/Footer";
 import UserRoutes from "./modules/user/routes/UserRoutes";
-// import AdminRoutes from "./modules/admin/routes/AdminRoutes";
+import AdminRoutes from "./modules/admin/routes/AdminRoutes";
 
 function App() {
   return (
@@ -10,7 +10,7 @@ function App() {
       <Header />
       <div className="bodyWeb">
         <UserRoutes />
-        {/* <AdminRoutes /> */}
+        <AdminRoutes />
       </div>
       <Footer />
     </div>

@@ -1,0 +1,102 @@
+
+.stored-borrows {
+    padding: 20px;
+}
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.search-container input {
+    padding: 5px;
+    font-size: 16px;
+    width: 300px;
+}
+
+.add-borrow-btn {
+    padding: 10px 20px;
+    background-color: green;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.add-borrow-btn:hover {
+    background-color: darkgreen;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+    text-align: center;
+    padding: 10px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 5px 10px;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.pagination button:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+}
+
+
+button {
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+
+button.delete-btn {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+button.delete-btn:hover {
+    background-color: #e60000;
+}
+
+
+button.edit-btn {
+    background-color: #4d94ff;
+    color: white;
+}
+
+button.edit-btn:hover {
+    background-color: #0066cc;
+}
+
+button.returned-btn {
+    background-color: #ffcc00;
+    color: black;
+}
+
+button.returned-btn:hover {
+    background-color: #e6b800;
+}
+
+.modal-content input {
+    padding: 10px;
+    margin: 5px;
+    width: 100%;
+}

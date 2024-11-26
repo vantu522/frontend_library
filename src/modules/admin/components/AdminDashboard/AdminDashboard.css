@@ -1,0 +1,268 @@
+
+.parent {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    gap: 8px;
+    margin-top: 50px;
+    margin-left: -250px;
+}
+    
+.div1 {
+    grid-row: span 4 / span 4;
+}
+
+.div2 {
+    grid-row: span 2 / span 2;
+}
+
+.div3 {
+    grid-row: span 2 / span 2;
+    grid-column-start: 1;
+    grid-row-start: 5;
+}
+
+.div4 {
+    grid-row: span 2 / span 2;
+    grid-column-start: 3;
+    grid-row-start: 1;
+}
+
+.div8 {
+    grid-row: span 2 / span 2;
+    grid-column-start: 2;
+    grid-row-start: 3;
+}
+
+.div9 {
+    grid-row: span 2 / span 2;
+    grid-column-start: 3;
+    grid-row-start: 3;
+}
+
+.div10 {
+    grid-column: span 2 / span 2;
+    grid-row: span 2 / span 2;
+    grid-column-start: 2;
+    grid-row-start: 5;
+}
+
+.div11 {
+    grid-row: span 4 / span 4;
+    grid-column-start: 4;
+    grid-row-start: 1;
+}
+
+.div12 {
+    grid-row: span 2 / span 2;
+    grid-column-start: 4;
+    grid-row-start: 5;
+}
+        
+
+/* Tổng thể */
+.content {
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  /* Bố cục grid cho các ô */
+
+  /* Các ô chung */
+  .parent > div {
+    background-color: white;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    transition: transform 0.3s ease-in-out;
+    min-height: 150px; /* Thiết lập chiều cao tối thiểu cho các ô */
+  }
+  
+  .parent > div:hover {
+    transform: scale(1.05); /* Hiệu ứng phóng to khi hover vào ô */
+  }
+  
+  /* Các ô cụ thể */
+  
+  /* Thêm biểu đồ tròn vào ô div11 */
+  .div11 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    min-height: 300px; /* Chiều cao đủ để hiển thị biểu đồ */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  
+  .chart-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px; /* Khoảng cách giữa tiêu đề và biểu đồ */
+  }
+  
+  /* Có thể thêm hiệu ứng cho biểu đồ */
+  .pie-chart {
+    width: 100%;
+    height: auto;
+  }
+
+
+  /* Các ô có tổng và biểu tượng */
+.total-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 15px;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    min-height: 200px; /* Chiều cao ô đủ để hiển thị cả biểu đồ và thông tin */
+  }
+  
+  .total-box .icon {
+    font-size: 30px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .total-box .total {
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 45px;
+  }
+  
+  .total-box .trend {
+    font-size: 16px;
+    color: #888;
+    margin-top: 10px;
+    padding-top: 10px;
+    width: 100%;
+    border-top: 1px solid #ddd;
+  }
+  
+  .total-box .chart-container {
+    width: 100%;
+    height: 100px; /* Kích thước của biểu đồ */
+    margin-top: 15px;
+  }
+  
+  .total-box .trend .percentage {
+    font-weight: bold;
+  }
+  
+  .total-box .increase {
+    color: green;
+  }
+  
+  .total-box .decrease {
+    color: red;
+  }
+  
+  /* Đưa tên và icon lên góc trái */
+  .total-box .header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .total-box .header .icon {
+    margin-right: 10px;
+  }
+  
+  .total-box .header .name {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .line {
+    width: 100%;
+    height: 2px;
+    background-color: #ddd;
+    margin-top: 10px;
+    position: relative;
+  }
+  
+  .div2, .div4, .div8, .div9 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    min-height: 200px;
+    margin-bottom: 15px;
+  }
+  
+  .div2, .div4, .div8, .div9 {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .total-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  .left-side {
+    display: flex;
+    align-items: center;
+  }
+  
+  .left-side .icon {
+    font-size: 24px;
+    margin-right: 10px;
+  }
+  
+  .name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: -10px;
+  }
+  
+  .right-side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  
+  .total {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .line {
+    width: 100%;
+    height: 2px;
+    background-color: #ddd;
+    margin: 5px 0;
+  }
+  
+  .trend {
+    font-size: 16px;
+  }
+  
+  .increase {
+    color: green;
+  }
+  
+  .decrease {
+    color: red;
+  }
+  
+  
+  
