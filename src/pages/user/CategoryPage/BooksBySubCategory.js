@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { createSlug } from '../../../../../utils/slugify';
-import bookService from '../../../../../services/user/bookService';
+import { createSlug } from '../../../utils/slugify';
+import bookService from '../../../services/user/bookService';
 
 function BooksBySubCategory() {
   const { bigCategoryName, subCategoryName } = useParams();

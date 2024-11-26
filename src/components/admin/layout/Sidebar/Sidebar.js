@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faUser, faBook, faChartBar, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom'; 
 import './Sidebar.css';
-import logo from '../../assets/img/logo.png'
+import logo from '../../../../assets/images/logo.png';
 
 const Sidebar = () => {
     const [openSubmenu, setOpenSubmenu] = useState(null);

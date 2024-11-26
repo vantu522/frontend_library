@@ -1,9 +1,9 @@
 import React from "react";
 import "./HomePage.css";
-import BarChart from "../../components/BarChart";
-import LineChartComponent from "../../components/LineChartComponent"
-import PieChartComponent from "../../components/PieChartComponent";
-import MapComponent from "../../components/MapComponent";
+import BarChart from '../../../components/user/BarChart';
+import LineChartComponent from "../../../components/user/LineChartComponent"
+import PieChartComponent from "../../../components/user/PieChartComponent";
+import MapComponent from "../../../components/user/MapComponent";
 
 
 function HomePage() {

@@ -1,19 +1,14 @@
 import React from "react";
-import Header from "./modules/user/components/common/Header";
-import Footer from "./modules/user/components/common/Footer";
-import UserRoutes from "./modules/user/routes/UserRoutes";
-import AdminRoutes from "./modules/admin/routes/AdminRoutes";
+import { Routes, Route } from 'react-router-dom';
+import UserRoutes from './routes/UserRoutes';
+import AdminRoutes from "./routes/AdminRoutes";
 
 function App() {
   return (
-    <div className="App">
-      <Header />
-      <div className="bodyWeb">
-        <UserRoutes />
-        <AdminRoutes />
-      </div>
-      <Footer />
-    </div>
+    <Routes> 
+      <Route path="/admin/*" element={<AdminRoutes />} />
+      <Route path="/*" element={<UserRoutes />} />
+    </Routes>
   );
 }
 

@@ -1,0 +1,11 @@
+.user-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+    margin-top: 60px; /* Điều chỉnh theo chiều cao của Header */
+}

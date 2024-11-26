@@ -1,8 +1,8 @@
 // src/pages/SubCategoryPage/SubCategoryPage.js
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { createSlug } from '../../../../../utils/slugify';
-import categoryService from '../../../../../services/user/categoryService';
+import { createSlug } from '../../../utils/slugify';
+import categoryService from '../../../services/user/categoryService';
 // import './SubCategoryPage.css';
 
 function SubCategoryPage() {

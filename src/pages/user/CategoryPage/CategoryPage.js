@@ -1,8 +1,8 @@
 // src/pages/CategoryPage/CategoryPage.js
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { createSlug } from '../../../../../utils/slugify';
-import categoryService from '../../../../../services/user/categoryService';
+import { createSlug } from '../../../utils/slugify';
+import categoryService from '../../../services/user/categoryService';
 // import './CategoryPage.css';
 
 function CategoryPage() {
