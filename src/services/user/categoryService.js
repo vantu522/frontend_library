@@ -1,14 +1,13 @@
-const API_URL = 'http://10.147.19.246:8080/books/categories';
+import { API_ENDPOINTS } from '../../config/apiConfig';
 
 const categoryService = {
   fetchBigCategories: async () => {
     try {
-      const response = await fetch(`${API_URL}`);
+      const response = await fetch(`${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.USER.BOOKS}`);
       if (!response.ok) {
         throw new Error('Không thể tải danh mục');
       }
-      const data = await response.json();
-      return data;
+      return await response.json();
     } catch (error) {
       throw error;
     }
@@ -16,12 +15,11 @@ const categoryService = {
 
   fetchSubCategories: async (slug) => {
     try {
-      const response = await fetch(`${API_URL}/${slug}`);
+      const response = await fetch(`${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.USER.BOOKS}/${slug}`);
       if (!response.ok) {
         throw new Error('Không thể tải danh mục con');
       }
-      const data = await response.json();
-      return data;
+      return await response.json();
     } catch (error) {
       throw error;
     }

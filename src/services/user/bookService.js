@@ -1,16 +1,18 @@
-const API_URL = 'http://10.147.19.246:8080/books/categories';
+import { API_ENDPOINTS } from '../../config/apiConfig';
 
 const bookService = {
   fetchBooksByCategory: async (bigCategorySlug, subCategorySlug) => {
     try {      
-      const response = await fetch(`${API_URL}/${bigCategorySlug}/${subCategorySlug}/books`, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-      });
-      
+      const response = await fetch(
+        `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.USER.BOOKS}/${bigCategorySlug}/${subCategorySlug}/books`, 
+        {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+        }
+      );
       
       if (!response.ok) {
         const errorText = await response.text();
@@ -18,8 +20,7 @@ const bookService = {
         throw new Error(`API error: ${response.status} - ${errorText}`);
       }
       
-      const data = await response.json();
-      return data;
+      return await response.json();
     } catch (error) {
       console.error('Service error:', error);
       throw error;
