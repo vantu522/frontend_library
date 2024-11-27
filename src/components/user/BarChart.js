@@ -6,7 +6,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const BarChart = () => {
   const data = {
-    labels: ['Thể loại', 'Thể loại', 'Thể loại', 'Thể loại', 'Thể loại', 'Thể loại'],
+    labels: ['Thể loại 1', 'Thể loại 2', 'Thể loại 3', 'Thể loại 4', 'Thể loại 5', 'Thể loại 6'],
     datasets: [
       {
         label: '# of Votes',

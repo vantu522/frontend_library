@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import './EmployeeManagement.css';
 import EmployeeModal from './EditEmployeeModal';
 
-const EmployeeManagement = ({ employees, onAdd, onUpdate, onDelete }) => {
+const EmployeeManagement = ({ employees = [], onAdd, onUpdate, onDelete }) => {
     const [showModal, setShowModal] = useState(false);
     const [currentEmployee, setCurrentEmployee] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const employeesPerPage = 5; 
+
+    const employeesArray = employees || [];
 
     const handleOpenModal = (employee = null) => {
         setCurrentEmployee(employee);
@@ -29,7 +31,7 @@ const EmployeeManagement = ({ employees, onAdd, onUpdate, onDelete }) => {
         handleCloseModal();
     };
 
-    const filteredEmployees = employees.filter(employee =>
+    const filteredEmployees = employeesArray.filter(employee =>
         employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         employee.position.toLowerCase().includes(searchTerm.toLowerCase())
     );

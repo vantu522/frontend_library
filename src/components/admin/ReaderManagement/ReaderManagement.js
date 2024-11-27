@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import './ReaderManagement.css';
 import ReaderModal from './EditReaderModal';
 
-const ReaderManagement = ({ readers, onAdd, onUpdate, onDelete }) => {
+const ReaderManagement = ({ readers = [], onAdd, onUpdate, onDelete }) => {
     const [showModal, setShowModal] = useState(false);
     const [currentReader, setCurrentReader] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const readersPerPage = 5;
+
+    const readersArray = readers || [];
 
     const handleOpenModal = (reader = null) => {
         setCurrentReader(reader);
@@ -34,7 +36,7 @@ const ReaderManagement = ({ readers, onAdd, onUpdate, onDelete }) => {
         handleCloseModal();
     };
 
-    const filteredReaders = readers.filter(reader =>
+    const filteredReaders = readersArray.filter(reader =>
         reader.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         reader.email.toLowerCase().includes(searchTerm.toLowerCase())
     );

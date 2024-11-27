@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import AddBookModal from '../AddBookModal/AddBookModal';
 import './BookList.css';
 
-const BookList = ({ books, onAdd, onDelete, onUpdate }) => {
+const BookList = ({ books = [], onAdd, onDelete, onUpdate }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [statusFilter, setStatusFilter] = useState('all');
@@ -11,13 +11,13 @@ const BookList = ({ books, onAdd, onDelete, onUpdate }) => {
     const [editBook, setEditBook] = useState(null); // For editing books
 
     // Filter books based on search term and status
-    const filteredBooks = books.filter(book => {
+    const filteredBooks = books?.filter(book => {
         const matchesSearch = 
             book.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
             book.author.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesStatus = statusFilter === 'all' || book.status === statusFilter;
         return matchesSearch && matchesStatus;
-    });
+    }) || [];
 
     const indexOfLastBook = currentPage * booksPerPage;
     const indexOfFirstBook = indexOfLastBook - booksPerPage;

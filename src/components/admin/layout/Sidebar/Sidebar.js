@@ -22,13 +22,13 @@ const Sidebar = () => {
             <p>LIBARARY</p>
             <ul>
                 <li>
-                    <Link to="/">
+                    <Link to="/admin">
                         <FontAwesomeIcon icon={faHome} className="icon" />
                         <span>Trang chủ</span>
                     </Link>
                 </li>
                 <li>
-                    <a href="#" onClick={() => toggleSubmenu('books')}>
+                    <a href="/admin" onClick={() => toggleSubmenu('books')}>
                         <FontAwesomeIcon icon={faBook} className="icon" />
                         <span>Sách</span>
                         <FontAwesomeIcon 
@@ -38,8 +38,8 @@ const Sidebar = () => {
                     </a>
                     {openSubmenu === 'books' && (
                         <ul className="submenu">
-                            <li><Link to="/books">Danh Sách Sách</Link></li>
-                            <li><Link to="/stored-borrows">Danh Sách Phiếu Mượn</Link></li>
+                            <li><Link to="/admin/books">Danh Sách Sách</Link></li>
+                            <li><Link to="/admin/stored-borrows">Danh Sách Phiếu Mượn</Link></li>
                         </ul>
                     )}
                 </li>
@@ -54,8 +54,8 @@ const Sidebar = () => {
                     </a>
                     {openSubmenu === 'profile' && (
                         <ul className="submenu">
-                            <li><Link to="/employees">Hồ Sơ Nhân Viên</Link></li>
-                            <li><Link to="/readers">Hồ Sơ Độc Giả</Link></li>
+                            <li><Link to="/admin/employees">Hồ Sơ Nhân Viên</Link></li>
+                            <li><Link to="/admin/readers">Hồ Sơ Độc Giả</Link></li>
                         </ul>
                     )}
                 </li>
@@ -70,9 +70,9 @@ const Sidebar = () => {
                     </a>
                     {openSubmenu === 'statistics' && (
                         <ul className="submenu">
-                            <li><Link to="/statistics">Thống Kê Nhanh</Link></li>
-                            <li><Link to="/top-readers">Top Độc Giả</Link></li>
-                            <li><Link to="/top-book">Top Sách Yêu Thích</Link></li>
+                            <li><Link to="/admin/statistics">Thống Kê Nhanh</Link></li>
+                            <li><Link to="/admin/top-readers">Top Độc Giả</Link></li>
+                            <li><Link to="/admin/top-book">Top Sách Yêu Thích</Link></li>
                         </ul>
                     )}
                 </li>

@@ -20,7 +20,7 @@ function HomePage() {
       </main>
       <div className="statistical">
         <h2>Thống kê</h2>
-        <div className="chart">
+        <div className="Chart">
           <div className="chart-container">
             <BarChart />
           </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './StoredBorrows.css';
 import BorrowModal from '../BorrowModal/BorrowModal';
 
-const StoredBorrows = ({ borrows, onAdd, onUpdate, onDelete }) => {
+const StoredBorrows = ({ borrows = [], onAdd, onUpdate, onDelete, setBorrows, onReturn, onNotReturned }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [statusFilter, setStatusFilter] = useState('all');
@@ -10,8 +10,10 @@ const StoredBorrows = ({ borrows, onAdd, onUpdate, onDelete }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedBorrow, setSelectedBorrow] = useState(null);
 
+    const borrowsArray = borrows || [];
+
     const checkOverdueBorrows = () => {
-        borrows.forEach(borrow => {
+        borrowsArray.forEach(borrow => {
             const isOverdue = new Date(borrow.dueDate) < new Date();
             if (isOverdue && !borrow.isReturned && !borrow.isOverdue) {
                 borrow.isOverdue = true;
@@ -22,10 +24,10 @@ const StoredBorrows = ({ borrows, onAdd, onUpdate, onDelete }) => {
 
     useEffect(() => {
         checkOverdueBorrows();
-    }, [borrows]);
+    }, [borrowsArray]);
 
     const handleStatusToggle = (id) => {
-        const updatedBorrow = borrows.find(borrow => borrow.id === id);
+        const updatedBorrow = borrowsArray.find(borrow => borrow.id === id);
         if (updatedBorrow) {
             updatedBorrow.isReturned = !updatedBorrow.isReturned;
             updatedBorrow.isOverdue = false; 
@@ -33,7 +35,7 @@ const StoredBorrows = ({ borrows, onAdd, onUpdate, onDelete }) => {
         }
     };
 
-    const filteredBorrows = borrows.filter(borrow => {
+    const filteredBorrows = borrowsArray.filter(borrow => {
         const matchesSearch = 
             borrow.borrowerPhone.includes(searchTerm) ||
             borrow.borrowerName.toLowerCase().includes(searchTerm.toLowerCase()) ||

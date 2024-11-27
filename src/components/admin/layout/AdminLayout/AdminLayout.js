@@ -1,6 +1,7 @@
 import React from 'react';
 import Sidebar from '../Sidebar/Sidebar';
 import Navbar from '../Navbar/Navbar';
+import './AdminLayout.css';
 
 const AdminLayout = ({ children }) => {
     return (

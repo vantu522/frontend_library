@@ -27,7 +27,7 @@ const Navbar = () => {
     };
 
     const handleChangePassword = () => {
-        navigate('/change-password');
+        navigate('/admin/change-password');
     };
 
     return (
