@@ -1,5 +1,5 @@
 .category{
-  background-color: #f4f2ef;
+  background-color: #f4f2ef; 
   padding-top: 50px;
   padding-bottom: 30px;
 }
@@ -13,7 +13,7 @@
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
-  margin-top: 100px;
+  margin-top: 90px;
 }
 
 .search-header__icon {
@@ -39,6 +39,12 @@
 
 .search-header input::placeholder {
   color: #302119;
+}
+
+
+.heading{
+  text-align: center;
+  padding-top: 50px;
 }
 /* Styles for .layout-column__inner */
 .layout-column__inner {

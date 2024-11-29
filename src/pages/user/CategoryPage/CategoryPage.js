@@ -32,6 +32,9 @@ function CategoryPage() {
   return (
     <div className='category'>
         <div className='layout-column_single'>
+            <h1 className='heading'>
+              <span>Các danh mục sách phổ biến</span>
+            </h1>
             <div class="search-header">
                 <span class="SVGInline search-header__icon">
                     <svg class="SVGInline-svg search-header__icon-svg" viewBox="0 0 24 24"    xmlns="http://www.w3.org/2000/svg">
@@ -41,6 +44,7 @@ function CategoryPage() {
                 </span>
                 <input placeholder='Tìm tên sách hoặc tác giả ...' className='search-header__input'></input>
             </div>
+            
         </div>
         <div className='layout-column_single'>
           <div className='layout-column__inner'>
