@@ -1,0 +1,182 @@
+.subcategory-page{
+    margin-top: 90px;
+}
+
+/* Subcategory Page Styles */
+.subcategory-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9fc;
+  }
+  
+  .back-button {
+    background-color: #f0f0f0;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px;
+  }
+  
+  .back-button:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .subCategory-title {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+  
+  .subcategories {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+  
+  .subcategory-section {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    overflow: hidden;
+  }
+  
+  .subcategory-section h3 {
+    font-size: 1.4rem;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    padding-left: 10px;
+    border-left: 4px solid #3498db;
+  }
+  
+  .books-list {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 15px;
+    padding: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: #bdc3c7 #ecf0f1;
+  }
+  
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .books-list::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .book-item {
+    flex: 0 0 auto;
+    width: 180px;
+    scroll-snap-align: start;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  }
+  
+  .book-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+  }
+  
+  .book-item img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+  }
+  
+  .book-item h3 {
+    padding: 10px;
+    margin: 0;
+    font-size: 0.9rem;
+    text-align: center;
+    color: #2c3e50;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .subcategory-page {
+      padding: 10px;
+    }
+  
+    .books-list {
+      gap: 10px;
+    }
+  
+    .book-item {
+      width: 150px;
+    }
+  
+    .book-item img {
+      height: 200px;
+    }
+  }
+  
+  /* Scroll Hints */
+  .books-list {
+    position: relative;
+  }
+  
+  .books-list::before,
+  .books-list::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 30px;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  .books-list::before {
+    left: 0;
+    background: linear-gradient(to right, rgba(255,255,255,1), rgba(255,255,255,0));
+  }
+  
+  .books-list::after {
+    right: 0;
+    background: linear-gradient(to left, rgba(255,255,255,1), rgba(255,255,255,0));
+  }
+
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Căn giữa theo chiều dọc */
+    background-color: #f9f9f9; 
+  }
+
+  /* Keyframes for fade-in effect */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px); /* Dịch chuyển nhẹ từ dưới lên */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* Trở về vị trí ban đầu */
+  }
+}
+
+/* Apply animation to book-item */
+.book-item {
+  opacity: 0; /* Ban đầu ẩn */
+  animation: fadeIn 0.5s ease-in-out forwards; /* Hiệu ứng fade-in */
+  animation-delay: var(--delay, 0s); /* Thời gian delay, mặc định là 0s */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .book-item {
+    animation: fadeIn 0.7s ease-in-out forwards; /* Tăng thời gian cho màn hình nhỏ */
+  }
+}
