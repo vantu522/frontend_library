@@ -4,7 +4,7 @@ import UserLayout from '../components/user/layout/UserLayout';
 
 // Import các pages
 import HomePage from "../pages/user/HomePage/HomePage";
-import IntroducePage from "../pages/user/IntroducePage/IntroducePage";
+import NewPage from "../pages/user/NewPage/NewPage";
 import CategoryPage from "../pages/user/CategoryPage/CategoryPage";
 import SubCategoryPage from "../pages/user/CategoryPage/SubCategoryPage";
 import BooksBySubCategory from "../pages/user/CategoryPage/BooksBySubCategory";
@@ -18,7 +18,7 @@ const UserRoutes = () => {
     <UserLayout>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/introduce" element={<IntroducePage />} />
+        <Route path="/new" element={<NewPage />} />
         <Route path="/category" element={<CategoryPage />} />
         <Route 
           path="/category/:bigCategoryName" 
