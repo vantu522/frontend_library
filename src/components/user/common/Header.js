@@ -1,16 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import './common.css';
 
 const Header = () => {
+  const [prevScrollPos, setPrevScrollPos] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollPos = window.pageYOffset;
+
+      setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 70);
+      setPrevScrollPos(currentScrollPos);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [prevScrollPos]);
+
   return (
-    <header className="header">
+    <header className={`header ${!visible ? 'header--hidden' : ''}`}>
       <div className="logo">
         <img src="/assets/images/logomain.jpg" alt="Logo" className="logo-image" />
         Wisdom's Beacon
       </div>
       <nav>
-        <ul className="nav-list">
+      <ul className="nav-list">
           <li>
             <NavLink 
               exact 
@@ -18,16 +36,16 @@ const Header = () => {
               className="nav-btn" 
               activeClassName="active-nav-btn"
             >
-              TRANG CHỦ
+              Trang chủ
             </NavLink>
           </li>
           <li>
             <NavLink 
-              to="/introduce" 
+              to="/new" 
               className="nav-btn" 
               activeClassName="active-nav-btn"
             >
-              TIN TỨC
+              Tin tức
             </NavLink>
           </li>
           <li>
@@ -36,7 +54,7 @@ const Header = () => {
               className="nav-btn" 
               activeClassName="active-nav-btn"
             >
-              DANH MỤC
+              Danh mục
             </NavLink>
           </li>
           <li>
@@ -45,17 +63,13 @@ const Header = () => {
               className="nav-btn" 
               activeClassName="active-nav-btn"
             >
-              GIỎ SÁCH
+              Giỏ sách 
             </NavLink>
           </li>
         </ul>
       </nav>
       <div className="login-btn">
-        <NavLink 
-          to="/loginemail" 
-          className="login"
-          activeClassName="active-nav-btn"
-        >
+        <NavLink to="/loginemail" className="login" activeClassName="active-nav-btn">
           <img src="/assets/images/loginlogo.jpg" alt="Login Icon" className="login-icon" /> Login
         </NavLink>
       </div>
@@ -64,3 +78,7 @@ const Header = () => {
 };
 
 export default Header;
+
+
+
+

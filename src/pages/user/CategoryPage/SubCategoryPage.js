@@ -1,17 +1,25 @@
-// src/pages/SubCategoryPage/SubCategoryPage.js
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { createSlug } from '../../../utils/slugify';
 import categoryService from '../../../services/user/categoryService';
-// import './SubCategoryPage.css';
+import bookService from '../../../services/user/bookService';
+import './SubCategoryPage.css';
+import { Player } from '@lottiefiles/react-lottie-player';
+import loadingAnimation from '../../../assets/aniamations/Animation - 1732875047380.json';
+
 
 function SubCategoryPage() {
-  const [subCategories, setSubCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const { bigCategoryName } = useParams();
   const navigate = useNavigate();
+
+  const [subCategories, setSubCategories] = useState([]);
+  const [booksByCategory, setBooksByCategory] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [originalCategoryName, setOriginalCategoryName] = useState('');
+
+  // Refs for scroll controls
+  const bookListRefs = useRef({});
 
   useEffect(() => {
     const fetchSubCategories = async () => {
@@ -23,6 +31,21 @@ function SubCategoryPage() {
         const categories = JSON.parse(localStorage.getItem('categories') || '[]');
         const original = categories.find((cat) => createSlug(cat) === slug);
         setOriginalCategoryName(original || bigCategoryName);
+
+        const booksData = await Promise.all(
+          data.map(async (subCategory) => {
+            const subCategorySlug = createSlug(subCategory);
+            const books = await bookService.fetchBooksByCategory(slug, subCategorySlug);
+            return { subCategory, books: books || [] };
+          })
+        );
+
+        const booksMap = {};
+        booksData.forEach(({ subCategory, books }) => {
+          booksMap[subCategory] = books;
+        });
+
+        setBooksByCategory(booksMap);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -30,44 +53,81 @@ function SubCategoryPage() {
       }
     };
 
-    fetchSubCategories();
+    if (bigCategoryName) {
+      setLoading(true);
+      fetchSubCategories();
+    }
   }, [bigCategoryName]);
 
   const handleGoBack = () => {
     navigate(-1);
   };
 
-  if (loading) return <p>Đang tải...</p>;
-  if (error) return <p>{error}</p>;
+  const scrollBooks = (subCategory, direction) => {
+    const bookList = bookListRefs.current[subCategory];
+    if (bookList) {
+      const scrollAmount = bookList.clientWidth; // Scroll by one viewport width
+      bookList.scrollBy({
+        left: direction === 'next' ? scrollAmount : -scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  if (loading) {
+    return true;
+  }
+  if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
   return (
-    <div className="subCategory-page">
+    <div className="subcategory-page">
       <button className="back-button" onClick={handleGoBack}>
         ← Quay lại
       </button>
       <h2 className="subCategory-title">Các thể loại con của {originalCategoryName}</h2>
-      <div className="book-list">
+      <div className="subcategories">
         {subCategories.map((subCategory, index) => (
-          <div className="book-item" key={index}>
-            <h3>{subCategory}</h3>
-            <div className="book-image">
-              <img 
-                src="https://img.websosanh.vn/v10/users/review/images/0y9326ybla81n/de-men-phieu-luu-ky.jpg?compress=85" 
-                alt={subCategory}
-              />
+          <div className="subcategory-section" key={index}>
+            <div className="subcategory-header">
+              <h3>{subCategory}</h3>
             </div>
-            <button 
-              className="borrow-button"
-               onClick={() => window.location.href = `/category/${createSlug(originalCategoryName)}/${createSlug(subCategory)}`}
-               >
-             Xem sách
-            </button>
-
-            <Link to={`/category/${createSlug(originalCategoryName)}/${createSlug(subCategory)}`}>Xem Sách</Link>
+            {booksByCategory[subCategory] && booksByCategory[subCategory].length > 0 ? (
+              <div className="books-container">
+                <button 
+                  className="scroll-btn scroll-prev" 
+                  onClick={() => scrollBooks(subCategory, 'prev')}
+                >
+                  ❮
+                </button>
+                <div 
+                  className="books-list" 
+                  ref={(el) => bookListRefs.current[subCategory] = el}
+                >
+                  {booksByCategory[subCategory].map((book) => (
+                    <div key={book.id} className="book-item"
+                    style={{ '--delay': `${index * 0.1}s` }} // Delay tăng dần cho mỗi cuốn sách
+                    >
+                      <img src={book.img} alt={book.name} />
+                      <p>{book.author}</p>
+                      <h3>{book.title}</h3>
+                    </div>
+                  ))}
+                </div>
+                <button 
+                  className="scroll-btn scroll-next" 
+                  onClick={() => scrollBooks(subCategory, 'next')} 
+                >
+                  ❯
+                </button>
+              </div>
+            ) : (
+              <p>Không có sách nào trong thể loại này</p>
+            )}
           </div>
         ))}
+      </div>
     </div>
-    </div>
-  )
+  );
 }
+
 export default SubCategoryPage;
