@@ -1,0 +1,39 @@
+/* Notification.css */
+.notification {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    margin: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #fff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    width: 300px;
+  }
+  
+  .notification.info {
+    background-color: #2196f3;
+  }
+  
+  .notification.success {
+    background-color: #4caf50;
+  }
+  
+  .notification.warning {
+    background-color: #ff9800;
+  }
+  
+  .notification.error {
+    background-color: #f44336;
+  }
+  
+  .notification-close {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: auto;
+  }
+  

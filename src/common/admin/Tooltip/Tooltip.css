@@ -1,0 +1,52 @@
+/* Tooltip.css */
+.tooltip-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .tooltip-box {
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  
+  .tooltip-wrapper:hover .tooltip-box {
+    opacity: 1;
+  }
+  
+  /* Vị trí tooltip */
+  .tooltip-box.top {
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 5px;
+  }
+  
+  .tooltip-box.bottom {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 5px;
+  }
+  
+  .tooltip-box.left {
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-right: 5px;
+  }
+  
+  .tooltip-box.right {
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 5px;
+  }
+  

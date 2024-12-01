@@ -1,0 +1,210 @@
+/* Styles for the BorrowList page */
+.borrow-list {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .navigation select,
+  .navigation input {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+  }
+  
+  .navigation select {
+    width: 150px;
+  }
+  
+  .navigation input {
+    width: 250px;
+  }
+  
+  .navigation button {
+    padding: 8px 16px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  /* Button styling */
+  button.primary {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  button.primary:hover {
+    background-color: #0056b3;
+  }
+  
+  button.danger {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  button.danger:hover {
+    background-color: #c82333;
+  }
+  
+  button.success {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  button.success:hover {
+    background-color: #218838;
+  }
+  
+  button.info {
+    background-color: #17a2b8;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  button.info:hover {
+    background-color: #138496;
+  }
+  
+  /* Modal and Form Styling */
+  .modal-content {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    width: 500px;
+    margin: 0 auto;
+  }
+  
+  .modal-header {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  
+  .modal-footer {
+    text-align: right;
+  }
+  
+  .form-input {
+    margin-bottom: 15px;
+  }
+  
+  .form-input input,
+  .form-input select {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .form-input label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    display: block;
+  }
+  
+  @media (max-width: 768px) {
+    .navigation {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .navigation select,
+    .navigation input {
+      margin-bottom: 10px;
+    }
+  
+    .navigation button {
+      margin-top: 10px;
+    }
+  }
+  /* Container của trang BorrowList */
+.borrow-list {
+    /* Các style cho container chính của trang */
+  }
+  
+  /* Button styling with borders only in BorrowList */
+  .borrow-list button.primary,
+  .borrow-list button.danger,
+  .borrow-list button.success,
+  .borrow-list button.info {
+    padding: 8px 16px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 4px;  /* Viền tròn */
+    border: 2px solid transparent;  /* Mặc định là không có viền, chỉ có border khi hover */
+    transition: all 0.3s ease;
+  }
+  
+  /* Primary button with border */
+  .borrow-list button.primary {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;  /* Viền theo màu nền */
+  }
+  
+  .borrow-list button.primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;  /* Đổi viền khi hover */
+  }
+  
+  /* Danger button with border */
+  .borrow-list button.danger {
+    background-color: #dc3545;
+    color: white;
+    border-color: #dc3545;  /* Viền theo màu nền */
+  }
+  
+  .borrow-list button.danger:hover {
+    background-color: #c82333;
+    border-color: #c82333;  /* Đổi viền khi hover */
+  }
+  
+  /* Success button with border */
+  .borrow-list button.success {
+    background-color: #28a745;
+    color: white;
+    border-color: #28a745;  /* Viền theo màu nền */
+  }
+  
+  .borrow-list button.success:hover {
+    background-color: #218838;
+    border-color: #218838;  /* Đổi viền khi hover */
+  }
+  
+  /* Info button with border */
+  .borrow-list button.info {
+    background-color: #17a2b8;
+    color: white;
+    border-color: #17a2b8;  /* Viền theo màu nền */
+  }
+  
+  .borrow-list button.info:hover {
+    background-color: #138496;
+    border-color: #138496;  /* Đổi viền khi hover */
+  }
+  
+  /* Button with focus effect */
+  .borrow-list button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Áp dụng hiệu ứng bóng khi focus */
+  }
+  
+  
