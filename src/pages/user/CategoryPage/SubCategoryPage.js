@@ -3,10 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { createSlug } from '../../../utils/slugify';
 import categoryService from '../../../services/user/categoryService';
 import bookService from '../../../services/user/bookService';
-import './SubCategoryPage.css';
 import { Player } from '@lottiefiles/react-lottie-player';
 import loadingAnimation from '../../../assets/aniamations/Animation - 1732875047380.json';
-
 
 function SubCategoryPage() {
   const { bigCategoryName } = useParams();
@@ -18,7 +16,6 @@ function SubCategoryPage() {
   const [error, setError] = useState(null);
   const [originalCategoryName, setOriginalCategoryName] = useState('');
 
-  // Refs for scroll controls
   const bookListRefs = useRef({});
 
   useEffect(() => {
@@ -63,65 +60,88 @@ function SubCategoryPage() {
     navigate(-1);
   };
 
+  const handleSubCategoryClick = async (subCategory) => {
+    const bigSlug = createSlug(bigCategoryName);
+    const subSlug = createSlug(subCategory);
+
+    // Navigate to books page for the specific subcategory
+    navigate(`/category/${bigSlug}/${subSlug}`);
+  };
+
   const scrollBooks = (subCategory, direction) => {
     const bookList = bookListRefs.current[subCategory];
     if (bookList) {
-      const scrollAmount = bookList.clientWidth; // Scroll by one viewport width
+      const scrollAmount = bookList.clientWidth;
       bookList.scrollBy({
         left: direction === 'next' ? scrollAmount : -scrollAmount,
         behavior: 'smooth'
       });
     }
   };
+  const handleBookDetailClick = (bookId) => {
+    navigate(`/book/${bookId}`); // Điều hướng đến trang chi tiết sách theo bookId
+  };
+
 
   if (loading) {
-    return true;
+    return true
   }
-  if (error) return <p style={{ color: 'red' }}>{error}</p>;
+
+  if (error) return <p className="text-red-500 text-center">{error}</p>;
 
   return (
-    <div className="subcategory-page">
-      <button className="back-button" onClick={handleGoBack}>
+    <div className="max-w-9xl mx-auto mt-20 p-6 bg-gray-50 animate-fadeIn">
+      <button
+        onClick={handleGoBack}
+        className="mb-5 bg-gray-100 px-4 py-2 rounded-lg hover:bg-gray-200 transition"
+      >
         ← Quay lại
       </button>
-      <h2 className="subCategory-title">Các thể loại con của {originalCategoryName}</h2>
-      <div className="subcategories">
+      <h2 className="text-2xl font-semibold text-center mb-8">
+        Các thể loại con của {originalCategoryName}
+      </h2>
+      <div className="space-y-10">
         {subCategories.map((subCategory, index) => (
-          <div className="subcategory-section" key={index}>
-            <div className="subcategory-header">
-              <h3>{subCategory}</h3>
-            </div>
-            {booksByCategory[subCategory] && booksByCategory[subCategory].length > 0 ? (
-              <div className="books-container">
-                <button 
-                  className="scroll-btn scroll-prev" 
+          <div key={index} className="bg-white rounded-lg shadow-md p-6">
+            <button className="text-lg font-medium text-blue-800 mb-4 hover:text-blue-600 transition cursor-pointer"
+            onClick={() =>handleSubCategoryClick(subCategory)} 
+          > 
+              {subCategory}
+            </button>
+            {booksByCategory[subCategory]?.length > 0 ? (
+              <div className="relative">
+                <button
                   onClick={() => scrollBooks(subCategory, 'prev')}
+                  className="absolute top-1/2 -translate-y-1/2 left-0 bg-white shadow-lg p-2 rounded-full hover:bg-gray-200 transition z-10"
                 >
                   ❮
                 </button>
-                <div 
-                  className="books-list" 
-                  ref={(el) => bookListRefs.current[subCategory] = el}
+                <div
+                  ref={(el) => (bookListRefs.current[subCategory] = el)}
+                  className="flex gap-4 overflow-x-auto scrollbar-hide"
                 >
-                  {booksByCategory[subCategory].map((book) => (
-                    <div key={book.id} className="book-item"
-                    style={{ '--delay': `${index * 0.1}s` }} // Delay tăng dần cho mỗi cuốn sách
+                  {booksByCategory[subCategory].map((book, idx) => (
+                    <div
+                      onClick={() => handleBookDetailClick(book.bookId)}
+                      key={book.id}
+                      className="cursor-pointer flex-none w-44 bg-gray-100 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition transform hover:scale-105"
+                      style={{ animationDelay: `${idx * 0.1}s` }}
                     >
-                      <img src={book.img} alt={book.name} />
-                      <p>{book.author}</p>
-                      <h3>{book.title}</h3>
+                      <img src={book.img} alt={book.name} className="w-full h-56 object-cover" />
+                      <p className='pl-3'>{book.author}</p>
+                      <h3 className="text-center text-gray-800 text-sm truncate pl-3">{book.title}</h3>
                     </div>
                   ))}
                 </div>
-                <button 
-                  className="scroll-btn scroll-next" 
-                  onClick={() => scrollBooks(subCategory, 'next')} 
+                <button
+                  onClick={() => scrollBooks(subCategory, 'next')}
+                  className="absolute top-1/2 -translate-y-1/2 right-0 bg-white shadow-lg p-2 rounded-full hover:bg-gray-200 transition z-10"
                 >
                   ❯
                 </button>
               </div>
             ) : (
-              <p>Không có sách nào trong thể loại này</p>
+              <p className="text-gray-500">Không có sách nào trong thể loại này</p>
             )}
           </div>
         ))}

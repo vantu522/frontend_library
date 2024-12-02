@@ -11,6 +11,7 @@ import BooksBySubCategory from "../pages/user/CategoryPage/BooksBySubCategory";
 import ManagePage from "../pages/user/ManagePage/ManagePage";
 import LoginEmail from "../pages/user/Login/LoginEmail";
 import Signup from "../pages/user/Login/Signup";
+import BookDetail from "../components/user/BookDetail";
 import ForgotPassword from "../pages/user/Login/ForgotPassword";
 
 const UserRoutes = () => {
@@ -28,6 +29,7 @@ const UserRoutes = () => {
           path="/category/:bigCategoryName/:subCategoryName"
           element={<BooksBySubCategory />}
         />
+        <Route path="/book/:bookId" element={<BookDetail />} /> 
         <Route path="/shopcart" element={<ManagePage />} />
         <Route path="/loginemail" element={<LoginEmail />} />
         <Route path="/signup" element={<Signup />} />
