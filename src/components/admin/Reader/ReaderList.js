@@ -7,24 +7,79 @@ import AddReaderForm from "./AddReaderForm";
 import EditReaderForm from "./EditReaderForm";
 import { deleteReader, updateReader, addReader } from "../../../redux/admin/readerReducer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrash, faInfoCircle, faPlus } from "@fortawesome/free-solid-svg-icons";
+
+// Component DeleteModal
+const DeleteModal = ({ isOpen, onConfirm, onCancel }) => (
+  <Modal onClose={onCancel} isOpen={isOpen}>
+    <div className="delete-modal">
+      <h3>Bạn có chắc chắn muốn xóa độc giả này?</h3>
+      <button onClick={onConfirm} className="btn primary">
+        Xóa
+      </button>
+      <button onClick={onCancel} className="btn secondary">
+        Hủy
+      </button>
+    </div>
+  </Modal>
+);
+
+// Component InfoModal
+const InfoModal = ({ isOpen, onClose, selectedReader }) => (
+  <Modal onClose={onClose} isOpen={isOpen}>
+    <div>
+      <h2>Thông Tin Sách Đang Mượn</h2>
+      {selectedReader ? (
+        <>
+          {selectedReader.borrowedBooks && selectedReader.borrowedBooks.length > 0 ? (
+            <ul>
+              {selectedReader.borrowedBooks.map((book, index) => (
+                <li key={index}>
+                  <p><strong>Tựa sách:</strong> {book.title}</p>
+                  <p><strong>Ngày mượn:</strong> {book.borrowDate}</p>
+                  <p><strong>Ngày trả dự kiến:</strong> {book.dueDate}</p>
+                  <p>
+                    <strong>Trạng thái:</strong>{" "}
+                    {book.status === "returned"
+                      ? "Đã trả"
+                      : book.status === "overdue"
+                      ? "Quá hạn"
+                      : "Đang mượn"}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>Độc giả này hiện không mượn sách nào.</p>
+          )}
+        </>
+      ) : (
+        <p>Không có thông tin độc giả.</p>
+      )}
+      <button onClick={onClose} className="btn secondary">
+        Đóng
+      </button>
+    </div>
+  </Modal>
+);
 
 const ReaderList = () => {
   const readers = useSelector((state) => state.readers || []);
   const dispatch = useDispatch();
+
   const [visibleForm, setVisibleForm] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const [readerId, setReaderId] = useState(null);
   const [selectedReader, setSelectedReader] = useState(null);
-  const [infoModalOpen, setInfoModalOpen] = useState(false); 
+  const [infoModalOpen, setInfoModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredReaders = Array.isArray(readers)
-    ? readers.filter((reader) =>
-        reader.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        reader.email.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    : [];
+  // Lọc độc giả theo từ khóa tìm kiếm
+  const filteredReaders = readers.filter((reader) =>
+    reader.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    reader.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const columns = [
     { label: "Tên", field: "name" },
@@ -33,87 +88,107 @@ const ReaderList = () => {
     { label: "Số Điện Thoại", field: "phone" },
     {
       label: "Hành động",
-      width: 130,
       render: (val, row) => (
         <div style={{ display: "flex", gap: "8px" }}>
-          <FontAwesomeIcon
-            icon={faEdit}
-            style={{ cursor: "pointer", color: "#007bff" }}
-            onClick={() => {
-              setVisibleForm(true);
-              setIsEdit(true);
-              setReaderId(row.id);
-            }}
-          />
-          <Tooltip content={"Sau khi xóa, dữ liệu sẽ không thể khôi phục lại được"} position="left">
-            <FontAwesomeIcon
-              icon={faTrash}
-              style={{ cursor: "pointer", color: "#dc3545" }}
-              onClick={() => dispatch(deleteReader(row.id))}
-            />
+          <Tooltip content="Xem thông tin" position="left">
+            <button
+              onClick={() => {
+                setSelectedReader(row);
+                setInfoModalOpen(true);
+              }}
+            >
+              <FontAwesomeIcon icon={faInfoCircle} size="lg" />
+            </button>
           </Tooltip>
-          <FontAwesomeIcon
-            icon={faInfoCircle}
-            style={{ cursor: "pointer", color: "#17a2b8" }}
-            onClick={() => {
-              setSelectedReader(row);
-              setInfoModalOpen(true);
-            }}
-          />
+
+          <Tooltip content="Chỉnh sửa" position="left">
+            <button
+              onClick={() => {
+                setVisibleForm(true);
+                setIsEdit(true);
+                setSelectedReader(row);
+              }}
+            >
+              <FontAwesomeIcon icon={faEdit} size="lg" />
+            </button>
+          </Tooltip>
+
+          <Tooltip content="Xóa độc giả" position="left">
+            <button
+              onClick={() => {
+                setDeleteTargetId(row.id);
+                setDeleteModalOpen(true);
+              }}
+            >
+              <FontAwesomeIcon icon={faTrash} size="lg" />
+            </button>
+          </Tooltip>
         </div>
       ),
     },
   ];
 
+  const handleDelete = () => {
+    dispatch(deleteReader(deleteTargetId));
+    setDeleteModalOpen(false);
+  };
+
   return (
     <div>
+      <h1>Danh Sách Độc Giả</h1>
+
+      {/* Thanh tìm kiếm */}
+      <div className="navigation">
+        <input
+          type="text"
+          placeholder="Tìm kiếm độc giả..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <button
+          className="btn primary"
+          onClick={() => {
+            setVisibleForm(true);
+            setIsEdit(false);
+            setSelectedReader(null);
+          }}
+        >
+          <FontAwesomeIcon icon={faPlus} /> Thêm Độc Giả
+        </button>
+      </div>
+
+      {/* Bảng danh sách độc giả */}
+      <Table columns={columns} data={filteredReaders} />
+
+      {/* Modal Thêm/Sửa Độc Giả */}
       <Modal onClose={() => setVisibleForm(false)} isOpen={visibleForm}>
         {isEdit ? (
           <EditReaderForm
-            readerId={readerId}
-            setVisibleForm={setVisibleForm}
+            reader={selectedReader}
+            onClose={() => setVisibleForm(false)}
             onUpdate={(reader) => dispatch(updateReader(reader))}
           />
         ) : (
           <AddReaderForm
-            setVisibleForm={setVisibleForm}
+            onClose={() => setVisibleForm(false)}
             onAdd={(reader) => dispatch(addReader(reader))}
           />
         )}
       </Modal>
 
-      <Modal onClose={() => setInfoModalOpen(false)} isOpen={infoModalOpen}>
-        <h2>Thông Tin Sách Đang Mượn</h2>
-        {selectedReader ? (
-          <ul>
-            {selectedReader.borrowedBooks && selectedReader.borrowedBooks.length > 0 ? (
-              selectedReader.borrowedBooks.map((book, index) => (
-                <li key={index}>
-                  <strong>{book.title}</strong> - Ngày mượn: {book.borrowDate}
-                </li>
-              ))
-            ) : (
-              <p>Độc giả này không mượn sách nào.</p>
-            )}
-          </ul>
-        ) : (
-          <p>Không có thông tin.</p>
-        )}
-      </Modal>
+      {/* Modal Xem Thông Tin */}
+      <InfoModal
+        isOpen={infoModalOpen}
+        onClose={() => setInfoModalOpen(false)}
+        selectedReader={selectedReader}
+      />
 
-      <h1>Danh Sách Độc Giả</h1>
-      <div className="navigation">
-        <button
-          style={{ marginBottom: 8 }}
-          onClick={() => {
-            setVisibleForm(true);
-            setIsEdit(false);
-          }}
-        >
-          Thêm Độc Giả
-        </button>
-      </div>
-      <Table columns={columns} data={filteredReaders} />
+      {/* Modal Xóa */}
+      <DeleteModal
+        isOpen={deleteModalOpen}
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteModalOpen(false)}
+      />
     </div>
   );
 };

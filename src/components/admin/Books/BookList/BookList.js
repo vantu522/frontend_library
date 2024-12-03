@@ -61,66 +61,68 @@ const BookList = () => {
   };
 
   const columns = [
-    { label: "Tên sách", field: "title" },
-    { label: "Tác giả", field: "author" },
-    { label: "Thể loại", field: "genre" },
-    { label: "Nhà xuất bản", field: "publisher" },
-    { label: "Năm xuất bản", field: "year", className: "compact" },
-    { label: "Số lượng", field: "quantity", className: "compact" },
-    {
-      label: "Trạng thái",
-      field: "status",
-      render: (val) => (
-        <span
-          className={val === "available" ? "status-available" : "status-unavailable"}
-        >
-          {val === "available" ? "Còn sách" : "Hết sách"}
-        </span>
-      ),
-    },
-    {
-      label: "Hành động",
-      width: 130,
-      render: (val, row) => (
-        <>
-          <Tooltip content="Chỉnh sửa" position="left">
-            <button
-              onClick={() => {
-                setVisibleForm(true);
-                setIsEdit(true);
-                setBookId(row.id);
-              }}
-            >
-              <FaEdit size={18} />
-            </button>
-          </Tooltip>
-
-          <Tooltip content="Xóa sách" position="left">
-            <button
-              onClick={() => {
-                setShowDeleteConfirm(true);
-                setBookToDelete(row);
-              }}
-            >
-              <FaTrashAlt size={18} />
-            </button>
-          </Tooltip>
-
-          <Tooltip
-            content={row.status === "available" ? "Đánh dấu hết sách" : "Đánh dấu còn sách"}
-            position="left"
+  { label: "Tên sách", field: "title", width: "20%" },
+  { label: "Tác giả", field: "author", width: "20%" },
+  { label: "Thể loại", field: "genre", width: "15%" },
+  { label: "Nhà xuất bản", field: "publisher", width: "10%" },
+  { label: "NXB", field: "year", width: "5%", className: "compact" },
+  { label: "SL", field: "quantity", width: "5%", className: "compact" },
+  {
+    label: "Trạng thái",
+    field: "status",
+    width: "10%",
+    render: (val) => (
+      <span
+        className={val === "available" ? "status-available" : "status-unavailable"}
+      >
+        {val === "available" ? "Còn sách" : "Hết sách"}
+      </span>
+    ),
+  },
+  {
+    label: "Hành động",
+    width: "30%",
+    render: (val, row) => (
+      <>
+        <Tooltip content="Chỉnh sửa" position="left">
+          <button
+            onClick={() => {
+              setVisibleForm(true);
+              setIsEdit(true);
+              setBookId(row.id);
+            }}
           >
-            <button onClick={() => handleUpdateBookStatus(row)}>
-              <FaExclamationCircle
-                size={18}
-                className={row.status === "available" ? "icon-warning" : "icon-primary"}
-              />
-            </button>
-          </Tooltip>
-        </>
-      ),
-    },
-  ];
+            <FaEdit size={18} />
+          </button>
+        </Tooltip>
+
+        <Tooltip content="Xóa sách" position="left">
+          <button
+            onClick={() => {
+              setShowDeleteConfirm(true);
+              setBookToDelete(row);
+            }}
+          >
+            <FaTrashAlt size={18} color="red"/>
+          </button>
+        </Tooltip>
+
+        <Tooltip
+          content={row.status === "available" ? "Đánh dấu hết sách" : "Đánh dấu còn sách"}
+          position="left"
+        >
+          <button onClick={() => handleUpdateBookStatus(row)}>
+            <FaExclamationCircle
+              size={18}
+              className={row.status === "available" ? "icon-warning" : "icon-primary"}
+            />
+          </button>
+        </Tooltip>
+      </>
+    ),
+  },
+];
+
 
   return (
     <div>

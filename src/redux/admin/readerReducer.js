@@ -1,50 +1,48 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const loadReadersFromLocalStorage = () => {
+// Load state from Local Storage
+const loadFromLocalStorage = () => {
   try {
-    const readers = localStorage.getItem("readers");
-    return readers ? JSON.parse(readers) : [];
+    const serializedState = localStorage.getItem("readers");
+    return serializedState ? JSON.parse(serializedState) : [];
   } catch (error) {
-    console.error("Lỗi khi tải độc giả từ localStorage:", error);
+    console.error("Could not load state", error);
     return [];
   }
 };
 
-const saveReadersToLocalStorage = (readers) => {
+// Save state to Local Storage
+const saveToLocalStorage = (state) => {
   try {
-    localStorage.setItem("readers", JSON.stringify(readers));
+    const serializedState = JSON.stringify(state);
+    localStorage.setItem("readers", serializedState);
   } catch (error) {
-    console.error("Lỗi khi lưu độc giả vào localStorage:", error);
+    console.error("Could not save state", error);
   }
 };
 
-const readerSlice = createSlice({
+const readersSlice = createSlice({
   name: "readers",
-  initialState: loadReadersFromLocalStorage() || [],
+  initialState: loadFromLocalStorage(),
   reducers: {
     addReader: (state, action) => {
       state.push(action.payload);
-      saveReadersToLocalStorage(state);
+      saveToLocalStorage(state);
     },
     deleteReader: (state, action) => {
-      const index = state.findIndex((reader) => reader.id === action.payload);
-      if (index !== -1) {
-        state.splice(index, 1);
-        saveReadersToLocalStorage(state);
-      }
+      const updatedState = state.filter((reader) => reader.id !== action.payload);
+      saveToLocalStorage(updatedState);
+      return updatedState;
     },
     updateReader: (state, action) => {
-      const { id, name, email, phone } = action.payload;
-      const reader = state.find((r) => r.id === id);
-      if (reader) {
-        reader.name = name;
-        reader.email = email;
-        reader.phone = phone;
-        saveReadersToLocalStorage(state);
+      const index = state.findIndex((reader) => reader.id === action.payload.id);
+      if (index !== -1) {
+        state[index] = action.payload;
+        saveToLocalStorage(state);
       }
     },
   },
 });
 
-export const { addReader, deleteReader, updateReader } = readerSlice.actions;
-export default readerSlice.reducer;
+export const { addReader, deleteReader, updateReader } = readersSlice.actions;
+export default readersSlice.reducer;

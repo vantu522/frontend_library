@@ -266,3 +266,38 @@
     color: white;
   }
   
+  /* BookList.css */
+.table-column {
+  text-align: left;
+}
+
+.table-column.compact {
+  text-align: center;
+}
+
+/* Căn chỉnh và đặt độ rộng */
+.table-column-title {
+  width: 20%;
+}
+
+.table-column-author {
+  width: 15%;
+}
+
+.table-column-genre {
+  width: 15%;
+}
+
+.table-column-publisher {
+  width: 20%;
+}
+
+.table-column-year,
+.table-column-quantity {
+  width: 10%;
+}
+
+.table-column-actions {
+  width: 15%;
+  text-align: center;
+}

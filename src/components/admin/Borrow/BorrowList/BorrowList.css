@@ -207,4 +207,26 @@
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Áp dụng hiệu ứng bóng khi focus */
   }
   
+  .delete-confirmation {
+    text-align: center;
+  }
+  
+  .navigation {
+    margin-bottom: 20px;
+  }
+  
+  .navigation input,
+  .navigation select {
+    margin-right: 10px;
+    padding: 5px;
+    border-radius: 5px;
+  }
+  
+  button {
+    cursor: pointer;
+  }
+  
+  button:hover {
+    opacity: 0.8;
+  }
   
