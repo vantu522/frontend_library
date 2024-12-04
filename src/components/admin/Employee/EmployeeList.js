@@ -2,20 +2,19 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "../../../common/admin/Modal/Modal";
 import Table from "../../../common/admin/Table/Table";
-import Button from "../../../common/admin/Button/Button";
 import Tooltip from "../../../common/admin/Tooltip/Tooltip";
 import AddEmployeeForm from "./AddEmployeeForm";
 import EditEmployeeForm from "./EditEmployeeForm";
 import { deleteEmployee, updateEmployee, addEmployee } from "../../../redux/admin/employeesReducer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash, faInfoCircle, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 const EmployeeList = () => {
   const employees = useSelector((state) => state.employees);
   const dispatch = useDispatch();
   const [visibleForm, setVisibleForm] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const [selectedEmployee, setSelectedEmployee] = useState(null); // Gộp ID và thông tin nhân viên
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [positionFilter, setPositionFilter] = useState('all');
 
@@ -29,15 +28,16 @@ const EmployeeList = () => {
   });
 
   const columns = [
-    { label: "Tên", field: "name" },
-    { label: "Chức Vụ", field: "position" },
-    { label: "Số Điện Thoại", field: "phone" },
-    { label: "Email", field: "email" },
+    { label: "Mã Nhân Viên", field: "id", width: "15%" },
+    { label: "Tên", field: "name", width: "25%" },
+    { label: "Chức Vụ", field: "position", width: "20%" },
+    { label: "Số Điện Thoại", field: "phone", width: "20%" },
+    { label: "Email", field: "email", width: "20%" },
     {
       label: "Hành động",
-      width: 130,
+      width: "10%",
       render: (val, row) => (
-        <div style={{ display: "flex", gap: "8px" }}>
+        <div className="flex gap-2">
           {/* Chỉnh sửa */}
           <Tooltip content="Chỉnh sửa" position="left">
             <button
@@ -45,10 +45,10 @@ const EmployeeList = () => {
               onClick={() => {
                 setVisibleForm(true);
                 setIsEdit(true);
-                setSelectedEmployee(row);
+                setSelectedEmployee(row); 
               }}
             >
-              <FontAwesomeIcon icon={faEdit} size="lg" color="#007bff" />
+              <FontAwesomeIcon icon={faEdit} size="lg" className="text-blue-500" />
             </button>
           </Tooltip>
 
@@ -58,7 +58,7 @@ const EmployeeList = () => {
               className="icon-btn"
               onClick={() => dispatch(deleteEmployee(row.id))}
             >
-              <FontAwesomeIcon icon={faTrash} size="lg" color="#ff4d4f" />
+              <FontAwesomeIcon icon={faTrash} size="lg" className="text-red-500" />
             </button>
           </Tooltip>
         </div>
@@ -67,48 +67,56 @@ const EmployeeList = () => {
   ];
 
   return (
-    <div>
+    <div className="p-6 bg-white rounded-lg shadow-md">
+      {/* Modal cho thêm và chỉnh sửa nhân viên */}
       <Modal onClose={() => setVisibleForm(false)} isOpen={visibleForm}>
         {isEdit ? (
           <EditEmployeeForm
-            employee={selectedEmployee}
+            employeeId={selectedEmployee?.id}
             onClose={() => setVisibleForm(false)}
             onUpdate={(employee) => dispatch(updateEmployee(employee))}
           />
         ) : (
           <AddEmployeeForm
-            onClose={() => setVisibleForm(false)}
+            setVisibleForm={setVisibleForm} // Ensure this is passed correctly
             onAdd={(employee) => dispatch(addEmployee(employee))}
           />
         )}
       </Modal>
 
-      <h1>Danh Sách Nhân Viên</h1>
+      <h1 className="text-2xl font-semibold mb-4 text-gray-800">Danh Sách Nhân Viên</h1>
 
-      <div className="navigation">
-        <input
-          type="text"
-          placeholder="Tìm kiếm..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <select onChange={(e) => setPositionFilter(e.target.value)} value={positionFilter}>
-          <option value="all">Tất cả chức vụ</option>
-          <option value="manager">Quản lý</option>
-          <option value="staff">Nhân viên</option>
-        </select>
-        <Button
-          style={{ marginBottom: 8 }}
-          size="medium"
+      <div className="flex justify-between items-center mb-6">
+        <div className="flex gap-4 items-center">
+          <input
+            type="text"
+            placeholder="Tìm kiếm..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <select
+            onChange={(e) => setPositionFilter(e.target.value)}
+            value={positionFilter}
+            className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="all">Tất cả chức vụ</option>
+            <option value="manager">Quản lý</option>
+            <option value="staff">Nhân viên</option>
+          </select>
+        </div>
+
+        <button
           onClick={() => {
             setVisibleForm(true);
             setIsEdit(false);
             setSelectedEmployee(null);
           }}
+          className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
         >
-          <FontAwesomeIcon icon={faPlus} style={{ marginRight: 8 }} />
+          <FontAwesomeIcon icon={faPlus} />
           Thêm Nhân Viên
-        </Button>
+        </button>
       </div>
 
       <Table columns={columns} data={filteredEmployees} />

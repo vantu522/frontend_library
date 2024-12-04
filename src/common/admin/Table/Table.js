@@ -6,7 +6,7 @@ const Table = ({ columns, data }) => {
   const [sortConfig, setSortConfig] = useState({ key: "", direction: "" });
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 25;
+  const itemsPerPage = 15;
 
   const sortedData = useMemo(() => {
     let sortableData = [...data];

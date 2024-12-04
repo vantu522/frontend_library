@@ -16,8 +16,9 @@ const ArchivedFeedbackList = () => {
   ];
 
   return (
-    <div>
-      <h1>Danh Sách Phản Hồi Đã Lưu Trữ</h1>
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <h1 className="text-2xl font-semibold text-gray-700 mb-6">Danh Sách Phản Hồi Đã Lưu Trữ</h1>
+      
       <Table columns={columns} data={archivedFeedbacks} />
     </div>
   );

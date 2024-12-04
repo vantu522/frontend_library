@@ -79,19 +79,20 @@ const AddBorrowForm = ({ setVisibleForm }) => {
   };
 
   return (
-    <div className="add-borrow-form">
-      <h2>Thêm Phiếu Mượn</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
+    <div className="p-6 max-w-lg mx-auto bg-white rounded-lg shadow-md">
+      <h2 className="text-2xl font-semibold text-center mb-6">Thêm Phiếu Mượn</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <label className="block text-sm font-medium text-gray-700">
           Tên Sách:
           <input
             type="text"
             value={bookTitle}
             onChange={handleBookTitleChange}
             required
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
           {suggestedBooks.length > 0 && (
-            <ul className="suggestions">
+            <ul className="mt-2 bg-white shadow-md border rounded-md max-h-40 overflow-y-auto">
               {suggestedBooks.map((book) => (
                 <li
                   key={book.id}
@@ -99,6 +100,7 @@ const AddBorrowForm = ({ setVisibleForm }) => {
                     setBookTitle(book.title);
                     setSuggestedBooks([]);
                   }}
+                  className="cursor-pointer p-2 hover:bg-gray-100"
                 >
                   {book.title}
                 </li>
@@ -106,40 +108,54 @@ const AddBorrowForm = ({ setVisibleForm }) => {
             </ul>
           )}
         </label>
-        <label>
+        <label className="block text-sm font-medium text-gray-700">
           Số Điện Thoại:
           <input
             type="text"
             value={borrowerPhone}
             onChange={(e) => setBorrowerPhone(e.target.value)}
             required
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
         </label>
-        <label>
+        <label className="block text-sm font-medium text-gray-700">
           Email:
           <input
             type="email"
             value={borrowerEmail}
             onChange={(e) => setBorrowerEmail(e.target.value)}
             required
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
         </label>
-        <label>
+        <label className="block text-sm font-medium text-gray-700">
           Ngày Trả Dự Kiến:
           <input
             type="date"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
             required
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
         </label>
-        <button type="submit">Thêm Phiếu Mượn</button>
+        <button
+          type="submit"
+          className="w-full py-2 px-4 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+        >
+          Thêm Phiếu Mượn
+        </button>
       </form>
 
       {showModalMessage && (
         <Modal onClose={() => setShowModalMessage(false)} isOpen={showModalMessage}>
-          <h2>Thông Báo</h2>
-          <p>Người mượn chưa tồn tại. Vui lòng thêm người mượn trước.</p>
+          <h2 className="text-xl font-semibold text-center mb-4">Thông Báo</h2>
+          <p className="text-center mb-4">Người mượn chưa tồn tại. Vui lòng thêm người mượn trước.</p>
+          <button
+            onClick={() => setShowModalMessage(false)}
+            className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            Đóng
+          </button>
         </Modal>
       )}
     </div>

@@ -24,45 +24,56 @@ const EditReaderForm = ({ reader, onClose, onUpdate }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-4 p-6 bg-white rounded-lg shadow-lg"
+    >
       <div>
-        <label>Tên:</label>
+        <label className="block font-medium text-gray-700">Tên:</label>
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
+          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
       </div>
       <div>
-        <label>Email:</label>
+        <label className="block font-medium text-gray-700">Email:</label>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
       </div>
       <div>
-        <label>Địa Chỉ:</label>
+        <label className="block font-medium text-gray-700">Địa Chỉ:</label>
         <input
           type="text"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
+          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
       </div>
       <div>
-        <label>Số Điện Thoại:</label>
+        <label className="block font-medium text-gray-700">Số Điện Thoại:</label>
         <input
           type="text"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
+          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
       </div>
-      <button type="submit">Lưu</button>
-      <button type="button" onClick={onClose}>
-        Hủy
-      </button>
+      <div className="flex gap-4 mt-6">
+        <button
+          type="submit"
+          className="w-full py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          Lưu
+        </button>
+      </div>
     </form>
   );
 };

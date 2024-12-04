@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateBorrow } from '../../../../redux/admin/borrowsReducer';
-import "./EditBorrowForm.css"
 
 const EditBorrowForm = ({ borrowId, setVisibleForm }) => {
   const borrow = useSelector((state) =>
     state.borrows.find((borrow) => borrow.id === borrowId)
   ); 
   const [bookId, setBookId] = useState('');
-  const [bookTitle, setBookTitle] = useState('');  // Thêm state cho tên sách
+  const [bookTitle, setBookTitle] = useState('');
   const [borrowerName, setBorrowerName] = useState('');
   const [borrowerPhone, setBorrowerPhone] = useState('');
   const [borrowerEmail, setBorrowerEmail] = useState('');
@@ -18,7 +17,7 @@ const EditBorrowForm = ({ borrowId, setVisibleForm }) => {
   useEffect(() => {
     if (borrow) {
       setBookId(borrow.bookId);
-      setBookTitle(borrow.bookTitle);  // Lấy tên sách
+      setBookTitle(borrow.bookTitle); 
       setBorrowerName(borrow.borrowerName);
       setBorrowerPhone(borrow.borrowerPhone);
       setBorrowerEmail(borrow.borrowerEmail);
@@ -32,7 +31,7 @@ const EditBorrowForm = ({ borrowId, setVisibleForm }) => {
     const updatedBorrow = {
       id: borrowId,
       bookId,
-      bookTitle,  // Cập nhật tên sách
+      bookTitle, 
       borrowerName,
       borrowerPhone,
       borrowerEmail,
@@ -49,58 +48,67 @@ const EditBorrowForm = ({ borrowId, setVisibleForm }) => {
   }
 
   return (
-    <div className="borrow-form">
-      <h2>Chỉnh Sửa Phiếu Mượn</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
+    <div className="p-6 max-w-lg mx-auto bg-white rounded-lg shadow-md">
+      <h2 className="text-2xl font-semibold text-center mb-6">Chỉnh Sửa Phiếu Mượn</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <label className="block text-sm font-medium text-gray-700">
           Tên Sách:
           <input
             type="text"
-            value={bookTitle}  // Liên kết với state bookTitle
+            value={bookTitle} 
             onChange={(e) => setBookTitle(e.target.value)}
             required
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
         </label>
-        <label>
+        <label className="block text-sm font-medium text-gray-700">
           Tên Người Mượn:
           <input
             type="text"
             value={borrowerName}
             onChange={(e) => setBorrowerName(e.target.value)}
-            disabled  // Vô hiệu hóa trường này
+            disabled
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed"
           />
         </label>
-        <label>
+        <label className="block text-sm font-medium text-gray-700">
           Số Điện Thoại:
           <input
             type="text"
             value={borrowerPhone}
             onChange={(e) => setBorrowerPhone(e.target.value)}
-            disabled  // Vô hiệu hóa trường này
+            disabled
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed"
           />
         </label>
-        <label>
+        <label className="block text-sm font-medium text-gray-700">
           Email:
           <input
             type="email"
             value={borrowerEmail}
             onChange={(e) => setBorrowerEmail(e.target.value)}
-            disabled  // Vô hiệu hóa trường này
+            disabled
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed"
           />
         </label>
-        <label>
+        <label className="block text-sm font-medium text-gray-700">
           Ngày Trả Dự Kiến:
           <input
             type="date"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
             required
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
         </label>
-        <button type="submit">Cập Nhật Phiếu Mượn</button>
-        <button type="button" onClick={() => setVisibleForm(false)}>
-          Hủy
-        </button>
+        <div className="flex space-x-4">
+          <button
+            type="submit"
+            className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            Cập Nhật Phiếu Mượn
+          </button>
+        </div>
       </form>
     </div>
   );

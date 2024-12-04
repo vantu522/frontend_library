@@ -11,11 +11,10 @@ const FeedbackList = () => {
   const [feedback, setFeedback] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFeedbackId, setSelectedFeedbackId] = useState(null);
-  const [sortConfig, setSortConfig] = useState({ key: '', direction: 'asc' }); 
+  const [sortConfig, setSortConfig] = useState({ key: '', direction: 'asc' });
 
   const feedbacks = useSelector((state) => state.feedbacks.feedbacks);
-  const currentAdmin = useSelector((state) => state.auth?.adminName || ""); 
-
+  const currentAdmin = useSelector((state) => state.auth?.adminName || "");
 
   const filteredFeedbacks = feedbacks.filter(
     (item) =>
@@ -30,7 +29,6 @@ const FeedbackList = () => {
     }
     setSortConfig({ key, direction });
   };
-
 
   const sortedFeedbacks = React.useMemo(() => {
     let sortableItems = [...filteredFeedbacks];
@@ -52,19 +50,16 @@ const FeedbackList = () => {
     {
       label: "Họ Tên",
       field: "name",
-
       onClick: () => requestSort('name'),
     },
     {
       label: "Email",
       field: "email",
-
       onClick: () => requestSort('email'),
     },
     {
       label: "Câu Hỏi",
       field: "question",
-
       onClick: () => requestSort('question'),
     },
     {
@@ -77,7 +72,7 @@ const FeedbackList = () => {
             setSelectedFeedbackId(row.id);
           }}
           size="small"
-          className="primary"
+          className="primary bg-blue-500 hover:bg-blue-600 text-white py-1 px-4 rounded"
         >
           Gửi Phản Hồi
         </Button>
@@ -91,7 +86,7 @@ const FeedbackList = () => {
         sendFeedback({
           id: selectedFeedbackId,
           feedback,
-          employee: currentAdmin, 
+          employee: currentAdmin,
         })
       );
       setVisibleForm(false);
@@ -101,24 +96,36 @@ const FeedbackList = () => {
   };
 
   return (
-    <div>
+    <div className="p-6 bg-gray-50 min-h-screen">
       <Modal onClose={() => setVisibleForm(false)} isOpen={visibleForm}>
-        <textarea
-          value={feedback}
-          onChange={(e) => setFeedback(e.target.value)}
-          placeholder="Nhập phản hồi của bạn"
-          rows={5}
-        />
-        <Button onClick={handleSendFeedback} className="primary">
-          Gửi Phản Hồi
-        </Button>
+        <div className="flex flex-col space-y-4">
+          <textarea
+            value={feedback}
+            onChange={(e) => setFeedback(e.target.value)}
+            placeholder="Nhập phản hồi của bạn"
+            rows={5}
+            className="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <Button
+            onClick={handleSendFeedback}
+            className="primary bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded-lg"
+          >
+            Gửi Phản Hồi
+          </Button>
+        </div>
       </Modal>
 
-      <h1>Danh Sách Phản Hồi</h1>
-      <Table
-        columns={columns}
-        data={sortedFeedbacks} 
-      />
+      <h1 className="text-2xl font-semibold text-gray-700 mb-4">Danh Sách Phản Hồi</h1>
+      <div className="mb-6">
+        <input
+          type="text"
+          placeholder="Tìm kiếm..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="p-3 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+      <Table columns={columns} data={sortedFeedbacks} />
     </div>
   );
 };

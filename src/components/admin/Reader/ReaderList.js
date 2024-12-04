@@ -12,14 +12,22 @@ import { faEdit, faTrash, faInfoCircle, faPlus } from "@fortawesome/free-solid-s
 // Component DeleteModal
 const DeleteModal = ({ isOpen, onConfirm, onCancel }) => (
   <Modal onClose={onCancel} isOpen={isOpen}>
-    <div className="delete-modal">
-      <h3>Bạn có chắc chắn muốn xóa độc giả này?</h3>
-      <button onClick={onConfirm} className="btn primary">
-        Xóa
-      </button>
-      <button onClick={onCancel} className="btn secondary">
-        Hủy
-      </button>
+    <div className="p-6 text-center">
+      <h3 className="text-lg font-semibold">Bạn có chắc chắn muốn xóa độc giả này?</h3>
+      <div className="mt-4 space-x-4">
+        <button
+          onClick={onConfirm}
+          className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+        >
+          Xóa
+        </button>
+        <button
+          onClick={onCancel}
+          className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+        >
+          Hủy
+        </button>
+      </div>
     </div>
   </Modal>
 );
@@ -27,14 +35,14 @@ const DeleteModal = ({ isOpen, onConfirm, onCancel }) => (
 // Component InfoModal
 const InfoModal = ({ isOpen, onClose, selectedReader }) => (
   <Modal onClose={onClose} isOpen={isOpen}>
-    <div>
-      <h2>Thông Tin Sách Đang Mượn</h2>
+    <div className="p-6">
+      <h2 className="text-xl font-semibold mb-4">Thông Tin Sách Đang Mượn</h2>
       {selectedReader ? (
         <>
           {selectedReader.borrowedBooks && selectedReader.borrowedBooks.length > 0 ? (
             <ul>
               {selectedReader.borrowedBooks.map((book, index) => (
-                <li key={index}>
+                <li key={index} className="mb-4">
                   <p><strong>Tựa sách:</strong> {book.title}</p>
                   <p><strong>Ngày mượn:</strong> {book.borrowDate}</p>
                   <p><strong>Ngày trả dự kiến:</strong> {book.dueDate}</p>
@@ -56,7 +64,10 @@ const InfoModal = ({ isOpen, onClose, selectedReader }) => (
       ) : (
         <p>Không có thông tin độc giả.</p>
       )}
-      <button onClick={onClose} className="btn secondary">
+      <button
+        onClick={onClose}
+        className="mt-4 px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+      >
         Đóng
       </button>
     </div>
@@ -89,13 +100,14 @@ const ReaderList = () => {
     {
       label: "Hành động",
       render: (val, row) => (
-        <div style={{ display: "flex", gap: "8px" }}>
+        <div className="flex gap-3">
           <Tooltip content="Xem thông tin" position="left">
             <button
               onClick={() => {
                 setSelectedReader(row);
                 setInfoModalOpen(true);
               }}
+              className="text-blue-500 hover:text-blue-700"
             >
               <FontAwesomeIcon icon={faInfoCircle} size="lg" />
             </button>
@@ -108,6 +120,7 @@ const ReaderList = () => {
                 setIsEdit(true);
                 setSelectedReader(row);
               }}
+              className="text-yellow-500 hover:text-yellow-700"
             >
               <FontAwesomeIcon icon={faEdit} size="lg" />
             </button>
@@ -119,6 +132,7 @@ const ReaderList = () => {
                 setDeleteTargetId(row.id);
                 setDeleteModalOpen(true);
               }}
+              className="text-red-500 hover:text-red-700"
             >
               <FontAwesomeIcon icon={faTrash} size="lg" />
             </button>
@@ -134,26 +148,28 @@ const ReaderList = () => {
   };
 
   return (
-    <div>
-      <h1>Danh Sách Độc Giả</h1>
+    <div className="p-6 bg-white rounded-lg shadow-md">
+      <h1 className="text-2xl font-semibold mb-4 text-gray-800">Danh Sách Độc Giả</h1>
 
       {/* Thanh tìm kiếm */}
-      <div className="navigation">
+      <div className="flex justify-between items-center mb-6">
         <input
           type="text"
           placeholder="Tìm kiếm độc giả..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <button
-          className="btn primary"
+          className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
           onClick={() => {
             setVisibleForm(true);
             setIsEdit(false);
             setSelectedReader(null);
           }}
         >
-          <FontAwesomeIcon icon={faPlus} /> Thêm Độc Giả
+          <FontAwesomeIcon icon={faPlus} />
+          Thêm Độc Giả
         </button>
       </div>
 

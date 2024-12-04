@@ -11,7 +11,6 @@ import EditBorrowForm from '../EditBorrowForm/EditBorrowForm';
 import AddBorrowForm from '../AddBorrowForm/AddBorrowForm';
 import { toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';  
-import "./BorrowList.css";
 
 const BorrowList = () => {
   const borrows = useSelector((state) => state.borrows);
@@ -69,10 +68,7 @@ const BorrowList = () => {
       field: 'status',
       render: (val, row) => (
         <span
-          style={{
-            color: row.status === 'overdue' ? 'red' : 'green',  // Màu đỏ cho quá hạn, xanh cho đang mượn
-            fontWeight: 'bold',
-          }}
+          className={`font-bold ${row.status === 'overdue' ? 'text-red-500' : 'text-green-500'}`}
         >
           {row.status === 'overdue' ? 'Quá hạn' : 'Đang mượn'}
         </span>
@@ -90,6 +86,7 @@ const BorrowList = () => {
                 setIsEdit(true);
                 setBorrowId(row.id);
               }}
+              className="text-blue-500 hover:text-blue-700"
             >
               <FaEdit size={18} />
             </button>
@@ -101,6 +98,7 @@ const BorrowList = () => {
                 setDeleteTargetId(row.id);
                 setShowDeleteModal(true);
               }}
+              className="text-red-500 hover:text-red-700 ml-2"
             >
               <FaTrash size={18} />
             </button>
@@ -110,7 +108,7 @@ const BorrowList = () => {
             <Tooltip content="Đánh dấu là đã trả và xóa" position="left">
               <button
                 onClick={() => handleMarkAsReturned(row)}
-                style={{ marginLeft: 8 }}
+                className="text-green-500 hover:text-green-700 ml-2"
               >
                 <FaCheck size={18} />
               </button>
@@ -173,7 +171,7 @@ const BorrowList = () => {
   };
 
   return (
-    <div>
+    <div className="p-5 font-sans">
       {/* Form Add Borrow */}
       <Modal onClose={() => setVisibleForm(false)} isOpen={visibleForm}>
         {isEdit ? (
@@ -192,44 +190,58 @@ const BorrowList = () => {
 
       {/* Modal xác nhận xóa */}
       <Modal onClose={handleDeleteCancel} isOpen={showDeleteModal}>
-        <div className="delete-confirmation">
+        <div className="text-center">
           <h3>Bạn có chắc chắn muốn xóa phiếu mượn này?</h3>
-          <Button onClick={handleDeleteConfirm} className="primary">
+          <Button onClick={handleDeleteConfirm} className="bg-blue-500 text-white hover:bg-blue-700 px-4 py-2 rounded-md mt-2">
             Xóa
           </Button>
-          <Button onClick={handleDeleteCancel} className="secondary">
-            Hủy
-          </Button>
+
         </div>
       </Modal>
 
-      <h1>Danh Sách Phiếu Mượn</h1>
+      <h1 className="text-2xl font-bold mb-4">Danh Sách Phiếu Mượn</h1>
+      
 
-      <div className="navigation">
-        <select onChange={(e) => setStatusFilter(e.target.value)} value={statusFilter}>
-          <option value="all">Tất cả trạng thái</option>
-          <option value="active">Đang mượn</option>
-          <option value="returned">Đã trả</option>
-          <option value="overdue">Quá hạn</option>
-        </select>
+      {/* Thanh tìm kiếm, trạng thái, và nút thêm */}
+      <div className="flex justify-between items-center mb-5">
+  {/* Thanh tìm kiếm bên trái */}
+  <input
+    type="text"
+    placeholder="Tìm kiếm"
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    className="p-2 border rounded-md w-64"
+  />
 
-        <input
-          type="text"
-          placeholder="Tìm kiếm"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+  {/* Phần bên phải chứa nút thêm phiếu mượn và thanh lọc */}
+  <div className="flex gap-3">
+    {/* Thanh trạng thái lọc */}
+    <select
+      onChange={(e) => setStatusFilter(e.target.value)}
+      value={statusFilter}
+      className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+    >
+      <option value="all">Tất cả trạng thái</option>
+      <option value="active">Đang mượn</option>
+      <option value="returned">Đã trả</option>
+      <option value="overdue">Quá hạn</option>
+    </select>
 
-        <Button
-          onClick={() => {
-            setVisibleForm(true);
-            setIsEdit(false);  // Thêm mới
-          }}
-        >
-          <FaPlus /> Thêm sách
-        </Button>
-      </div>
+    {/* Nút Thêm phiếu mượn */}
+    <button
+      onClick={() => {
+        setVisibleForm(true);
+        setIsEdit(false);
+      }}
+      className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+    >
+      <FaPlus /> Thêm phiếu mượn
+    </button>
+  </div>
+</div>
 
+
+      {/* Bảng danh sách phiếu mượn */}
       <Table columns={columns} data={filteredBorrows} />
     </div>
   );
