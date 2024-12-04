@@ -24,7 +24,9 @@ const BorrowList = () => {
   const [bookId, setBookId] = useState(null);  
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [returnedBooks, setReturnedBooks] = useState(new Set());  
+  const [returnedBooks, setReturnedBooks] = useState(new Set());
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteTargetId, setDeleteTargetId] = useState(null);  // Lưu ID của phiếu mượn cần xóa
 
   const checkReaderExists = (borrowerName) => {
     return readers.some((reader) => reader.name.toLowerCase() === borrowerName.toLowerCase());
@@ -38,13 +40,19 @@ const BorrowList = () => {
     return matchesSearch && matchesStatus;
   });
 
+  // Hàm kiểm tra và cập nhật trạng thái quá hạn
   useEffect(() => {
     const today = new Date();
     borrows.forEach((borrow) => {
       const dueDate = new Date(borrow.dueDate);
-      if (borrow.status === 'active' && today > dueDate) {
-        const updatedBorrow = { ...borrow, status: 'overdue' };
-        dispatch(updateBorrow(updatedBorrow));
+      if (borrow.status === 'active') {
+        if (today > dueDate) {
+          const updatedBorrow = { ...borrow, status: 'overdue' };  // Đổi trạng thái thành 'overdue' nếu quá hạn
+          dispatch(updateBorrow(updatedBorrow));
+        } else {
+          const updatedBorrow = { ...borrow, status: 'active' };  // Đảm bảo rằng trạng thái là 'active' nếu chưa quá hạn
+          dispatch(updateBorrow(updatedBorrow));
+        }
       }
     });
   }, [borrows, dispatch]);
@@ -53,9 +61,23 @@ const BorrowList = () => {
     { label: 'Tên sách', field: 'bookTitle' },
     { label: 'Tên người mượn', field: 'borrowerName' },
     { label: 'Email', field: 'borrowerEmail' },
-    { label: 'Số điện thoại', field: 'borrowerEmail' },
+    { label: 'Số điện thoại', field: 'borrowerPhone' },
     { label: 'Ngày mượn', field: 'borrowDate' },
     { label: 'Ngày trả dự kiến', field: 'dueDate' },
+    {
+      label: 'Trạng thái',
+      field: 'status',
+      render: (val, row) => (
+        <span
+          style={{
+            color: row.status === 'overdue' ? 'red' : 'green',  // Màu đỏ cho quá hạn, xanh cho đang mượn
+            fontWeight: 'bold',
+          }}
+        >
+          {row.status === 'overdue' ? 'Quá hạn' : 'Đang mượn'}
+        </span>
+      ),
+    },
     {
       label: 'Hành động',
       width: 180,
@@ -66,7 +88,7 @@ const BorrowList = () => {
               onClick={() => {
                 setVisibleForm(true);
                 setIsEdit(true);
-                setBookId(row.id); 
+                setBorrowId(row.id);
               }}
             >
               <FaEdit size={18} />
@@ -74,45 +96,67 @@ const BorrowList = () => {
           </Tooltip>
 
           <Tooltip content="Sau khi xóa, dữ liệu không thể khôi phục" position="left">
-            <Button
-              onClick={() => dispatch(deleteBorrow(row.id))}
+            <button
+              onClick={() => {
+                setDeleteTargetId(row.id);
+                setShowDeleteModal(true);
+              }}
             >
-              <FaTrash size={18}/>
-            </Button>
+              <FaTrash size={18} />
+            </button>
           </Tooltip>
 
-          {row.status === 'active' && !returnedBooks.has(row.id) && (  
-            <Button
-              onClick={() => {
-                const updatedBorrow = { ...row, status: 'returned' };
-                dispatch(updateBorrow(updatedBorrow));
-
-                dispatch(addToHistory({
-                  ...updatedBorrow,
-                  returnDate: new Date().toISOString().split('T')[0],
-                }));
-
-                setReturnedBooks((prevBooks) => {
-                  const updatedBooks = new Set(prevBooks);
-                  updatedBooks.add(row.id);
-                  return updatedBooks;
-                });
-
-                dispatch(deleteBorrow(row.id));
-
-                toast.success(`Phiếu mượn sách "${row.bookTitle}" đã được đánh dấu là đã trả và xóa khỏi danh sách.`);
-              }}
-              style={{ marginLeft: 8 }}
-              size="small"
-              className="success"
-            >
-              <FaCheck />
-            </Button>
+          {(row.status === 'active' || row.status === 'overdue') && !returnedBooks.has(row.id) && (
+            <Tooltip content="Đánh dấu là đã trả và xóa" position="left">
+              <button
+                onClick={() => handleMarkAsReturned(row)}
+                style={{ marginLeft: 8 }}
+              >
+                <FaCheck size={18} />
+              </button>
+            </Tooltip>
           )}
         </>
       ),
     },
   ];
+
+  const handleDeleteConfirm = () => {
+    dispatch(deleteBorrow(deleteTargetId));
+    setShowDeleteModal(false);  // Đóng modal sau khi xóa
+    toast.success('Phiếu mượn đã được xóa thành công.');
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false);  // Đóng modal nếu hủy xóa
+  };
+
+  const handleMarkAsReturned = (row) => {
+    if (returnedBooks.has(row.id)) return;
+
+    const updatedBorrow = { ...row, status: 'returned' };
+    dispatch(updateBorrow(updatedBorrow));
+
+    dispatch(addToHistory({
+      ...updatedBorrow,
+      returnDate: new Date().toISOString().split('T')[0],
+    }));
+
+    setReturnedBooks((prevBooks) => {
+      const updatedBooks = new Set(prevBooks);
+      updatedBooks.add(row.id);
+      return updatedBooks;
+    });
+
+    dispatch(deleteBorrow(row.id));
+
+    // Hiển thị thông báo khi trả sách dù đã quá hạn
+    if (row.status === 'overdue') {
+      toast.warn(`Sách "${row.bookTitle}" đã quá hạn! Đánh dấu là đã trả dù quá hạn.`);
+    }
+
+    toast.success(`Phiếu mượn sách "${row.bookTitle}" đã được đánh dấu là đã trả và xóa khỏi danh sách.`);
+  };
 
   const handleAddBorrow = (borrow) => {
     if (!checkReaderExists(borrow.borrowerName)) {
@@ -130,6 +174,7 @@ const BorrowList = () => {
 
   return (
     <div>
+      {/* Form Add Borrow */}
       <Modal onClose={() => setVisibleForm(false)} isOpen={visibleForm}>
         {isEdit ? (
           <EditBorrowForm
@@ -143,6 +188,19 @@ const BorrowList = () => {
             onAdd={handleAddBorrow}
           />
         )}
+      </Modal>
+
+      {/* Modal xác nhận xóa */}
+      <Modal onClose={handleDeleteCancel} isOpen={showDeleteModal}>
+        <div className="delete-confirmation">
+          <h3>Bạn có chắc chắn muốn xóa phiếu mượn này?</h3>
+          <Button onClick={handleDeleteConfirm} className="primary">
+            Xóa
+          </Button>
+          <Button onClick={handleDeleteCancel} className="secondary">
+            Hủy
+          </Button>
+        </div>
       </Modal>
 
       <h1>Danh Sách Phiếu Mượn</h1>
@@ -165,12 +223,10 @@ const BorrowList = () => {
         <Button
           onClick={() => {
             setVisibleForm(true);
-            setIsEdit(false);
+            setIsEdit(false);  // Thêm mới
           }}
-          size="small"
-          className="primary"
         >
-          <FaPlus />
+          <FaPlus /> Thêm sách
         </Button>
       </div>
 

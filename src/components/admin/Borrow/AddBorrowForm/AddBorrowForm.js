@@ -1,26 +1,21 @@
-// AddBorrowForm.jsx
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "../../../../common/admin/Modal/Modal";
 import { addBorrow } from "../../../../redux/admin/borrowsReducer";
-import "./AddBorrowForm.css"
+import "./AddBorrowForm.css";
 
 const AddBorrowForm = ({ setVisibleForm }) => {
   const dispatch = useDispatch();
-
-
   const [bookTitle, setBookTitle] = useState("");
   const [borrowerPhone, setBorrowerPhone] = useState("");
   const [borrowerEmail, setBorrowerEmail] = useState("");
-  const [borrowerName, setBorrowerName] = useState(""); 
+  const [borrowerName, setBorrowerName] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [suggestedBooks, setSuggestedBooks] = useState([]);
-  const [showModalMessage, setShowModalMessage] = useState(false); 
+  const [showModalMessage, setShowModalMessage] = useState(false);
 
- 
   const readers = useSelector((state) => state.readers);
   const books = useSelector((state) => state.books);
-
 
   useEffect(() => {
     const existingReader = readers.find(
@@ -33,7 +28,6 @@ const AddBorrowForm = ({ setVisibleForm }) => {
       setBorrowerName("");
     }
   }, [borrowerEmail, borrowerPhone, readers]);
-
 
   const handleBookTitleChange = (e) => {
     const title = e.target.value;
@@ -48,9 +42,7 @@ const AddBorrowForm = ({ setVisibleForm }) => {
     }
   };
 
-
   const isPhoneValid = (phone) => /^\d{10}$/.test(phone);
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -66,7 +58,7 @@ const AddBorrowForm = ({ setVisibleForm }) => {
     );
 
     if (!existingReader) {
-      setShowModalMessage(true); 
+      setShowModalMessage(true);
       return;
     }
 
@@ -82,7 +74,7 @@ const AddBorrowForm = ({ setVisibleForm }) => {
       status: "active",
     };
 
-    dispatch(addBorrow(newBorrow)); 
+    dispatch(addBorrow(newBorrow));
     setVisibleForm(false);
   };
 
@@ -105,7 +97,7 @@ const AddBorrowForm = ({ setVisibleForm }) => {
                   key={book.id}
                   onClick={() => {
                     setBookTitle(book.title);
-                    setSuggestedBooks([]); 
+                    setSuggestedBooks([]);
                   }}
                 >
                   {book.title}
@@ -142,7 +134,6 @@ const AddBorrowForm = ({ setVisibleForm }) => {
           />
         </label>
         <button type="submit">Thêm Phiếu Mượn</button>
-
       </form>
 
       {showModalMessage && (

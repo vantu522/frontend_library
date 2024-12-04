@@ -6,21 +6,23 @@ import Button from "../../../common/admin/Button/Button";
 import Tooltip from "../../../common/admin/Tooltip/Tooltip";
 import AddEmployeeForm from "./AddEmployeeForm";
 import EditEmployeeForm from "./EditEmployeeForm";
-import { deleteEmployee, updateEmployee, addEmployee } from "../../../redux/admin/employeesReducer"; // Cập nhật imports
+import { deleteEmployee, updateEmployee, addEmployee } from "../../../redux/admin/employeesReducer";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faTrash, faInfoCircle, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 const EmployeeList = () => {
-  const employees = useSelector((state) => state.employees); // Lấy danh sách nhân viên từ Redux store (thay đổi 'state.persons' thành 'state.employees')
+  const employees = useSelector((state) => state.employees);
   const dispatch = useDispatch();
   const [visibleForm, setVisibleForm] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const [employeeId, setEmployeeId] = useState(null);
+  const [selectedEmployee, setSelectedEmployee] = useState(null); // Gộp ID và thông tin nhân viên
   const [searchTerm, setSearchTerm] = useState('');
   const [positionFilter, setPositionFilter] = useState('all');
-  
-  // Xử lý trạng thái tìm kiếm và bộ lọc
+
+  // Xử lý tìm kiếm và bộ lọc
   const filteredEmployees = employees.filter((employee) => {
-    const matchesSearch = 
-      employee.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    const matchesSearch =
+      employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       employee.position.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesPosition = positionFilter === 'all' || employee.position === positionFilter;
     return matchesSearch && matchesPosition;
@@ -35,33 +37,31 @@ const EmployeeList = () => {
       label: "Hành động",
       width: 130,
       render: (val, row) => (
-        <>
-          <Button
-            onClick={() => {
-              setVisibleForm(true);
-              setIsEdit(true);
-              setEmployeeId(row.id);
-            }}
-            size="small"
-            className="primary"
-          >
-            Chỉnh sửa
-          </Button>
-
-          <Tooltip
-            content={"Sau khi xóa, dữ liệu sẽ không thể khôi phục lại được"}
-            position="left"
-          >
-            <Button
-              onClick={() => dispatch(deleteEmployee(row.id))} 
-              style={{ marginLeft: 8 }}
-              size="small"
-              className="danger"
+        <div style={{ display: "flex", gap: "8px" }}>
+          {/* Chỉnh sửa */}
+          <Tooltip content="Chỉnh sửa" position="left">
+            <button
+              className="icon-btn"
+              onClick={() => {
+                setVisibleForm(true);
+                setIsEdit(true);
+                setSelectedEmployee(row);
+              }}
             >
-              Xóa
-            </Button>
+              <FontAwesomeIcon icon={faEdit} size="lg" color="#007bff" />
+            </button>
           </Tooltip>
-        </>
+
+          {/* Xóa */}
+          <Tooltip content="Xóa nhân viên" position="left">
+            <button
+              className="icon-btn"
+              onClick={() => dispatch(deleteEmployee(row.id))}
+            >
+              <FontAwesomeIcon icon={faTrash} size="lg" color="#ff4d4f" />
+            </button>
+          </Tooltip>
+        </div>
       ),
     },
   ];
@@ -71,20 +71,27 @@ const EmployeeList = () => {
       <Modal onClose={() => setVisibleForm(false)} isOpen={visibleForm}>
         {isEdit ? (
           <EditEmployeeForm
-            employeeId={employeeId}
-            setVisibleForm={setVisibleForm}
-            onUpdate={(employee) => dispatch(updateEmployee(employee))} 
+            employee={selectedEmployee}
+            onClose={() => setVisibleForm(false)}
+            onUpdate={(employee) => dispatch(updateEmployee(employee))}
           />
         ) : (
-          <AddEmployeeForm 
-            setVisibleForm={setVisibleForm} 
+          <AddEmployeeForm
+            onClose={() => setVisibleForm(false)}
             onAdd={(employee) => dispatch(addEmployee(employee))}
           />
         )}
       </Modal>
+
       <h1>Danh Sách Nhân Viên</h1>
-      
+
       <div className="navigation">
+        <input
+          type="text"
+          placeholder="Tìm kiếm..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
         <select onChange={(e) => setPositionFilter(e.target.value)} value={positionFilter}>
           <option value="all">Tất cả chức vụ</option>
           <option value="manager">Quản lý</option>
@@ -96,12 +103,14 @@ const EmployeeList = () => {
           onClick={() => {
             setVisibleForm(true);
             setIsEdit(false);
+            setSelectedEmployee(null);
           }}
         >
+          <FontAwesomeIcon icon={faPlus} style={{ marginRight: 8 }} />
           Thêm Nhân Viên
         </Button>
       </div>
-      
+
       <Table columns={columns} data={filteredEmployees} />
     </div>
   );
