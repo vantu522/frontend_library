@@ -10,7 +10,7 @@ const Header = () => {
     const handleScroll = () => {
       const currentScrollPos = window.pageYOffset;
 
-      setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 70);
+      setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 20);
       setPrevScrollPos(currentScrollPos);
     };
 
@@ -24,7 +24,7 @@ const Header = () => {
   return (
     <header className={`header ${!visible ? 'header--hidden' : ''}`}>
       <div className="logo">
-        <img src="/assets/images/logomain.jpg" alt="Logo" className="logo-image" />
+        <img src="/assets/images/logo-preview.png" alt="Logo" className="logo-image" />
         Wisdom's Beacon
       </div>
       <nav>
