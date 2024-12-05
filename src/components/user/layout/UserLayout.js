@@ -1,13 +1,12 @@
 import React from 'react';
 import Header from '../common/Header';
 import Footer from '../common/Footer';
-import './UserLayout.css';
 
 const UserLayout = ({ children }) => {
     return (
-        <div className="user-layout">
+        <div className="flex flex-col min-h-screen">
             <Header />
-            <main className="main-content">
+            <main className="flex-1">
                 {children}
             </main>
             <Footer />

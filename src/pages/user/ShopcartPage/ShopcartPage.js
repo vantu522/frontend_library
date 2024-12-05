@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import DatePickerInput from '../../../components/user/DatePickerInput'; 
-import './ManagePage.css';
+import DatePickerInput from '../../../components/user/DatePickerInput';
 
 const BookList = () => {
   const [borrowDate, setBorrowDate] = useState(null);
@@ -13,8 +12,9 @@ const BookList = () => {
   ];
 
   return (
-    <div className="book-list">
-      <div className="book-header">
+    <div className="w-full">
+      {/* Header */}
+      <div className="grid grid-cols-8 gap-2 bg-orange-400 text-white font-bold text-center py-2 mt-24">
         <div>ID</div>
         <div>Tên sách</div>
         <div>Tác giả</div>
@@ -24,8 +24,13 @@ const BookList = () => {
         <div>Phí phạt</div>
         <div>Hành động</div>
       </div>
+
+      {/* Book Rows */}
       {books.map((book) => (
-        <div className="book-row" key={book.id}>
+        <div
+          key={book.id}
+          className="grid grid-cols-8 gap-2 items-center text-center py-2 border-b border-gray-300"
+        >
           <div>{book.id}</div>
           <div>{book.name}</div>
           <div>{book.author}</div>
@@ -45,7 +50,9 @@ const BookList = () => {
             />
           </div>
           <div>0 VNĐ</div>
-          <button className="return-button">Trả ngay</button>
+          <button className="bg-orange-400 text-white py-1 px-3 rounded-lg hover:bg-orange-500">
+            Trả ngay
+          </button>
         </div>
       ))}
     </div>
