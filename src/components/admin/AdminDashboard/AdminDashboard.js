@@ -1,22 +1,12 @@
 import React from 'react';
-import { Pie, Bar, Line } from 'react-chartjs-2'; 
-import { FaUsers, FaChartBar, FaDollarSign, FaCogs } from 'react-icons/fa'; 
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement } from 'chart.js';
+import { Bar, Line } from 'react-chartjs-2';
+import { PieChart, Pie, Cell, Tooltip, Label } from 'recharts';
+import { FaUsers, FaChartBar, FaDollarSign, FaCogs } from 'react-icons/fa';
+import { Chart as ChartJS, ArcElement, Tooltip as ChartTooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement } from 'chart.js';
 
-ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement);
+ChartJS.register(ArcElement, ChartTooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement);
 
-// Dữ liệu biểu đồ
-const pieData = {
-  labels: ['Red', 'Blue', 'Yellow'],
-  datasets: [
-    {
-      data: [300, 50, 100],
-      backgroundColor: ['red', 'blue', 'yellow'],
-      hoverBackgroundColor: ['darkred', 'darkblue', 'darkyellow'],
-    },
-  ],
-};
-
+// Dữ liệu biểu đồ Bar và Line
 const barData = {
   labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
   datasets: [
@@ -43,24 +33,68 @@ const lineData = {
   ],
 };
 
+// Dữ liệu biểu đồ Donut
+const pieChartData = [
+  { name: 'Red', value: 300, color: 'red' },
+  { name: 'Blue', value: 50, color: 'blue' },
+  { name: 'Yellow', value: 100, color: 'yellow' },
+  { name: 'Green', value: 100, color: 'green' },
+];
+
+const DonutChart = () => {
+  // Tính tổng dữ liệu
+  const total = pieChartData.reduce((sum, item) => sum + item.value, 0);
+
+  return (
+    <div className="bg-white p-6 rounded-lg shadow-md flex justify-center items-center" style={{ width: '100%', height: '100%' }}>
+      <div className="text-lg font-semibold mb-4 text-center">Biểu đồ Donut</div>
+      <PieChart width={300} height={300}>
+        <Pie
+          data={pieChartData}
+          dataKey="value"
+          nameKey="name"
+          cx="50%"
+          cy="50%"
+          innerRadius={60}
+          outerRadius={100}
+          paddingAngle={5}
+          strokeWidth={2}
+        >
+          {pieChartData.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={entry.color} />
+          ))}
+          <Label
+            value={`${total} Tổng số`}
+            position="center"
+            fontSize={16}
+            fill="black"
+          />
+        </Pie>
+        <Tooltip />
+      </PieChart>
+      <div className="mt-4">
+        {pieChartData.map((entry, index) => (
+          <div key={index} className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div style={{ width: 10, height: 10, backgroundColor: entry.color }}></div>
+              <div className="text-sm font-medium">{entry.name}</div>
+            </div>
+            <div className="text-sm font-semibold">{entry.value} ({((entry.value / total) * 100).toFixed(2)}%)</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+
+
 const AdminDashboard = () => {
   const monthlyChanges = {
-    users: {
-      total: 1234,
-      change: 5, 
-    },
-    reports: {
-      total: 56789,
-      change: -3,
-    },
-    revenue: {
-      total: 12,
-      change: 10,
-    },
-    settings: {
-      total: 89,
-      change: -2,
-    },
+    users: { total: 1234, change: 5 },
+    reports: { total: 56789, change: -3 },
+    revenue: { total: 12, change: 10 },
+    settings: { total: 89, change: -2 },
   };
 
   const getChangeClass = (change) => {
@@ -70,7 +104,6 @@ const AdminDashboard = () => {
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        
         {/* Người Dùng */}
         <div className="total-box flex items-center justify-between p-4 bg-white shadow-md rounded-lg">
           <div className="flex items-center gap-4">
@@ -138,20 +171,28 @@ const AdminDashboard = () => {
 
       {/* Biểu đồ */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <div className="text-lg font-semibold mb-4">Biểu đồ Tròn</div>
-          <Pie data={pieData} />
-        </div>
+        {/* Biểu đồ Donut */}
+        <DonutChart />
 
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        {/* Biểu đồ Cột */}
+        <div className="bg-white p-6 rounded-lg shadow-md" style={{ height: '100%', width: '100%' }}>
           <div className="text-lg font-semibold mb-4">Biểu đồ Cột</div>
-          <Bar data={barData} />
+          <Bar data={barData} options={{ responsive: false }} height={250} />
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow-md mt-6">
-        <div className="text-lg font-semibold mb-4">Biểu đồ Đường</div>
-        <Line data={lineData} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+        {/* Biểu đồ Đường (Thu nhỏ) */}
+        <div className="bg-white p-6 rounded-lg shadow-md" style={{ height: '350px', width: '100%' }}>
+          <div className="text-lg font-semibold mb-4">Biểu đồ Đường</div>
+          <Line data={lineData} options={{ maintainAspectRatio: false }} height={300} />
+        </div>
+
+        {/* Biểu đồ Cột thêm */}
+        <div className="bg-white p-6 rounded-lg shadow-md" style={{ height: '100%', width: '100%' }}>
+          <div className="text-lg font-semibold mb-4">Biểu đồ Cột Thêm</div>
+          <Bar data={barData} options={{ responsive: false }} height={250} />
+        </div>
       </div>
     </div>
   );
