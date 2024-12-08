@@ -17,30 +17,30 @@ function Signup() {
     <div className="flex justify-center items-center h-screen bg-gray-200">
       <div className="flex">
         {/* Welcome Section */}
-        <div className="flex flex-col items-center bg-orange-300 rounded-l-lg shadow-md p-6 w-80">
-          <h2 className="font-bold text-xl mb-4">CHÀO MỪNG TRỞ LẠI</h2>
-          <p className="text-center text-lg mb-6">
+        <div className="bg-[#OA7075] rounded-l-lg shadow-lg p-10 w-[400px] h-auto flex flex-col items-center text-center">
+          <h2 className="font-bold text-2xl text-black mb-4">CHÀO MỪNG TRỞ LẠI</h2>
+          <p className="text-xl text-black my-6">
             Hãy đăng nhập bằng thông tin cá nhân của bạn để không bỏ lỡ bất kỳ điều gì từ chúng tôi!
           </p>
           <Link
             to="/loginemail"
-            className="bg-orange-500 text-black font-bold py-2 px-6 rounded-full hover:bg-orange-400"
+            className="bg-white hover:bg-gray-200 text-[#OA7075] font-bold py-3 px-6 rounded-full mt-6 text-lg transition-colors"
           >
             ĐĂNG NHẬP
           </Link>
         </div>
 
         {/* Signup Form */}
-        <div className="flex flex-col items-center bg-blue-100 rounded-r-lg shadow-md p-6 w-80">
-          <h2 className="font-bold text-xl mb-4">ĐĂNG KÝ</h2>
-          <form onSubmit={handleSignup} className="w-full">
+        <div className="bg-blue-100 rounded-r-lg shadow-lg p-10 w-[400px] h-auto flex flex-col items-center">
+          <h2 className="font-bold text-2xl mb-4">ĐĂNG KÝ</h2>
+          <form onSubmit={handleSignup} className="w-full flex flex-col items-center">
             <input
               type="text"
               placeholder="Họ và tên"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+              className="w-full p-3 my-3 border border-gray-300 rounded-lg text-lg"
             />
             <input
               type="email"
@@ -48,7 +48,7 @@ function Signup() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+              className="w-full p-3 my-3 border border-gray-300 rounded-lg text-lg"
             />
             <input
               type="password"
@@ -56,11 +56,11 @@ function Signup() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+              className="w-full p-3 my-3 border border-gray-300 rounded-lg text-lg"
             />
             <button
               type="submit"
-              className="w-full bg-orange-500 text-black font-bold py-2 px-6 rounded-lg hover:bg-orange-400"
+              className="bg-[#OA7075] hover:bg-[#9F5F64] text-black font-bold py-3 px-6 rounded-full mt-6 text-lg transition-colors"
             >
               ĐĂNG KÝ
             </button>

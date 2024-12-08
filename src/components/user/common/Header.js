@@ -23,7 +23,7 @@ const Header = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-500 ${
         visible ? 'translate-y-0' : '-translate-y-full'
-      } bg-gradient-to-r from-white to-gray-100 shadow-md py-2 px-10 flex justify-between items-center`}
+      } bg-gradient-to-r from-white to-gray-100 shadow-md py-4 px-10 flex justify-between items-center`}
     >
       <div className="flex items-center gap-4">
         <img
@@ -31,7 +31,7 @@ const Header = () => {
           alt="Logo"
           className="w-12 h-12 object-contain transform transition-transform duration-300 hover:scale-105"
         />
-        <span className="text-lg font-bold text-gray-800 uppercase tracking-wider">
+        <span className="text-2xl font-bold text-gray-800 uppercase tracking-wider">
           Wisdom's Beacon
         </span>
       </div>
@@ -42,7 +42,7 @@ const Header = () => {
               exact
               to="/"
               className={({ isActive }) =>
-                `text-gray-700 font-medium text-base px-4 py-2 rounded transition-all duration-300 ${
+                `text-gray-700 font-medium text-2xl px-4 py-2 rounded transition-all duration-300 ${
                   isActive ? 'text-blue-600 font-semibold' : 'hover:text-blue-600 hover:bg-blue-100'
                 }`
               }
@@ -54,7 +54,7 @@ const Header = () => {
             <NavLink
               to="/news"
               className={({ isActive }) =>
-                `text-gray-700 font-medium text-base px-4 py-2 rounded transition-all duration-300 ${
+                `text-gray-700 font-medium text-2xl px-4 py-2 rounded transition-all duration-300 ${
                   isActive ? 'text-blue-600 font-semibold' : 'hover:text-blue-600 hover:bg-blue-100'
                 }`
               }
@@ -66,7 +66,7 @@ const Header = () => {
             <NavLink
               to="/category"
               className={({ isActive }) =>
-                `text-gray-700 font-medium text-base px-4 py-2 rounded transition-all duration-300 ${
+                `text-gray-700 font-medium text-2xl px-4 py-2 rounded transition-all duration-300 ${
                   isActive ? 'text-blue-600 font-semibold' : 'hover:text-blue-600 hover:bg-blue-100'
                 }`
               }
@@ -78,7 +78,7 @@ const Header = () => {
             <NavLink
               to="/shopcart"
               className={({ isActive }) =>
-                `text-gray-700 font-medium text-base px-4 py-2 rounded transition-all duration-300 ${
+                `text-gray-700 font-medium text-2xl px-4 py-2 rounded transition-all duration-300 ${
                   isActive ? 'text-blue-600 font-semibold' : 'hover:text-blue-600 hover:bg-blue-100'
                 }`
               }
@@ -102,7 +102,7 @@ const Header = () => {
         </NavLink>
       </div>
     </header>
-  );
+  );  
 };
 
 export default Header;

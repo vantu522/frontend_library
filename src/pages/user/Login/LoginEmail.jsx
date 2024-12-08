@@ -15,8 +15,9 @@ function LoginEmail() {
   return (
     <div className="flex justify-center items-center h-screen bg-gray-200">
       <div className="flex">
-        <div className="bg-blue-100 rounded-l-lg shadow-lg p-5 w-80 h-[350px] flex flex-col items-center">
-          <h2 className="font-bold text-lg">ĐĂNG NHẬP</h2>
+        {/* Form Đăng Nhập */}
+        <div className="bg-blue-100 rounded-l-lg shadow-lg p-10 w-[400px] h-auto flex flex-col items-center">
+          <h2 className="font-bold text-2xl mb-4">ĐĂNG NHẬP</h2>
           <form onSubmit={handleLogin} className="w-full flex flex-col items-center">
             <input
               type="email"
@@ -24,7 +25,7 @@ function LoginEmail() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-11/12 p-2 my-2 border border-gray-300 rounded-lg"
+              className="w-full p-3 my-3 border border-gray-300 rounded-lg text-lg"
             />
             <input
               type="password"
@@ -32,29 +33,30 @@ function LoginEmail() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-11/12 p-2 my-2 border border-gray-300 rounded-lg"
+              className="w-full p-3 my-3 border border-gray-300 rounded-lg text-lg"
             />
-            <div className="w-11/12 text-right text-sm">
+            <div className="w-full text-right text-sm">
               <Link to="/forgotpassword" className="text-blue-500 hover:underline">
                 Quên mật khẩu?
               </Link>
             </div>
             <button
               type="submit"
-              className="bg-orange-500 hover:bg-orange-400 text-black font-bold py-2 px-4 rounded-full mt-4"
+              className="bg-[#OA7075] hover:bg-[#9F5F64] text-black font-bold py-3 px-6 rounded-full mt-6 text-lg transition-colors"
             >
               ĐĂNG NHẬP
             </button>
           </form>
         </div>
-        <div className="bg-orange-400 rounded-r-lg shadow-lg p-5 w-80 h-[350px] flex flex-col items-center text-center">
-          <h2 className="font-bold text-lg">XIN CHÀO</h2>
-          <p className="text-xl my-4">
+
+        <div className="bg-[#OA7075] rounded-r-lg shadow-lg p-10 w-[400px] h-auto flex flex-col items-center text-center">
+          <h2 className="font-bold text-2xl text-black mb-4">XIN CHÀO</h2>
+          <p className="text-xl text-black my-6">
             Nhập thông tin cá nhân của bạn và cùng chúng tôi khởi đầu hành trình thú vị này!
           </p>
           <Link
             to="/signup"
-            className="bg-orange-500 hover:bg-orange-400 text-black font-bold py-2 px-4 rounded-full mt-4"
+            className="bg-white hover:bg-gray-200 text-[#OA7075] font-bold py-3 px-6 rounded-full mt-6 text-lg transition-colors"
           >
             ĐĂNG KÝ
           </Link>

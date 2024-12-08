@@ -20,6 +20,42 @@ function NewsPage() {
       description:
         "The Boston Originals reading series kicked off the Woodberry Poetry Room’s Fall 2024 season of programming.",
     },
+    {
+      date: "November 5, 2024",
+      title: "Boston Bohemians: An Evening of Poetry from Local Poets",
+      description:
+        "The Boston Originals reading series kicked off the Woodberry Poetry Room’s Fall 2024 season of programming.",
+    },
+    {
+      date: "November 5, 2024",
+      title: "Boston Bohemians: An Evening of Poetry from Local Poets",
+      description:
+        "The Boston Originals reading series kicked off the Woodberry Poetry Room’s Fall 2024 season of programming.",
+    },
+    {
+      date: "November 5, 2024",
+      title: "Boston Bohemians: An Evening of Poetry from Local Poets",
+      description:
+        "The Boston Originals reading series kicked off the Woodberry Poetry Room’s Fall 2024 season of programming.",
+    },
+    {
+      date: "November 5, 2024",
+      title: "Boston Bohemians: An Evening of Poetry from Local Poets",
+      description:
+        "The Boston Originals reading series kicked off the Woodberry Poetry Room’s Fall 2024 season of programming.",
+    },
+    {
+      date: "November 5, 2024",
+      title: "Boston Bohemians: An Evening of Poetry from Local Poets",
+      description:
+        "The Boston Originals reading series kicked off the Woodberry Poetry Room’s Fall 2024 season of programming.",
+    },
+    {
+      date: "November 5, 2024",
+      title: "Boston Bohemians: An Evening of Poetry from Local Poets",
+      description:
+        "The Boston Originals reading series kicked off the Woodberry Poetry Room’s Fall 2024 season of programming.",
+    },
   ];
 
   const newsItems = [
@@ -35,14 +71,38 @@ function NewsPage() {
       date: "October 18, 2024",
       title: "Ukraine’s First Lady Shares History with Harvard",
     },
+    {
+      image:
+        "https://i.pinimg.com/474x/07/8e/02/078e0212bce731f1f7a202767ffd5ca8.jpg",
+      date: "October 18, 2024",
+      title: "Ukraine’s First Lady Shares History with Harvard",
+    },
+    {
+      image:
+        "https://i.pinimg.com/474x/07/8e/02/078e0212bce731f1f7a202767ffd5ca8.jpg",
+      date: "October 18, 2024",
+      title: "Ukraine’s First Lady Shares History with Harvard",
+    },
+    {
+      image:
+        "https://i.pinimg.com/474x/07/8e/02/078e0212bce731f1f7a202767ffd5ca8.jpg",
+      date: "October 18, 2024",
+      title: "Ukraine’s First Lady Shares History with Harvard",
+    },
+    {
+      image:
+        "https://i.pinimg.com/474x/07/8e/02/078e0212bce731f1f7a202767ffd5ca8.jpg",
+      date: "October 18, 2024",
+      title: "Ukraine’s First Lady Shares History with Harvard",
+    },
   ];
 
   return (
     <div className="grid gap-8 p-8">
       {/* Header Section */}
       <div className="text-center py-10">
-        <h1 className="text-4xl font-bold">NEWS</h1>
-        <p className="text-lg text-gray-600">
+        <h1 className="text-5xl font-bold pt-20">NEWS</h1>
+        <p className="text-2xl text-gray-600">
           Harvard Library is a hub for learning, sharing and the discovery of
           new ideas. Read about that work in action.
         </p>
