@@ -11,13 +11,18 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "aos": "^2.3.4",
     "axios": "^1.7.7",
     "canvasjs": "^1.8.3",
     "chart.js": "^4.4.7",
     "dotenv": "^16.4.5",
     "framer-motion": "^11.12.0",
     "i": "^0.3.7",
+<<<<<<< HEAD
     "immer": "^10.1.1",
+=======
+    "install": "^0.13.0",
+>>>>>>> 55ab9b3a8a357721787954d08289959223f0a408
     "lottie-react": "^2.4.0",
     "lucide-react": "^0.462.0",
     "react": "^18.3.1",
@@ -63,6 +68,6 @@
   "devDependencies": {
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.15"
+    "tailwindcss": "^3.4.16"
   }
 }
