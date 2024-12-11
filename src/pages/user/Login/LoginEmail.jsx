@@ -13,7 +13,7 @@ function LoginEmail() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-200">
+    <div className="flex justify-center items-center h-screen ">
       <div className="flex">
         {/* Form Đăng Nhập */}
         <div className="bg-blue-100 rounded-l-lg shadow-lg p-10 w-[400px] h-auto flex flex-col items-center">

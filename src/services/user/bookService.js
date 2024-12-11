@@ -20,6 +20,8 @@ const bookService = {
         console.error('Error response:', errorText);
         throw new Error(`API error: ${response.status} - ${errorText}`);
       }
+
+
       
       return await response.json();
     } catch (error) {

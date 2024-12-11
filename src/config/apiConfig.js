@@ -1,11 +1,12 @@
 export const API_ENDPOINTS = {
-  BASE_URL: 'https://library-mana.azurewebsites.net',
+  BASE_URL: 'https://library-mana.azurewebsites.net',//localhost:8080
   USER: {
     BOOKS: '/books/categories',
     BOOK:'/books'
   },
   ADMIN: {
-    BOOKS: '/admin/books',
-    CATEGORIES: '/admin/categories'
+    BOOKS: '/books',
+    CATEGORIES: '/books/categories',
+    MEMBERS:'/members'
   }
 }; 

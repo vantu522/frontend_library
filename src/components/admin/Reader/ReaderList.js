@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "../../../common/admin/Modal/Modal";
 import Table from "../../../common/admin/Table/Table";
@@ -8,8 +8,8 @@ import EditReaderForm from "./EditReaderForm";
 import { deleteReader, updateReader, addReader } from "../../../redux/admin/readerReducer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faInfoCircle, faPlus } from "@fortawesome/free-solid-svg-icons";
+import memberService from "../../../services/admin/memberService";
 
-// Component DeleteModal
 const DeleteModal = ({ isOpen, onConfirm, onCancel }) => (
   <Modal onClose={onCancel} isOpen={isOpen}>
     <div className="p-6 text-center">
@@ -32,35 +32,27 @@ const DeleteModal = ({ isOpen, onConfirm, onCancel }) => (
   </Modal>
 );
 
-// Component InfoModal
 const InfoModal = ({ isOpen, onClose, selectedReader }) => (
   <Modal onClose={onClose} isOpen={isOpen}>
     <div className="p-6">
       <h2 className="text-xl font-semibold mb-4">Thông Tin Sách Đang Mượn</h2>
       {selectedReader ? (
-        <>
-          {selectedReader.borrowedBooks && selectedReader.borrowedBooks.length > 0 ? (
-            <ul>
-              {selectedReader.borrowedBooks.map((book, index) => (
-                <li key={index} className="mb-4">
-                  <p><strong>Tựa sách:</strong> {book.title}</p>
-                  <p><strong>Ngày mượn:</strong> {book.borrowDate}</p>
-                  <p><strong>Ngày trả dự kiến:</strong> {book.dueDate}</p>
-                  <p>
-                    <strong>Trạng thái:</strong>{" "}
-                    {book.status === "returned"
-                      ? "Đã trả"
-                      : book.status === "overdue"
-                      ? "Quá hạn"
-                      : "Đang mượn"}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>Độc giả này hiện không mượn sách nào.</p>
-          )}
-        </>
+        selectedReader.borrowedBooks?.length > 0 ? (
+          <ul>
+            {selectedReader.borrowedBooks.map((book, index) => (
+              <li key={index} className="mb-4">
+                <p><strong>Tựa sách:</strong> {book.title}</p>
+                <p><strong>Ngày mượn:</strong> {book.borrowDate}</p>
+                <p><strong>Ngày trả dự kiến:</strong> {book.dueDate}</p>
+                <p>
+                  <strong>Trạng thái:</strong> {book.status === "returned" ? "Đã trả" : book.status === "overdue" ? "Quá hạn" : "Đang mượn"}
+                </p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>Độc giả này hiện không mượn sách nào.</p>
+        )
       ) : (
         <p>Không có thông tin độc giả.</p>
       )}
@@ -77,7 +69,9 @@ const InfoModal = ({ isOpen, onClose, selectedReader }) => (
 const ReaderList = () => {
   const readers = useSelector((state) => state.readers || []);
   const dispatch = useDispatch();
-
+  const [reader, setReader] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [visibleForm, setVisibleForm] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [selectedReader, setSelectedReader] = useState(null);
@@ -86,8 +80,23 @@ const ReaderList = () => {
   const [deleteTargetId, setDeleteTargetId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Lọc độc giả theo từ khóa tìm kiếm
-  const filteredReaders = readers.filter((reader) =>
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        setLoading(true);
+        const data = await memberService.fetchAllMember();
+        setReader(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMembers();
+  }, []);
+
+  const filteredReaders = reader.filter((reader) =>
     reader.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     reader.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -96,7 +105,7 @@ const ReaderList = () => {
     { label: "Tên", field: "name" },
     { label: "Email", field: "email" },
     { label: "Địa Chỉ", field: "address" },
-    { label: "Số Điện Thoại", field: "phone" },
+    { label: "Số Điện Thoại", field: "phoneNumber" },
     {
       label: "Hành động",
       render: (val, row) => (
@@ -151,7 +160,6 @@ const ReaderList = () => {
     <div className="p-6 bg-white rounded-lg shadow-md">
       <h1 className="text-2xl font-semibold mb-4 text-gray-800">Danh Sách Độc Giả</h1>
 
-      {/* Thanh tìm kiếm */}
       <div className="flex justify-between items-center mb-6">
         <input
           type="text"
@@ -173,10 +181,14 @@ const ReaderList = () => {
         </button>
       </div>
 
-      {/* Bảng danh sách độc giả */}
-      <Table columns={columns} data={filteredReaders} />
+      {loading ? (
+        <p>Đang tải...</p>
+      ) : error ? (
+        <p className="text-red-500">{error}</p>
+      ) : (
+        <Table columns={columns} data={filteredReaders} />
+      )}
 
-      {/* Modal Thêm/Sửa Độc Giả */}
       <Modal onClose={() => setVisibleForm(false)} isOpen={visibleForm}>
         {isEdit ? (
           <EditReaderForm
@@ -192,15 +204,14 @@ const ReaderList = () => {
         )}
       </Modal>
 
-      {/* Modal Xem Thông Tin */}
       <InfoModal
         isOpen={infoModalOpen}
         onClose={() => setInfoModalOpen(false)}
         selectedReader={selectedReader}
       />
 
-      {/* Modal Xóa */}
-      <DeleteModal
+           {/* Modal Xóa */}
+           <DeleteModal
         isOpen={deleteModalOpen}
         onConfirm={handleDelete}
         onCancel={() => setDeleteModalOpen(false)}

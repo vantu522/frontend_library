@@ -14,7 +14,7 @@ function Signup() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-200">
+    <div className="flex justify-center items-center h-screen ">
       <div className="flex">
         {/* Welcome Section */}
         <div className="bg-[#OA7075] rounded-l-lg shadow-lg p-10 w-[400px] h-auto flex flex-col items-center text-center">

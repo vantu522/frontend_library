@@ -21,7 +21,6 @@ const BookList = () => {
         <div>Thể loại</div>
         <div>Ngày mượn</div>
         <div>Ngày trả</div>
-        <div>Phí phạt</div>
         <div>Hành động</div>
       </div>
 
@@ -49,7 +48,6 @@ const BookList = () => {
               placeholder="Chọn ngày trả"
             />
           </div>
-          <div>0 VNĐ</div>
           <button className="bg-orange-400 text-white py-1 px-3 rounded-lg hover:bg-orange-500">
             Trả ngay
           </button>
