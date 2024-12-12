@@ -3,105 +3,52 @@ import { Bar, Line } from 'react-chartjs-2';
 import { PieChart, Pie, Cell, Tooltip, Label } from 'recharts';
 import { FaUsers, FaChartBar, FaDollarSign, FaCogs } from 'react-icons/fa';
 import { Chart as ChartJS, ArcElement, Tooltip as ChartTooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement } from 'chart.js';
-
+import DonutChart from '../DonutChart ';
 ChartJS.register(ArcElement, ChartTooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement);
 
-// Dữ liệu biểu đồ Bar và Line
-const barData = {
-  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
-  datasets: [
-    {
-      label: 'Truy Cập',
-      data: [65, 59, 80, 81, 56],
-      backgroundColor: 'rgba(75, 192, 192, 0.2)',
-      borderColor: 'rgba(75, 192, 192, 1)',
-      borderWidth: 1,
-    },
-  ],
-};
 
-const lineData = {
-  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
-  datasets: [
-    {
-      label: 'Phí Phạt',
-      data: [12, 19, 3, 5, 2],
-      fill: false,
-      borderColor: 'rgba(255, 99, 132, 1)',
-      tension: 0.1,
-    },
-  ],
-};
+  // Dữ liệu biểu đồ Bar và Line
+  const barData = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+    datasets: [
+      {
+        label: 'Truy Cập',
+        data: [65, 59, 80, 81, 56],
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+      },
+    ],
+  };
 
-// Dữ liệu biểu đồ Donut
-const pieChartData = [
-  { name: 'Red', value: 300, color: 'red' },
-  { name: 'Blue', value: 50, color: 'blue' },
-  { name: 'Yellow', value: 100, color: 'yellow' },
-  { name: 'Green', value: 100, color: 'green' },
-];
-
-const DonutChart = () => {
-  // Tính tổng dữ liệu
-  const total = pieChartData.reduce((sum, item) => sum + item.value, 0);
-
-  return (
-    <div className="bg-white p-6 rounded-lg shadow-md flex justify-center items-center" style={{ width: '100%', height: '100%' }}>
-      <div className="text-lg font-semibold mb-4 text-center">Biểu đồ Donut</div>
-      <PieChart width={300} height={300}>
-        <Pie
-          data={pieChartData}
-          dataKey="value"
-          nameKey="name"
-          cx="50%"
-          cy="50%"
-          innerRadius={60}
-          outerRadius={100}
-          paddingAngle={5}
-          strokeWidth={2}
-        >
-          {pieChartData.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={entry.color} />
-          ))}
-          <Label
-            value={`${total} Tổng số`}
-            position="center"
-            fontSize={16}
-            fill="black"
-          />
-        </Pie>
-        <Tooltip />
-      </PieChart>
-      <div className="mt-4">
-        {pieChartData.map((entry, index) => (
-          <div key={index} className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div style={{ width: 10, height: 10, backgroundColor: entry.color }}></div>
-              <div className="text-sm font-medium">{entry.name}</div>
-            </div>
-            <div className="text-sm font-semibold">{entry.value} ({((entry.value / total) * 100).toFixed(2)}%)</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+  const lineData = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+    datasets: [
+      {
+        label: 'Phí Phạt',
+        data: [12, 19, 3, 5, 2],
+        fill: false,
+        borderColor: 'rgba(255, 99, 132, 1)',
+        tension: 0.1,
+      },
+    ],
+  };
 
 
 
 const AdminDashboard = () => {
-  const monthlyChanges = {
-    users: { total: 1234, change: 5 },
-    reports: { total: 56789, change: -3 },
-    revenue: { total: 12, change: 10 },
-    settings: { total: 89, change: -2 },
-  };
+    const monthlyChanges = {
+      users: { total: 1234, change: 5 },
+      reports: { total: 56789, change: -3 },
+      revenue: { total: 12, change: 10 },
+      settings: { total: 89, change: -2 },
+    };
 
   const getChangeClass = (change) => {
     return change >= 0 ? 'increase' : 'decrease';
   };
 
-  return (
+return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {/* Người Dùng */}
@@ -179,6 +126,7 @@ const AdminDashboard = () => {
           <div className="text-lg font-semibold mb-4">Biểu đồ Cột</div>
           <Bar data={barData} options={{ responsive: false }} height={250} />
         </div>
+
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
@@ -193,6 +141,7 @@ const AdminDashboard = () => {
           <div className="text-lg font-semibold mb-4">Biểu đồ Cột Thêm</div>
           <Bar data={barData} options={{ responsive: false }} height={250} />
         </div>
+
       </div>
     </div>
   );

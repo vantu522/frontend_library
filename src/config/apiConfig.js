@@ -11,5 +11,8 @@ export const API_ENDPOINTS = {
     ADDMEM: '/members/register',
     EDITMEMBER: '/members/update',
     DELETEMEM:'/members/delete'
+  },
+  STATISTICS:{
+    CATEGORY:'/books/category-distribution'
   }
 }; 
