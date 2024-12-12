@@ -27,18 +27,20 @@ const readersSlice = createSlice({
   reducers: {
     addReader: (state, action) => {
       state.push(action.payload);
-      saveToLocalStorage(state);
+      saveToLocalStorage(state); // Cập nhật Local Storage
     },
     deleteReader: (state, action) => {
-      const updatedState = state.filter((reader) => reader.id !== action.payload);
-      saveToLocalStorage(updatedState);
-      return updatedState;
+      const index = state.findIndex((reader) => reader.id === action.payload);
+      if (index !== -1) {
+        state.splice(index, 1); // Xóa phần tử
+        saveToLocalStorage(state); // Cập nhật Local Storage
+      }
     },
     updateReader: (state, action) => {
       const index = state.findIndex((reader) => reader.id === action.payload.id);
       if (index !== -1) {
-        state[index] = action.payload;
-        saveToLocalStorage(state);
+        state[index] = action.payload; // Cập nhật phần tử
+        saveToLocalStorage(state); // Cập nhật Local Storage
       }
     },
   },

@@ -8,6 +8,9 @@ module.exports = {
       animation: {
         fadeIn: 'fadeIn 0.5s ease-in-out',
       },
+      colors: {
+        'grayy': '#4B4B4B',
+      },
       keyframes: {
         fadeIn: {
           '0%': { opacity: 0, transform: 'translateY(20px)' },

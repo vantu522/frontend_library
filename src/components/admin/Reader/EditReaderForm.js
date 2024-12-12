@@ -1,27 +1,42 @@
 import React, { useState, useEffect } from "react";
+import memberService from "../../../services/admin/memberService";
 
 const EditReaderForm = ({ reader, onClose, onUpdate }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  // Cập nhật giá trị form khi `reader` thay đổi
   useEffect(() => {
     if (reader) {
       setName(reader.name);
       setEmail(reader.email);
       setAddress(reader.address);
-      setPhone(reader.phone);
+      setPhoneNumber(reader.phoneNumber);
     }
   }, [reader]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const updatedReader = { id: reader.id, name, email, address, phone };
-    onUpdate(updatedReader); // Gọi hàm update
-    onClose(); // Đóng form sau khi cập nhật
+    setIsLoading(true);
+    setError(null);
+  
+    const updatedReader = { id: reader.memberId, name, email, address, phoneNumber };
+  
+    try {
+      const result = await memberService.updateMember(reader.memberId, updatedReader);
+      onUpdate(result); // Cập nhật dữ liệu trong Redux Store
+      onClose(); 
+    } catch (err) {
+      setError("Có lỗi xảy ra khi cập nhật. Vui lòng thử lại.");
+      console.error("Update error:", err);
+    } finally {
+      setIsLoading(false);
+    }
   };
+  
 
   return (
     <form
@@ -61,17 +76,28 @@ const EditReaderForm = ({ reader, onClose, onUpdate }) => {
         <label className="block font-medium text-gray-700">Số Điện Thoại:</label>
         <input
           type="text"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          value={phoneNumber}
+          onChange={(e) => setPhoneNumber(e.target.value)}
           className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
       </div>
+      {error && (
+        <div className="text-red-500 text-sm">{error}</div>
+      )}
       <div className="flex gap-4 mt-6">
         <button
           type="submit"
-          className="w-full py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          disabled={isLoading}
+          className="w-full py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
         >
-          Lưu
+          {isLoading ? "Đang lưu..." : "Lưu"}
+        </button>
+        <button
+          type="button"
+          onClick={onClose}
+          className="w-full py-2 bg-gray-300 text-gray-700 font-semibold rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
+        >
+          Hủy
         </button>
       </div>
     </form>
@@ -79,3 +105,4 @@ const EditReaderForm = ({ reader, onClose, onUpdate }) => {
 };
 
 export default EditReaderForm;
+

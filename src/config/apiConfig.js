@@ -7,6 +7,8 @@ export const API_ENDPOINTS = {
   ADMIN: {
     BOOKS: '/books',
     CATEGORIES: '/books/categories',
-    MEMBERS:'/members'
+    MEMBERS:'/members',
+    ADDMEM: '/members/register',
+    EDITMEMBER: '/members/update'
   }
 }; 

@@ -1,18 +1,43 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import BarChart from "../../../components/user/BarChart";
 import LineChartComponent from "../../../components/user/LineChartComponent";
 import PieChartComponent from "../../../components/user/PieChartComponent";
 import MapComponent from "../../../components/user/MapComponent";
+import LoadingScreen from '../../../components/user/LoadingScreen';
 
 function HomePage() {
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     AOS.init({
       duration: 2000, 
       once: true, 
     });
+
+    const loadResources = async()=>{
+      try{
+
+      } catch(error){
+        console.error("loi tai tai nguyen", error);
+      }
+    }
+
+    loadResources();
+
+
   }, []);
+
+  const handleLoadingComplete = () =>{
+      setIsLoading(false);
+    }
+
+  if(isLoading){
+      return <LoadingScreen onLoadingComplete={handleLoadingComplete} />
+  }
+
+
 
   return (
     <div className="text-sky-500 flex flex-col overflow-hidden">

@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faInfoCircle, faPlus } from "@fortawesome/free-solid-svg-icons";
 import memberService from "../../../services/admin/memberService";
 
+// Modal Xóa
 const DeleteModal = ({ isOpen, onConfirm, onCancel }) => (
   <Modal onClose={onCancel} isOpen={isOpen}>
     <div className="p-6 text-center">
@@ -32,6 +33,7 @@ const DeleteModal = ({ isOpen, onConfirm, onCancel }) => (
   </Modal>
 );
 
+// Modal Thông Tin
 const InfoModal = ({ isOpen, onClose, selectedReader }) => (
   <Modal onClose={onClose} isOpen={isOpen}>
     <div className="p-6">
@@ -45,7 +47,12 @@ const InfoModal = ({ isOpen, onClose, selectedReader }) => (
                 <p><strong>Ngày mượn:</strong> {book.borrowDate}</p>
                 <p><strong>Ngày trả dự kiến:</strong> {book.dueDate}</p>
                 <p>
-                  <strong>Trạng thái:</strong> {book.status === "returned" ? "Đã trả" : book.status === "overdue" ? "Quá hạn" : "Đang mượn"}
+                  <strong>Trạng thái:</strong>{" "}
+                  {book.status === "returned"
+                    ? "Đã trả"
+                    : book.status === "overdue"
+                    ? "Quá hạn"
+                    : "Đang mượn"}
                 </p>
               </li>
             ))}
@@ -67,9 +74,9 @@ const InfoModal = ({ isOpen, onClose, selectedReader }) => (
 );
 
 const ReaderList = () => {
-  const readers = useSelector((state) => state.readers || []);
+  const reader = useSelector((state) => state.reader || []);
   const dispatch = useDispatch();
-  const [reader, setReader] = useState([]);
+  const [readerData, setReaderData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [visibleForm, setVisibleForm] = useState(false);
@@ -85,7 +92,7 @@ const ReaderList = () => {
       try {
         setLoading(true);
         const data = await memberService.fetchAllMember();
-        setReader(data);
+        setReaderData(data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -93,12 +100,18 @@ const ReaderList = () => {
       }
     };
 
+    // Nếu dữ liệu không đến từ server mà từ Redux
+  if (reader.length > 0) {
+    setReaderData(reader);
+  } else {
     fetchMembers();
+  }
   }, []);
 
-  const filteredReaders = reader.filter((reader) =>
-    reader.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    reader.email.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredReaders = readerData.filter(
+    (reader) =>
+      reader.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      reader.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const columns = [
@@ -121,7 +134,6 @@ const ReaderList = () => {
               <FontAwesomeIcon icon={faInfoCircle} size="lg" />
             </button>
           </Tooltip>
-
           <Tooltip content="Chỉnh sửa" position="left">
             <button
               onClick={() => {
@@ -134,7 +146,6 @@ const ReaderList = () => {
               <FontAwesomeIcon icon={faEdit} size="lg" />
             </button>
           </Tooltip>
-
           <Tooltip content="Xóa độc giả" position="left">
             <button
               onClick={() => {
@@ -159,7 +170,6 @@ const ReaderList = () => {
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
       <h1 className="text-2xl font-semibold mb-4 text-gray-800">Danh Sách Độc Giả</h1>
-
       <div className="flex justify-between items-center mb-6">
         <input
           type="text"
@@ -180,7 +190,6 @@ const ReaderList = () => {
           Thêm Độc Giả
         </button>
       </div>
-
       {loading ? (
         <p>Đang tải...</p>
       ) : error ? (
@@ -188,30 +197,42 @@ const ReaderList = () => {
       ) : (
         <Table columns={columns} data={filteredReaders} />
       )}
-
       <Modal onClose={() => setVisibleForm(false)} isOpen={visibleForm}>
         {isEdit ? (
           <EditReaderForm
-            reader={selectedReader}
-            onClose={() => setVisibleForm(false)}
-            onUpdate={(reader) => dispatch(updateReader(reader))}
-          />
+          reader={selectedReader}
+          onClose={() => setVisibleForm(false)}
+          onUpdate={(updatedReader) => {
+            // Cập nhật state local ngay lập tức
+            setReaderData((prev) =>
+              prev.map((reader) =>
+                reader.memberId === updatedReader.memberId ? updatedReader : reader
+              )
+            );
+            dispatch(updateReader(updatedReader));
+            setVisibleForm(false); // Đóng modal
+          }}
+        />
+        
         ) : (
           <AddReaderForm
             onClose={() => setVisibleForm(false)}
-            onAdd={(reader) => dispatch(addReader(reader))}
-          />
+            onAdd={(newReader) => {
+            // Cập nhật state local ngay lập tức
+            setReaderData((prev) => [...prev, newReader]);
+            dispatch(addReader(newReader));
+            setVisibleForm(false); // Đóng modal
+          }}
+        />
+        
         )}
       </Modal>
-
       <InfoModal
         isOpen={infoModalOpen}
         onClose={() => setInfoModalOpen(false)}
         selectedReader={selectedReader}
       />
-
-           {/* Modal Xóa */}
-           <DeleteModal
+      <DeleteModal
         isOpen={deleteModalOpen}
         onConfirm={handleDelete}
         onCancel={() => setDeleteModalOpen(false)}
