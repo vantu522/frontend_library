@@ -64,7 +64,7 @@ export default function AuthForm() {
               </div>
             </div>
             <button type="submit" className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
-              {isLogin ? 'Sign In' : 'Sign Up'}
+              {isLogin ? 'Đăng nhập' : 'Sign Up'}
             </button>
           </motion.form>
         </div>
