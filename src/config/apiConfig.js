@@ -9,6 +9,7 @@ export const API_ENDPOINTS = {
     CATEGORIES: '/books/categories',
     MEMBERS:'/members',
     ADDMEM: '/members/register',
-    EDITMEMBER: '/members/update'
+    EDITMEMBER: '/members/update',
+    DELETEMEM:'/members/delete'
   }
 }; 

@@ -59,6 +59,27 @@ const memberService = {
             console.error("service err", error);
             throw error;
          }
+    },
+
+    deleteMember: async(memberId) => {
+        try{
+            const response = await axios.delete(
+                `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.DELETEMEM}/${memberId}`,
+                {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                }
+
+            );
+
+            return response.data;
+        } catch(error){
+            console.error("Service error: ",error);
+            throw error;
+        }
+
     }
 };
 

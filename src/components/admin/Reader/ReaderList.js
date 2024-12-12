@@ -9,6 +9,7 @@ import { deleteReader, updateReader, addReader } from "../../../redux/admin/read
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faInfoCircle, faPlus } from "@fortawesome/free-solid-svg-icons";
 import memberService from "../../../services/admin/memberService";
+import { toast } from 'react-toastify';
 
 // Modal Xóa
 const DeleteModal = ({ isOpen, onConfirm, onCancel }) => (
@@ -149,7 +150,7 @@ const ReaderList = () => {
           <Tooltip content="Xóa độc giả" position="left">
             <button
               onClick={() => {
-                setDeleteTargetId(row.id);
+                setDeleteTargetId(row.memberId);
                 setDeleteModalOpen(true);
               }}
               className="text-red-500 hover:text-red-700"
@@ -162,10 +163,26 @@ const ReaderList = () => {
     },
   ];
 
-  const handleDelete = () => {
-    dispatch(deleteReader(deleteTargetId));
-    setDeleteModalOpen(false);
+  const handleDelete = async () => {
+    try {
+      // Gọi API xóa member
+      await memberService.deleteMember(deleteTargetId);
+  
+      // Cập nhật state local sau khi xóa thành công
+      setReaderData((prev) => prev.filter((reader) => reader.memberId !== deleteTargetId));
+  
+      // Đóng modal
+      setDeleteModalOpen(false);
+  
+      // Hiển thị thông báo thành công
+      toast.success("Xóa độc giả thành công!");
+    } catch (error) {
+      // Hiển thị thông báo lỗi
+      toast.error("Có lỗi xảy ra khi xóa độc giả!");
+      console.error("Error deleting member:", error);
+    }
   };
+  
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
@@ -198,35 +215,30 @@ const ReaderList = () => {
         <Table columns={columns} data={filteredReaders} />
       )}
       <Modal onClose={() => setVisibleForm(false)} isOpen={visibleForm}>
-        {isEdit ? (
-          <EditReaderForm
+      {isEdit ? (
+        <EditReaderForm
           reader={selectedReader}
           onClose={() => setVisibleForm(false)}
           onUpdate={(updatedReader) => {
-            // Cập nhật state local ngay lập tức
-            setReaderData((prev) =>
-              prev.map((reader) =>
-                reader.memberId === updatedReader.memberId ? updatedReader : reader
-              )
-            );
-            dispatch(updateReader(updatedReader));
-            setVisibleForm(false); // Đóng modal
-          }}
-        />
-        
-        ) : (
-          <AddReaderForm
-            onClose={() => setVisibleForm(false)}
-            onAdd={(newReader) => {
-            // Cập nhật state local ngay lập tức
-            setReaderData((prev) => [...prev, newReader]);
-            dispatch(addReader(newReader));
-            setVisibleForm(false); // Đóng modal
-          }}
-        />
-        
-        )}
-      </Modal>
+        // Cập nhật state local ngay lập tức
+        setReaderData((prev) =>
+          prev.map((reader) =>
+            reader.memberId === updatedReader.memberId ? updatedReader : reader
+          )
+        );
+        setVisibleForm(false);
+      }}
+    />
+  ) : (
+    <AddReaderForm
+      onClose={() => setVisibleForm(false)}
+      onAdd={(newReader) => {
+        // Cập nhật state local ngay lập tức
+        setReaderData((prev) => [...prev, newReader]);
+      }}
+    />
+  )}
+</Modal>
       <InfoModal
         isOpen={infoModalOpen}
         onClose={() => setInfoModalOpen(false)}

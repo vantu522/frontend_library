@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import memberService from "../../../services/admin/memberService";
 import { toast } from 'react-toastify'; // Đảm bảo đã cài đặt thư viện toast
 
-const AddReaderForm = ({ onClose }) => {
+const AddReaderForm = ({ onClose, onAdd }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -44,6 +44,8 @@ const AddReaderForm = ({ onClose }) => {
       if (response) {
         toast.success("Thêm thành viên thành công!");
         onClose(); // Đóng form sau khi thêm thành công
+
+        if (onAdd) onAdd(response);
       }
     } catch (error) {
       console.error("Lỗi khi thêm thành viên:", error);

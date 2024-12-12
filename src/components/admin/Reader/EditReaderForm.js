@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import memberService from "../../../services/admin/memberService";
+import { toast } from "react-toastify";
 
 const EditReaderForm = ({ reader, onClose, onUpdate }) => {
   const [name, setName] = useState("");
@@ -29,9 +30,10 @@ const EditReaderForm = ({ reader, onClose, onUpdate }) => {
       const result = await memberService.updateMember(reader.memberId, updatedReader);
       onUpdate(result); // Cập nhật dữ liệu trong Redux Store
       onClose(); 
+      toast.success("Cập nhật độc giả thành công!")
     } catch (err) {
       setError("Có lỗi xảy ra khi cập nhật. Vui lòng thử lại.");
-      console.error("Update error:", err);
+      toast.error("Cập nhật độc giả thất bại!")
     } finally {
       setIsLoading(false);
     }
