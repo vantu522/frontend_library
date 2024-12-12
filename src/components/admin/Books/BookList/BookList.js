@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "../../../../common/admin/Modal/Modal";
 import Table from "../../../../common/admin/Table/Table";
 import Tooltip from "../../../../common/admin/Tooltip/Tooltip";
 import AddBookForm from "../AddBookForm/AddBookForm";
 import EditBookForm from "../EditBookForm/EditBookForm";
-import { deleteBook, updateBook, addBook } from "../../../../redux/admin/booksReducer";
-import { FaEdit, FaTrashAlt, FaPlus, FaExclamationCircle, FaSearch, FaTimes } from "react-icons/fa";
+import { deleteBook, updateBook, addBook, fetchBooks } from "../../../../redux/admin/booksReducer";
+import { FaEdit, FaTrashAlt, FaPlus, FaExclamationCircle, FaTimes } from "react-icons/fa";
+import bookService from "../../../../services/admin/booksService";
+import { toast } from "react-toastify"; // Assuming you're using react-toastify for notifications
 
 const BookList = () => {
   const books = useSelector((state) => state.books);
@@ -22,36 +24,71 @@ const BookList = () => {
   const [bookToDelete, setBookToDelete] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [booksPerPage] = useState(10);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleDeleteBook = () => {
+  useEffect(() => {
+    const loadBooks = async () => {
+      try {
+        setIsLoading(true);
+        const data = await bookService.fetchAllBooks();
+        console.log(data)
+        dispatch(fetchBooks(data));
+        toast.success("Tải sách thành công");
+      } catch (error) {
+        console.error("Failed to load books", error);
+        toast.error("Không thể tải danh sách sách");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadBooks();
+  }, [dispatch]);
+
+  const handleDeleteBook = async () => {
     if (bookToDelete) {
-      dispatch(deleteBook(bookToDelete.id));
-      setShowDeleteConfirm(false);
-      setBookToDelete(null);
+      try {
+        await bookService.deleteBook(bookToDelete.id);
+        dispatch(deleteBook(bookToDelete.id));
+        toast.success(`Đã xóa sách "${bookToDelete.title}"`);
+        setShowDeleteConfirm(false);
+        setBookToDelete(null);
+      } catch (error) {
+        console.error("Failed to delete book", error);
+        toast.error("Không thể xóa sách");
+      }
     }
   };
 
-  const filteredBooks = books.filter((book) => {
+  const handleUpdateBookStatus = async (book) => {
+    try {
+      const updatedBook = {
+        ...book,
+        status: book.status === "available" ? "unavailable" : "available",
+        quantity: book.status === "available" ? 0 : book.quantity || 1,
+      };
+      
+      await bookService.updateBook(book.id, updatedBook);
+      dispatch(updateBook(updatedBook));
+      toast.success(`Cập nhật trạng thái sách "${book.title}"`);
+    } catch (error) {
+      console.error("Failed to update book status", error);
+      toast.error("Không thể cập nhật trạng thái sách");
+    }
+  };
+
+  const filteredBooks = Array.isArray(books) ? books.filter((book) => {
     const matchesSearch =
       book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       book.author.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || book.status === statusFilter;
     const matchesGenre = genreFilter === "all" || book.genre === genreFilter;
     return matchesSearch && matchesStatus && matchesGenre;
-  });
+  }) : [];
 
   const indexOfLastBook = currentPage * booksPerPage;
   const indexOfFirstBook = indexOfLastBook - booksPerPage;
   const currentBooks = filteredBooks.slice(indexOfFirstBook, indexOfLastBook);
-
-  const handleUpdateBookStatus = (book) => {
-    const updatedBook = {
-      ...book,
-      status: book.status === "available" ? "unavailable" : "available",
-      quantity: book.status === "available" ? 0 : book.quantity || 1,
-    };
-    dispatch(updateBook(updatedBook));
-  };
 
   const columns = [
     { label: "Tên sách", field: "title", width: "20%" },
@@ -66,9 +103,7 @@ const BookList = () => {
       width: "10%",
       render: (val) => (
         <span
-          className={`font-bold ${
-            val === "available" ? "text-green-500" : "text-red-500"
-          }`}
+          className={`font-bold ${val === "available" ? "text-green-500" : "text-red-500"}`}
         >
           {val === "available" ? "Còn sách" : "Hết sách"}
         </span>
@@ -125,12 +160,32 @@ const BookList = () => {
           <EditBookForm
             bookId={bookId}
             setVisibleForm={setVisibleForm}
-            onUpdate={(book) => dispatch(updateBook(book))}
+            onUpdate={async (book) => {
+              try {
+                await bookService.updateBook(bookId, book);
+                dispatch(updateBook(book));
+                toast.success(`Cập nhật sách "${book.title}" thành công`);
+                setVisibleForm(false);
+              } catch (error) {
+                console.error("Failed to update book", error);
+                toast.error("Không thể cập nhật sách");
+              }
+            }}
           />
         ) : (
           <AddBookForm
             setVisibleForm={setVisibleForm}
-            onAdd={(book) => dispatch(addBook(book))}
+            onAdd={async (book) => {
+              try {
+                const newBook = await bookService.addBook(book);
+                dispatch(addBook(newBook));
+                toast.success(`Thêm sách "${book.title}" thành công`);
+                setVisibleForm(false);
+              } catch (error) {
+                console.error("Failed to add book", error);
+                toast.error("Không thể thêm sách");
+              }
+            }}
           />
         )}
       </Modal>
@@ -209,7 +264,13 @@ const BookList = () => {
         </div>
       </div>
 
-      <Table columns={columns} data={currentBooks} />
+      {isLoading ? (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-blue-500"></div>
+        </div>
+      ) : (
+        <Table columns={columns} data={currentBooks} />
+      )}
     </div>
   );
 };
