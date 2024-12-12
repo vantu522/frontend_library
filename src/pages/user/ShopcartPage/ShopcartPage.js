@@ -22,7 +22,7 @@ const BookList = () => {
         <div>Ngày mượn</div>
         <div>Ngày trả</div>
         <div>Phí phạt</div>
-        <div>Hành động</div>
+        <div>Đặt lịch</div>
       </div>
 
       {/* Book Rows */}

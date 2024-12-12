@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/fontawesome-svg-core": "^6.7.1",
+    "@fortawesome/free-brands-svg-icons": "^6.7.1",
+    "@fortawesome/free-solid-svg-icons": "^6.7.1",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@lottiefiles/react-lottie-player": "^3.5.4",
     "@react-google-maps/api": "^2.20.3",
@@ -34,6 +36,7 @@
     "recharts": "^2.13.1",
     "slugify": "^1.6.6",
     "styled-components": "^6.1.13",
+    "swiper": "^11.1.15",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

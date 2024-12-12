@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart, faBell, faUser } from '@fortawesome/free-solid-svg-icons';
 
 const Header = () => {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
@@ -90,19 +92,29 @@ const Header = () => {
       </nav>
       <div className="flex items-center gap-4">
         <NavLink
+          to="/favorites"
+          className="flex items-center gap-2 text-gray-700 px-3 py-2 rounded-lg transition-all duration-300 hover:bg-gray-200"
+        >
+          <FontAwesomeIcon icon={faHeart} className="text-red-500 text-xl" />
+          <span>Yêu thích</span>
+        </NavLink>
+        <NavLink
+          to="/notifications"
+          className="flex items-center gap-2 text-gray-700 px-3 py-2 rounded-lg transition-all duration-300 hover:bg-gray-200"
+        >
+          <FontAwesomeIcon icon={faBell} className="text-yellow-500 text-xl" />
+          <span>Thông báo</span>
+        </NavLink>
+        <NavLink
           to="/loginemail"
           className="flex items-center gap-2 text-white bg-blue-600 px-5 py-2 rounded-lg transition-all duration-300 hover:bg-blue-700 shadow-lg"
         >
-          <img
-            src="/assets/images/loginlogo.jpg"
-            alt="Login Icon"
-            className="w-6 h-6 rounded-full"
-          />
-          Login
+          <FontAwesomeIcon icon={faUser} className="text-white text-xl" />
+          <span>Login</span>
         </NavLink>
       </div>
     </header>
-  );  
+  );
 };
 
 export default Header;

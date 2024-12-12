@@ -133,7 +133,7 @@ function NewsPage() {
       <div className="grid gap-6 md:grid-cols-2">
         <div className="bg-gray-100 p-6 rounded-lg">
           <h3 className="text-xl font-bold mb-2">STAY IN THE KNOW</h3>
-          <p className="mb-4">Sign up for email updates from Harvard Library</p>
+          <p className="mb-4">Sign up for email updates from Wisdom's Beacon Library</p>
           <input
             type="email"
             placeholder="Email Address"
