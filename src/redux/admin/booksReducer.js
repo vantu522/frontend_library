@@ -1,52 +1,40 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
+import bookService from '../../services/admin/booksService';
 
-const loadBooksFromLocalStorage = () => {
-  const books = localStorage.getItem("books");
-  return books ? JSON.parse(books) : [];
-};
-
-const saveBooksToLocalStorage = (books) => {
-  localStorage.setItem("books", JSON.stringify(books));
-};
-
-const handleUpdateBookStatus = (book) => {
-  const updatedBook = { ...book };
-  updatedBook.status = updatedBook.quantity === 0 ? 'unavailable' : 'available';
-  console.log(updatedBook);
-};
-
-const initialState = loadBooksFromLocalStorage();
+const initialState = [];
 
 const booksSlice = createSlice({
-  name: "books",
+  name: 'books',
   initialState,
   reducers: {
+    setBooks: (state, action) => {
+      return action.payload;
+    },
     addBook: (state, action) => {
       state.push(action.payload);
-      saveBooksToLocalStorage(state); 
     },
     updateBook: (state, action) => {
       const index = state.findIndex((book) => book.id === action.payload.id);
       if (index !== -1) {
-        const updatedBook = { ...state[index], ...action.payload };
-        updatedBook.status = updatedBook.quantity === 0 ? "unavailable" : "available";
-        state[index] = updatedBook; 
-        saveBooksToLocalStorage(state); 
+        state[index] = action.payload;
       }
     },
     deleteBook: (state, action) => {
-      const index = state.findIndex((book) => book.id === action.payload);
-      if (index !== -1) {
-        state.splice(index, 1); 
-        saveBooksToLocalStorage(state); 
-      }
-    },
-
-    setPagination: (state, action) => {
-      state.pagination = action.payload;
+      return state.filter((book) => book.id !== action.payload.id);
     }
-  },
+  }
 });
 
-export const { addBook, updateBook, deleteBook, setPagination } = booksSlice.actions;
+export const { setBooks, addBook, updateBook, deleteBook } = booksSlice.actions;
+
+// Thêm action fetchBooks để gọi API
+export const fetchBooks = () => async (dispatch) => {
+  try {
+    const books = await bookService.fetchAllBooks();
+    dispatch(setBooks(books));
+  } catch (error) {
+    console.error('Failed to fetch books:', error);
+  }
+};
+
 export default booksSlice.reducer;
