@@ -1,10 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { UserCircle } from 'lucide-react';
+import { UserCircle, Bell, LogOut } from 'lucide-react';
 
 const Header = () => {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
+  const [notifications, setNotifications] = useState([]);
+
+  // Giả lập dữ liệu người dùng và thông báo
+  useEffect(() => {
+    // Trong thực tế, bạn sẽ lấy thông tin từ localStorage, Redux hoặc context
+    const mockUser = {
+      name: 'Nguyễn Văn A',
+      avatar: 'https://example.com/avatar.jpg',
+    };
+    const mockNotifications = [
+      { id: 1, message: 'Bạn có sách mới' },
+      { id: 2, message: 'Ưu đãi đặc biệt' },
+    ];
+
+    // Giả định đăng nhập thành công
+    setIsLoggedIn(true);
+    setUser(mockUser);
+    setNotifications(mockNotifications);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,6 +40,13 @@ const Header = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [prevScrollPos]);
+
+  const handleLogout = () => {
+    // Xử lý đăng xuất
+    setIsLoggedIn(false);
+    setUser(null);
+    setNotifications([]);
+  };
 
   return (
     <header
@@ -63,14 +91,48 @@ const Header = () => {
             ))}
           </ul>
         </nav>
-        <div className="flex items-center">
-          <NavLink
-            to="/loginemail"
-            className="flex items-center gap-2 text-white bg-blue-600 px-4 py-2 rounded-full transition-all duration-300 hover:bg-blue-700 shadow-md hover:shadow-lg"
-          >
-            <UserCircle className="w-5 h-5" />
-            <span className="hidden md:inline">Đăng nhập</span>
-          </NavLink>
+        <div className="flex items-center space-x-4">
+          {isLoggedIn ? (
+            <>
+              {/* Icon thông báo */}
+              <div className="relative">
+                <Bell className="w-6 h-6 text-gray-600 cursor-pointer hover:text-blue-600" />
+                {notifications.length > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {notifications.length}
+                  </span>
+                )}
+              </div>
+
+              {/* Avatar người dùng */}
+              <div className="flex items-center space-x-2">
+                <img 
+                  src={user.avatar} 
+                  alt={user.name} 
+                  className="w-10 h-10 rounded-full object-cover border-2 border-blue-500"
+                />
+                <span className="hidden md:inline text-gray-800 font-medium">
+                  {user.name}
+                </span>
+              </div>
+
+              {/* Nút đăng xuất */}
+              <button 
+                onClick={handleLogout}
+                className="text-gray-600 hover:text-red-600"
+              >
+                <LogOut className="w-6 h-6" />
+              </button>
+            </>
+          ) : (
+            <NavLink
+              to="/loginemail"
+              className="flex items-center gap-2 text-white bg-blue-600 px-4 py-2 rounded-full transition-all duration-300 hover:bg-blue-700 shadow-md hover:shadow-lg"
+            >
+              <UserCircle className="w-5 h-5" />
+              <span className="hidden md:inline">Đăng nhập</span>
+            </NavLink>
+          )}
         </div>
       </div>
     </header>
@@ -78,4 +140,3 @@ const Header = () => {
 };
 
 export default Header;
-

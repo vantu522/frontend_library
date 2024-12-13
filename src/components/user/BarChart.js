@@ -6,10 +6,10 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const BarChart = () => {
   const data = {
-    labels: ['Thể loại 1', 'Thể loại 2', 'Thể loại 3', 'Thể loại 4', 'Thể loại 5', 'Thể loại 6'],
+    labels: ['Truyện cười', 'Tiểu thuyết', 'Giáo trình', 'Truyện dân gian', 'Văn học', 'Khoa học'],
     datasets: [
       {
-        label: '# of Votes',
+        label: 'Số lượng sách',
         data: [1000, 600, 800, 600, 400, 400],
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
@@ -40,7 +40,16 @@ const BarChart = () => {
       },
       title: {
         display: true,
-        text: 'Biểu đồ cột',
+        text: 'Biểu thống kê số lượng sách đã được mượn theo từng thể loại',
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            const genre = context.label; // Lấy nhãn từ labels
+            const value = context.raw;  // Lấy giá trị tương ứng
+            return `${genre}: ${value} sách`;
+          },
+        },
       },
     },
   };
