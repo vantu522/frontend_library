@@ -69,8 +69,8 @@ const Sidebar = () => {
                     </a>
                     {openSubmenu === 'management' && (
                         <ul className="bg-gray-700 pl-10 flex flex-col">
-                            <li><Link to="/admin/employees" className="px-5 py-2 text-gray-300 hover:text-white">Hồ Sơ Nhân Viên</Link></li>
                             <li><Link to="/admin/readers" className="px-5 py-2 text-gray-300 hover:text-white">Hồ Sơ Độc Giả</Link></li>
+                            <li><Link to="/admin/postlist" className="px-5 py-2 text-gray-300 hover:text-white">Bài Đăng</Link></li>
                         </ul>
                     )}
                 </li>

@@ -8,7 +8,7 @@ import EditBookForm from "../EditBookForm/EditBookForm";
 import { deleteBook, updateBook, addBook, fetchBooks } from "../../../../redux/admin/booksReducer";
 import { FaEdit, FaTrashAlt, FaPlus, FaExclamationCircle, FaTimes } from "react-icons/fa";
 import bookService from "../../../../services/admin/booksService";
-import { toast } from "react-toastify"; // Assuming you're using react-toastify for notifications
+import { toast } from "react-toastify";
 
 const BookList = () => {
   const books = useSelector((state) => state.books);
@@ -22,7 +22,7 @@ const BookList = () => {
   const [genreFilter, setGenreFilter] = useState("all");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [bookToDelete, setBookToDelete] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const [booksPerPage] = useState(10);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -31,7 +31,6 @@ const BookList = () => {
       try {
         setIsLoading(true);
         const data = await bookService.fetchAllBooks();
-        console.log(data)
         dispatch(fetchBooks(data));
         toast.success("Tải sách thành công");
       } catch (error) {
@@ -91,55 +90,111 @@ const BookList = () => {
   const currentBooks = filteredBooks.slice(indexOfFirstBook, indexOfLastBook);
 
   const columns = [
-    { label: "Tên sách", field: "title", width: "20%" },
-    { label: "Tác giả", field: "author", width: "20%" },
-    { label: "Thể loại", field: "genre", width: "20%" },
-    { label: "Nhà xuất bản", field: "publisher", width: "15%" },
-    { label: "NXB", field: "year", width: "5%", className: "text-center" },
-    { label: "SL", field: "quantity", width: "5%", className: "text-center" },
-    {
-      label: "Trạng thái",
-      field: "status",
+    { 
+      label: "Mã Sách", 
+      field: "id", 
       width: "10%",
       render: (val) => (
-        <span
-          className={`font-bold ${val === "available" ? "text-green-500" : "text-red-500"}`}
-        >
-          {val === "available" ? "Còn sách" : "Hết sách"}
+        <span className="text-gray-600 font-mono">
+          {val || 'N/A'}
         </span>
-      ),
+      )
+    },
+    { 
+      label: "Tên sách", 
+      field: "title", 
+      width: "20%",
+      render: (val, row) => (
+        <div className="flex flex-col">
+          <span className="font-semibold">{val}</span>
+          <span className="text-sm text-gray-500">ISBN: {row.isbn || 'Chưa cập nhật'}</span>
+        </div>
+      )
+    },
+    { 
+      label: "Tác giả", 
+      field: "author", 
+      width: "15%",
+      render: (val) => (
+        <span className="text-gray-700">{val}</span>
+      )
+    },
+    { 
+      label: "Thể loại", 
+      field: "genre", 
+      width: "10%",
+      render: (val) => {
+        const genreMap = {
+          'fiction': 'Tiểu thuyết',
+          'non-fiction': 'Phi hư cấu',
+          'science': 'Khoa học'
+        };
+        return (
+          <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+            {genreMap[val] || val}
+          </span>
+        );
+      }
+    },
+    { 
+      label: "Xuất bản", 
+      field: "publisher", 
+      width: "15%",
+      render: (val, row) => (
+        <div className="flex flex-col">
+          <span>{val}</span>
+          <span className="text-sm text-gray-500">{row.year}</span>
+        </div>
+      )
+    },
+    { 
+      label: "Kho", 
+      field: "quantity", 
+      width: "10%",
+      render: (val, row) => (
+        <div className="flex flex-col items-center">
+          <span className={`font-bold ${val > 5 ? 'text-green-600' : val > 0 ? 'text-yellow-600' : 'text-red-600'}`}>
+            {val} quyển
+          </span>
+          <span className={`text-xs ${row.status === 'available' ? 'text-green-500' : 'text-red-500'}`}>
+            {row.status === 'available' ? 'Còn sách' : 'Hết sách'}
+          </span>
+        </div>
+      )
     },
     {
       label: "Hành động",
-      width: "20%",
+      width: "10%",
       render: (val, row) => (
-        <>
-          <Tooltip content="Chỉnh sửa" position="left">
+        <div className="flex space-x-2 justify-center">
+          <Tooltip content="Chỉnh sửa" position="top">
             <button
               onClick={() => {
                 setVisibleForm(true);
                 setIsEdit(true);
                 setBookId(row.id);
               }}
+              className="text-blue-500 hover:text-blue-700"
             >
               <FaEdit size={18} />
             </button>
           </Tooltip>
 
-          <Tooltip content="Xóa sách" position="left">
+          <Tooltip content="Xóa sách" position="top">
             <button
               onClick={() => {
                 setShowDeleteConfirm(true);
                 setBookToDelete(row);
               }}
+              className="text-red-500 hover:text-red-700"
             >
-              <FaTrashAlt size={18} color="red" />
+              <FaTrashAlt size={18} />
             </button>
           </Tooltip>
 
           <Tooltip
             content={row.status === "available" ? "Đánh dấu hết sách" : "Đánh dấu còn sách"}
-            position="left"
+            position="top"
           >
             <button onClick={() => handleUpdateBookStatus(row)}>
               <FaExclamationCircle
@@ -148,7 +203,7 @@ const BookList = () => {
               />
             </button>
           </Tooltip>
-        </>
+        </div>
       ),
     },
   ];
@@ -269,7 +324,14 @@ const BookList = () => {
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-blue-500"></div>
         </div>
       ) : (
-        <Table columns={columns} data={currentBooks} />
+        <div>
+          <Table 
+            columns={columns} 
+            data={currentBooks} 
+            emptyMessage="Không có sách nào được tìm thấy" 
+          />
+          {/* Optional: Add pagination component here */}
+        </div>
       )}
     </div>
   );
