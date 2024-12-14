@@ -15,10 +15,10 @@ export default function AuthForm() {
       <div className="w-full max-w-md bg-white rounded-lg shadow-md overflow-hidden">
         <div className="p-6">
           <h2 className="text-2xl font-bold text-center text-gray-800">
-            {isLogin ? 'Welcome Back!' : 'Create an Account'}
+            {isLogin ? 'Chào mừng trở lại!' : 'Tạo tài khoản'}
           </h2>
           <p className="text-center text-gray-600 mt-2">
-            {isLogin ? 'Please sign in to continue' : 'Fill in your details to get started'}
+            {isLogin ? 'Vui lòng đăng nhập để tiếp tục' : 'Điền thông tin của bạn để bắt đầu'}
           </p>
         </div> 
         <div className="p-6">
@@ -30,7 +30,7 @@ export default function AuthForm() {
           >
             {!isLogin && (
               <div className="space-y-2">
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700">Tên đầy đủ</label>
                 <div className="relative">
                   <UserIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                   <input id="name" placeholder="John Doe" className="pl-10 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" />
@@ -41,11 +41,11 @@ export default function AuthForm() {
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
               <div className="relative">
                 <MailIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                <input id="email" type="email" placeholder="you@example.com" className="pl-10 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" />
+                <input id="email" type="email" placeholder="youremail@example.com" className="pl-10 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" />
               </div>
             </div>
             <div className="space-y-2">
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">Mật khẩu</label>
               <div className="relative">
                 <LockIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                 <input 
@@ -70,14 +70,14 @@ export default function AuthForm() {
         </div>
         <div className="p-6 bg-gray-50 border-t border-gray-200">
           <div className="text-sm text-center">
-            {isLogin ? "Don't have an account?" : "Already have an account?"}
+            {isLogin ? "Chưa có tài khoản?" : "Đã có tài khoản?"}
             <button onClick={toggleMode} className="ml-1 text-purple-600 hover:underline">
-              {isLogin ? 'Sign up' : 'Sign in'}
+              {isLogin ? 'Đăng ký' : 'Đăng xuất'}
             </button>
           </div>
           {isLogin && (
             <button className="mt-4 text-sm text-purple-600 hover:underline w-full text-center">
-              Forgot your password?
+              Bạn đã quên mật khẩu?
             </button>
           )}
         </div>

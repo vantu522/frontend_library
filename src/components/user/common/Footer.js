@@ -5,7 +5,7 @@ import { faFacebookF, faTwitter, faInstagram, faLinkedin } from '@fortawesome/fr
 
 function Footer() {
   return (
-    <footer className="bg-gradient-to-r from-[#2c3e50] to-[#3498db] text-white py-12 relative">
+    <footer className="bg-gradient-to-r from-[#2c3e50] to-[#3498db] text-white py-12 relative ">
       {/* Gradient bar */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#3498db] via-[#2ecc71] to-[#3498db]"></div>
 

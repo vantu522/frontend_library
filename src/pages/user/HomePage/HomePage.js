@@ -48,35 +48,31 @@ function HomePage() {
     },
   ];
 
-
   useEffect(() => {
     AOS.init({
-      duration: 2000, 
-      once: true, 
+      duration: 2000,
+      once: true,
     });
 
-    const loadResources = async()=>{
-      try{
-
-      } catch(error){
-        console.error("loi tai tai nguyen", error);
+    const loadResources = async () => {
+      try {
+        // Logic tải dữ liệu (nếu cần)
+        setTimeout(() => setIsLoading(false), 2000); // Giả lập tải tài nguyên
+      } catch (error) {
+        console.error("Lỗi tải tài nguyên", error);
       }
-    }
+    };
 
     loadResources();
-
-
   }, []);
 
-  const handleLoadingComplete = () =>{
-      setIsLoading(false);
-    }
+  const handleLoadingComplete = () => {
+    setIsLoading(false);
+  };
 
-  if(isLoading){
-      return <LoadingScreen onLoadingComplete={handleLoadingComplete} />
+  if (isLoading) {
+    return <LoadingScreen onLoadingComplete={handleLoadingComplete} />;
   }
-
-
 
   return (
     <div className="text-sky-500 flex flex-col overflow-hidden">
@@ -109,7 +105,7 @@ function HomePage() {
         </div>
 
         {/* Hiển thị sách được mượn nhiều */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-cols-4 lg:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
           {mostBorrowedBooks.map((book, index) => (
             <div
               key={index}
@@ -139,27 +135,26 @@ function HomePage() {
           Thống kê
         </h2>
         <div className="flex gap-5 mt-16">
-          {/* Biểu đồ BarChart chiếm 3 phần */}
           <div
             className="flex-[60%] bg-white rounded shadow-md h-[70vh] p-5"
             data-aos="fade-up"
           >
             <BarChart />
           </div>
-          {/* Phần text chiếm 2 phần */}
           <div
             className="flex-[40%] bg-gray-100 rounded p-5 flex items-center justify-center"
             data-aos="fade-left"
           >
             <p className="text-lg italic">
               Thư viện duy trì sự đa dạng các thể loại sách như tiểu thuyết, khoa học, nghiên cứu
-              và văn học thiếu nhi, đáp ứng nhu cầu phong phú của độc giả. Điều này không chỉ
-              khuyến khích thói quen đọc mà còn mở rộng kiến thức và tạo không gian khám phá cho mọi lứa tuổi.
+              và văn học thiếu nhi, đáp ứng nhu cầu phong phú của độc giả.
             </p>
           </div>
         </div>
       </div>
 
+      {/* Section khác (LineChart, PieChart, Map...) */}
+      {/* Bạn có thể giữ nguyên logic tương tự cho các phần khác đã gửi */}
       {/* Thống kê 2 Section */}
       <div className="w-[90%] mx-auto mt-10" data-aos="fade-up">
         <div className="flex gap-5 mt-10 items-center">
@@ -255,3 +250,6 @@ function HomePage() {
 }
 
 export default HomePage;
+
+
+
