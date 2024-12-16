@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { UserCircle, Bell, LogOut, Heart } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
@@ -10,26 +11,27 @@ const Header = () => {
   const [favoriteBooks, setFavoriteBooks] = useState([]);
   const [showFavorites, setShowFavorites] = useState(false);
 
-  // Giả lập dữ liệu người dùng và thông báo
-  useEffect(() => {
-    const mockUser = {
-      name: 'Nguyễn Văn A',
-      avatar: 'https://example.com/avatar.jpg',
-    };
-    const mockNotifications = [
-      { id: 1, message: 'Bạn có sách mới' },
-      { id: 2, message: 'Ưu đãi đặc biệt' },
-    ];
-    const mockFavoriteBooks = [
-      { id: 1, title: 'Đắc Nhân Tâm' },
-      { id: 2, title: 'Nhà Giả Kim' },
-      { id: 3, title: 'Cách Nghĩ Để Thành Công' },
-    ];
+  const navigate = useNavigate();
 
-    setIsLoggedIn(true);
-    setUser(mockUser);
-    setNotifications(mockNotifications);
-    setFavoriteBooks(mockFavoriteBooks);
+  useEffect(() => {
+    // Kiểm tra đăng nhập từ localStorage
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      const userData = JSON.parse(storedUser);
+      setIsLoggedIn(true);
+      setUser(userData);
+      
+      // Giả lập dữ liệu thông báo và sách yêu thích (bạn có thể thay thế bằng API thực)
+      setNotifications([
+        { id: 1, message: 'Bạn có sách mới' },
+        { id: 2, message: 'Ưu đãi đặc biệt' },
+      ]);
+      setFavoriteBooks([
+        { id: 1, title: 'Đắc Nhân Tâm' },
+        { id: 2, title: 'Nhà Giả Kim' },
+        { id: 3, title: 'Cách Nghĩ Để Thành Công' },
+      ]);
+    }
   }, []);
 
   useEffect(() => {
@@ -40,17 +42,20 @@ const Header = () => {
     };
 
     window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [prevScrollPos]);
 
   const handleLogout = () => {
+    // Xóa thông tin người dùng khỏi localStorage
+    localStorage.removeItem('user');
+    
     setIsLoggedIn(false);
     setUser(null);
     setNotifications([]);
     setFavoriteBooks([]);
+    
+    // Điều hướng về trang đăng nhập
+    navigate('/loginemail');
   };
 
   const toggleFavorites = () => {
@@ -133,26 +138,28 @@ const Header = () => {
                 )}
               </div>
 
-              {/* Avatar người dùng */}
-              <div className="flex items-center space-x-2">
-                <img 
-                  src='https://scontent.fhan18-1.fna.fbcdn.net/v/t39.30808-6/289693821_582015943280803_2102006602626651935_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=G0Vc9Sn0GZUQ7kNvgG2Loay&_nc_zt=23&_nc_ht=scontent.fhan18-1.fna&_nc_gid=AWxF11_1kpD51GjEtMQ9G1-&oh=00_AYBtle2IrxFt5bJrvJUmlmxA1cAfMm6xcQs7n_hu77tLew&oe=6762E0E4'
-                  alt={user.name} 
-                  className="w-12 h-12 rounded-full object-cover border-2 border-blue-500"
-                />
-                <span className="hidden md:inline text-gray-800 font-medium">
-                  {user.name}
-                </span>
-              </div>
+             {/* Avatar người dùng */}
+            <div className="flex items-center space-x-2">
+              <img 
+                src={user.avatar || 'https://via.placeholder.com/150'}
+                alt={user.name} 
+                className="w-12 h-12 rounded-full object-cover border-2 border-blue-500"
+              />
+              <span className="hidden md:inline text-gray-800 font-medium">
+                {user.name}
+              </span>
+            </div>
 
-              {/* Nút đăng xuất */}
-              <button
-                  onClick={handleLogout}
-                  className="ml-4 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                >
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Đăng xuất
-                </button>
+            {/* Nút đăng xuất */}
+            <button
+              onClick={handleLogout}
+              className="ml-4 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Đăng xuất
+            </button>
+ 
+ 
             </>
           ) : (
             <a

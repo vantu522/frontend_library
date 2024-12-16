@@ -56,6 +56,7 @@ function NewPage() {
       date: "25/10/2024",
       title: "Dự Án Số Hóa Bản Thảo Quý",
     },
+    // Các item còn lại...
   ];
 
   return (
