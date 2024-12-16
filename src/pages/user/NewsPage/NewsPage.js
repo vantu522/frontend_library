@@ -1,5 +1,45 @@
 import React from "react";
 
+// Component Banner
+const NewsBanner = () => {
+  const imageData = [
+    "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg", 
+    "https://i.pinimg.com/474x/07/8e/02/078e0212bce731f1f7a202767ffd5ca8.jpg", 
+    "https://i.pinimg.com/474x/07/8e/02/078e0212bce731f1f7a202767ffd5ca8.jpg"
+  ];
+
+  const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imageData.length);
+    }, 5000); // 5 giây đổi ảnh
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="relative w-full h-[300px] overflow-hidden mt-8">
+      {/* Ảnh nền thay đổi */}
+      <div
+        className="absolute inset-0 bg-cover bg-center transition-all duration-1000"
+        style={{ backgroundImage: `url(${imageData[currentImageIndex]})` }}
+      ></div>
+
+      {/* Lớp overlay */}
+      <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-center text-white">
+        <h1 className="text-2xl md:text-4xl font-bold mb-4">Library Newsletters</h1>
+        <p className="text-sm md:text-lg mb-6">
+          Sign up for our email newsletters and get library news and information delivered directly to your inbox.
+        </p>
+        <button className="bg-white text-black py-2 px-4 rounded hover:bg-gray-200 transition">
+          Subscribe
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// Component chính cho NewsPage
 function NewsPage() {
   const cards = [
     {
@@ -15,47 +55,30 @@ function NewsPage() {
         "An exhibit at the Loeb Music Library shares the work of one of Boston's most determined punk scene documenters.",
     },
     {
-      date: "November 5, 2024",
-      title: "Boston Bohemians: An Evening of Poetry from Local Poets",
+      date: "November 11, 2024",
+      title: "Before Grainy Smartphone Concert Footage, There Was Arthur Freedman",
       description:
-        "The Boston Originals reading series kicked off the Woodberry Poetry Room’s Fall 2024 season of programming.",
+        "An exhibit at the Loeb Music Library shares the work of one of Boston's most determined punk scene documenters.",
     },
     {
-      date: "November 5, 2024",
-      title: "Boston Bohemians: An Evening of Poetry from Local Poets",
+      date: "November 11, 2024",
+      title: "Before Grainy Smartphone Concert Footage, There Was Arthur Freedman",
       description:
-        "The Boston Originals reading series kicked off the Woodberry Poetry Room’s Fall 2024 season of programming.",
+        "An exhibit at the Loeb Music Library shares the work of one of Boston's most determined punk scene documenters.",
     },
     {
-      date: "November 5, 2024",
-      title: "Boston Bohemians: An Evening of Poetry from Local Poets",
+      date: "November 11, 2024",
+      title: "Before Grainy Smartphone Concert Footage, There Was Arthur Freedman",
       description:
-        "The Boston Originals reading series kicked off the Woodberry Poetry Room’s Fall 2024 season of programming.",
+        "An exhibit at the Loeb Music Library shares the work of one of Boston's most determined punk scene documenters.",
     },
     {
-      date: "November 5, 2024",
-      title: "Boston Bohemians: An Evening of Poetry from Local Poets",
+      date: "November 11, 2024",
+      title: "Before Grainy Smartphone Concert Footage, There Was Arthur Freedman",
       description:
-        "The Boston Originals reading series kicked off the Woodberry Poetry Room’s Fall 2024 season of programming.",
+        "An exhibit at the Loeb Music Library shares the work of one of Boston's most determined punk scene documenters.",
     },
-    {
-      date: "November 5, 2024",
-      title: "Boston Bohemians: An Evening of Poetry from Local Poets",
-      description:
-        "The Boston Originals reading series kicked off the Woodberry Poetry Room’s Fall 2024 season of programming.",
-    },
-    {
-      date: "November 5, 2024",
-      title: "Boston Bohemians: An Evening of Poetry from Local Poets",
-      description:
-        "The Boston Originals reading series kicked off the Woodberry Poetry Room’s Fall 2024 season of programming.",
-    },
-    {
-      date: "November 5, 2024",
-      title: "Boston Bohemians: An Evening of Poetry from Local Poets",
-      description:
-        "The Boston Originals reading series kicked off the Woodberry Poetry Room’s Fall 2024 season of programming.",
-    },
+    // Các item còn lại...
   ];
 
   const newsItems = [
@@ -67,34 +90,35 @@ function NewsPage() {
     },
     {
       image:
-        "https://i.pinimg.com/474x/07/8e/02/078e0212bce731f1f7a202767ffd5ca8.jpg",
-      date: "October 18, 2024",
-      title: "Ukraine’s First Lady Shares History with Harvard",
+        "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg",
+      date: "November 4, 2024",
+      title: "Harvard Affiliates Celebrate Day of the Dead",
     },
     {
       image:
-        "https://i.pinimg.com/474x/07/8e/02/078e0212bce731f1f7a202767ffd5ca8.jpg",
-      date: "October 18, 2024",
-      title: "Ukraine’s First Lady Shares History with Harvard",
+        "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg",
+      date: "November 4, 2024",
+      title: "Harvard Affiliates Celebrate Day of the Dead",
     },
     {
       image:
-        "https://i.pinimg.com/474x/07/8e/02/078e0212bce731f1f7a202767ffd5ca8.jpg",
-      date: "October 18, 2024",
-      title: "Ukraine’s First Lady Shares History with Harvard",
+        "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg",
+      date: "November 4, 2024",
+      title: "Harvard Affiliates Celebrate Day of the Dead",
     },
     {
       image:
-        "https://i.pinimg.com/474x/07/8e/02/078e0212bce731f1f7a202767ffd5ca8.jpg",
-      date: "October 18, 2024",
-      title: "Ukraine’s First Lady Shares History with Harvard",
+        "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg",
+      date: "November 4, 2024",
+      title: "Harvard Affiliates Celebrate Day of the Dead",
     },
     {
       image:
-        "https://i.pinimg.com/474x/07/8e/02/078e0212bce731f1f7a202767ffd5ca8.jpg",
-      date: "October 18, 2024",
-      title: "Ukraine’s First Lady Shares History with Harvard",
+        "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg",
+      date: "November 4, 2024",
+      title: "Harvard Affiliates Celebrate Day of the Dead",
     },
+    // Các item còn lại...
   ];
 
   return (
@@ -107,6 +131,9 @@ function NewsPage() {
           new ideas. Read about that work in action.
         </p>
       </div>
+
+      {/* Banner Section */}
+      <NewsBanner /> {/* Đây là nơi chèn banner vào */}
 
       {/* News Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -130,8 +157,8 @@ function NewsPage() {
       </div>
 
       {/* Info Section */}
-      <div className="grid gap-6 md:grid-cols-2">
-        <div className="bg-gray-100 p-6 rounded-lg">
+      <div className="grid gap-2 md:grid-cols-2">
+        <div className="bg-gray-100 p-6 rounded-lg max-w-md mx-auto">
           <h3 className="text-xl font-bold mb-2">STAY IN THE KNOW</h3>
           <p className="mb-4">Sign up for email updates from Wisdom's Beacon Library</p>
           <input
@@ -143,13 +170,22 @@ function NewsPage() {
             SIGN UP
           </button>
         </div>
-        <div className="bg-gray-100 p-6 rounded-lg">
+        <div className="bg-gray-100 p-6 rounded-lg max-w-md mx-auto">
           <h3 className="text-xl font-bold mb-2">FOLLOW HARVARD LIBRARY</h3>
-          <p className="mb-4">You can find us on Facebook and Twitter</p>
+          <p className="mb-4">You can find us on Facebook, Twitter, and YouTube</p>
           <div className="space-y-2">
-            <span className="block">Facebook</span>
-            <span className="block">Twitter</span>
-            <span className="block">YouTube</span>
+            <span className="flex items-center space-x-2">
+              <i className="fab fa-facebook-square text-xl text-blue-600"></i>
+              <span>Facebook</span>
+            </span>
+            <span className="flex items-center space-x-2">
+              <i className="fab fa-twitter-square text-xl text-blue-400"></i>
+              <span>Twitter</span>
+            </span>
+            <span className="flex items-center space-x-2">
+              <i className="fab fa-youtube text-xl text-red-600"></i>
+              <span>YouTube</span>
+            </span>
           </div>
         </div>
       </div>
