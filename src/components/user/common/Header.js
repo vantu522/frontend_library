@@ -141,7 +141,7 @@ const Header = () => {
              {/* Avatar người dùng */}
             <div className="flex items-center space-x-2">
               <img 
-                src={user.avatar || 'https://via.placeholder.com/150'}
+                src={ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS075s728_EWpOqKmQl3L-_4qGiNIDbuoRxGw&s'}
                 alt={user.name} 
                 className="w-12 h-12 rounded-full object-cover border-2 border-blue-500"
               />

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import bookService from '../../services/user/bookService';
-import { Clock, MapPin, Heart, Star, Calendar, Book } from 'lucide-react';
+import { Clock, MapPin, Heart, Star, Calendar, Book, MessageCircle } from 'lucide-react';
+import RatingsAndComments from './RatingsAndComments';
 
 function LibraryBookDetail() {
   const { bookId } = useParams();
@@ -154,7 +155,17 @@ function LibraryBookDetail() {
               <Calendar className="mr-2 h-5 w-5" />
               Đặt lịch mượn sách
             </button>
+
           </div>
+        </div>
+
+        {/* Ratings and Comments Section */}
+        <div className="border-t mt-8 pt-8 ml-6">
+          <h2 className="text-2xl font-bold mb-6 flex items-center">
+            <MessageCircle className="mr-2 h-6 w-6 text-blue-600" />
+            Đánh giá và Bình luận
+          </h2>
+          <RatingsAndComments bookId={bookId} />
         </div>
       </div>
     </div>
@@ -162,3 +173,4 @@ function LibraryBookDetail() {
 }
 
 export default LibraryBookDetail;
+

@@ -14,15 +14,16 @@ const BookList = () => {
   return (
     <div className="w-full">
       {/* Header */}
-      <div className="grid grid-cols-8 gap-2 bg-orange-400 text-white font-bold text-center py-2 mt-24">
-        <div>ID</div>
+      <div className="grid grid-cols-9 gap-2 bg-orange-400 text-white font-bold text-center py-2 mt-24">
+        <div>STT</div>
         <div>Hình ảnh</div>
         <div>Tên sách</div>
         <div>Tác giả</div>
         <div>Thể loại</div>
         <div>Ngày mượn</div>
-        <div>Ngày trả</div>
+        <div>Hạn trả</div>
         <div>Hành động</div>
+        <div>Trạng thái</div>
       </div>
 
       {/* Book Rows */}
