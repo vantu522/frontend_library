@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import bookService from '../../services/user/bookService';
-import { Clock, MapPin, Heart, Star, Calendar, Book, MessageCircle } from 'lucide-react';
+import { Clock, MapPin, Star, Calendar, Book, MessageCircle, XCircle } from 'lucide-react';
 import RatingsAndComments from './RatingsAndComments';
+import ReservationPopup from './ReservationPopup';
 
 function LibraryBookDetail() {
   const { bookId } = useParams();
@@ -12,6 +13,7 @@ function LibraryBookDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const [showReservationPopup, setShowReservationPopup] = useState(false);
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -29,17 +31,19 @@ function LibraryBookDetail() {
     fetchBook();
   }, [bookId]);
 
-  const handleReservation = () => {
-    navigate('/reservation', { 
-      state: { 
-        bookId: book.id, 
-        bookTitle: book.title 
-      } 
-    });
-  };
-
   const toggleDescription = () => {
     setIsDescriptionExpanded(!isDescriptionExpanded);
+  };
+
+  const handleReservation = () => {
+    setShowReservationPopup(true);
+  };
+
+  const handleConfirmReservation = (borrowDate) => {
+    // Implement the reservation logic here
+    console.log('Reservation confirmed for:', book.title, 'on', borrowDate);
+    setShowReservationPopup(false);
+    // You might want to navigate to a confirmation page or show a success message
   };
 
   if (loading) return (
@@ -120,8 +124,17 @@ function LibraryBookDetail() {
                 <p className="font-medium text-gray-700">Vị trí: Kệ sách A2, Tầng 2</p>
               </div>
               <div className="flex items-center">
-                <Clock className="h-5 w-5 mr-2 text-green-600" />
-                <p className="text-green-700">{book.availability ? 'Sẵn sàng mượn' : 'Sách hiện đã hết'}</p>
+              {book.availability ? (
+                <>
+                  <Clock className="h-5 w-5 mr-2 text-green-600" />
+                  <p className="text-green-700">Sẵn sàng mượn</p>
+                </>
+              ) : (
+                <>
+                  <XCircle className="h-5 w-5 mr-2 text-red-600" />
+                  <p className="text-red-600">Sách hiện đã hết</p>
+                </>
+              )}
               </div>
             </div>
 
@@ -168,6 +181,14 @@ function LibraryBookDetail() {
           <RatingsAndComments bookId={bookId} />
         </div>
       </div>
+
+      {showReservationPopup && (
+        <ReservationPopup
+          book={book}
+          onClose={() => setShowReservationPopup(false)}
+          onConfirm={handleConfirmReservation}
+        />
+      )}
     </div>
   );
 }

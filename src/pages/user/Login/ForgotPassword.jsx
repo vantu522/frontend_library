@@ -36,7 +36,7 @@ const ForgotPassword = () => {
       alert("Mật khẩu đã được cập nhật thành công!");
   
       // Chuyển về trang login
-      navigate("/login");
+      navigate("/loginemail");
   
       // Reset lại trạng thái input
       setStep(1);

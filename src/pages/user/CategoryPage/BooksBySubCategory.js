@@ -8,9 +8,12 @@ function BooksBySubCategory() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate(); // Khai báo hook useNavigate
+  const navigate = useNavigate();
+  const [originalBigCategoryName, setOriginalBigCategoryName] = useState('');
+  const [originalSubCategoryName, setOriginalSubCategoryName] = useState('');
 
   useEffect(() => {
+
     const fetchBooks = async () => {
       if (!bigCategoryName || !subCategoryName) {
         console.log('Missing category parameters');
@@ -21,6 +24,14 @@ function BooksBySubCategory() {
       setLoading(true);
       
       try {
+        const categories = JSON.parse(localStorage.getItem('categories') || '[]');
+        const originalBigCategory = categories.find((cat) => createSlug(cat) === bigCategoryName);
+        setOriginalBigCategoryName(originalBigCategory || bigCategoryName);
+
+        const subCategories = JSON.parse(localStorage.getItem('subCategories'|| '[]'));
+        const originalSubCategory = subCategories.find((sub) => createSlug(sub) === subCategoryName);
+        setOriginalSubCategoryName(originalSubCategory);
+
         const bigCategorySlug = createSlug(bigCategoryName);
         const subCategorySlug = createSlug(subCategoryName);
         
@@ -77,7 +88,7 @@ function BooksBySubCategory() {
   return (
     <div className="container mx-auto mt-24 p-10">
       <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-        Sách trong {bigCategoryName} - {subCategoryName}
+        Sách trong {originalBigCategoryName} - {originalSubCategoryName}
       </h2>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {books.map((book) => (

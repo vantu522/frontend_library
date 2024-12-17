@@ -3,6 +3,7 @@ import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { HiMail as MailIcon, HiUser as UserIcon, HiLockClosed as LockIcon, HiEye as EyeIcon, HiEyeOff as EyeOffIcon, HiPhone as PhoneIcon } from 'react-icons/hi';
+import { toast } from 'react-toastify';
 
 export default function AuthForm() {
   const [isLogin, setIsLogin] = useState(true)
@@ -13,7 +14,6 @@ export default function AuthForm() {
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
 
-  const navigate = useNavigate()
 
   const toggleMode = () => setIsLogin(!isLogin)
   const togglePasswordVisibility = () => setShowPassword(!showPassword)
@@ -38,16 +38,19 @@ export default function AuthForm() {
 
         // Điều hướng về trang chủ (HomePage)
         // navigate('/')
+        toast.success("Đăng nhập thành công!");
         window.location.href = "/";
       } else {
         // Gọi API đăng ký
         const response = await axios.post('https://library-mana.azurewebsites.net/members/register', {
           name,
           email,
-          password
+          password,
+          phoneNumber
         })
         
-        alert('Đăng ký thành công! Hãy đăng nhập để tiếp tục.')
+        // alert('Đăng ký thành công! Hãy đăng nhập để tiếp tục.')
+        toast.success("Đăng ký thành công!")
         setIsLogin(true) // Chuyển về chế độ đăng nhập
       }
     } catch (error) {
@@ -103,7 +106,7 @@ export default function AuthForm() {
                     className="pl-10 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" 
                     required
                   />
-                </div>
+                </div> 
               </div>
             )}
 
