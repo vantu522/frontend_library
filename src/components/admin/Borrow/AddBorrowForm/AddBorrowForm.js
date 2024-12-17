@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "../../../../common/admin/Modal/Modal";
 import { addBorrow } from "../../../../redux/admin/borrowsReducer";
-import "./AddBorrowForm.css";
+import borrowService from "../../../../services/admin/borrowService"; // Import borrowService
 
 const AddBorrowForm = ({ setVisibleForm }) => {
   const dispatch = useDispatch();
@@ -44,7 +44,7 @@ const AddBorrowForm = ({ setVisibleForm }) => {
 
   const isPhoneValid = (phone) => /^\d{10}$/.test(phone);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!isPhoneValid(borrowerPhone)) {
@@ -64,18 +64,24 @@ const AddBorrowForm = ({ setVisibleForm }) => {
 
     const borrowDate = new Date().toISOString();
     const newBorrow = {
-      id: Date.now(),
       bookTitle,
       borrowerName,
       borrowerPhone,
       borrowerEmail,
       borrowDate,
       dueDate,
-      status: "active",
     };
 
-    dispatch(addBorrow(newBorrow));
-    setVisibleForm(false);
+    try {
+      // Call borrowBook API to create the borrowing record
+      const borrowResponse = await borrowService.borrowBook(newBorrow);
+      console.log("Borrow Book response:", borrowResponse); // Log response if needed
+      dispatch(addBorrow({ ...newBorrow, id: borrowResponse.id }));
+      setVisibleForm(false);
+    } catch (error) {
+      console.error("Lỗi khi mượn sách:", error);
+      alert("Lỗi khi mượn sách. Vui lòng thử lại.");
+    }
   };
 
   return (
@@ -152,7 +158,7 @@ const AddBorrowForm = ({ setVisibleForm }) => {
           <p className="text-center mb-4">Người mượn chưa tồn tại. Vui lòng thêm người mượn trước.</p>
           <button
             onClick={() => setShowModalMessage(false)}
-            className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600"
           >
             Đóng
           </button>

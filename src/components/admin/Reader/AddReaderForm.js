@@ -125,12 +125,3 @@ const AddReaderForm = ({ onClose, onAdd }) => {
 
 export default AddReaderForm;
 
-
-
-
-
-
-
-
-
-
