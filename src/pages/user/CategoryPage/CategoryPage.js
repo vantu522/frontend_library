@@ -75,7 +75,9 @@ function CategoryPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {bigCategories.map((category, index) => (
               <div
+                
                 key={index}
+                onClick={() => handleCategoryClick(category)}
                 className="bg-white rounded-xl p-6 text-center transition-all duration-300 transform hover:-translate-y-2 hover:shadow-lg"
               >
                 <button

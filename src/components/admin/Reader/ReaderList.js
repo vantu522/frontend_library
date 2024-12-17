@@ -3,14 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import Modal from "../../../common/admin/Modal/Modal";
 import Table from "../../../common/admin/Table/Table";
 import Tooltip from "../../../common/admin/Tooltip/Tooltip";
+import Pagination from "../../../common/admin/Pagination"; // Adjust import path as needed
 import AddReaderForm from "./AddReaderForm";
 import EditReaderForm from "./EditReaderForm";
-import { deleteReader, updateReader, addReader } from "../../../redux/admin/readerReducer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faInfoCircle, faPlus } from "@fortawesome/free-solid-svg-icons";
 import memberService from "../../../services/admin/memberService";
 import { toast } from 'react-toastify';
 
+// Keep existing Modal components (DeleteModal and InfoModal) as they were...
+// (Copy the existing DeleteModal and InfoModal code from the previous implementation)
 // Modal Xóa
 const DeleteModal = ({ isOpen, onConfirm, onCancel }) => (
   <Modal onClose={onCancel} isOpen={isOpen}>
@@ -63,6 +65,9 @@ const InfoModal = ({ isOpen, onClose, selectedReader }) => (
   </Modal>
 );
 
+
+
+
 const ReaderList = () => {
   const reader = useSelector((state) => state.reader || []);
   const dispatch = useDispatch();
@@ -76,6 +81,10 @@ const ReaderList = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const fetchMembers = async () => {
@@ -91,29 +100,67 @@ const ReaderList = () => {
     };
 
     // Nếu dữ liệu không đến từ server mà từ Redux
-  if (reader.length > 0) {
-    setReaderData(reader);
-  } else {
-    fetchMembers();
-  }
+    if (reader.length > 0) {
+      setReaderData(reader);
+    } else {
+      fetchMembers();
+    }
   }, []);
 
+<<<<<<< HEAD
   const filteredReaders = readerData.filter((reader) => {
     const nameMatch = reader.name && reader.name.toLowerCase().includes(searchTerm.toLowerCase());
     const emailMatch = reader.email && reader.email.toLowerCase().includes(searchTerm.toLowerCase());
     return nameMatch || emailMatch;
   });
   
+=======
+  // Filter readers based on search term
+  const filteredReaders = readerData.filter(
+    (reader) =>
+      reader.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      reader.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+>>>>>>> 7ab8e19f369a64aaf3208eace2f8984e1b122e9d
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredReaders.length / itemsPerPage);
+  const paginatedReaders = filteredReaders.slice(
+    (currentPage - 1) * itemsPerPage, 
+    currentPage * itemsPerPage
+  );
+
+  // Reset current page when search term changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
 
   const columns = [
-    { label: "Tên", field: "name" },
-    { label: "Email", field: "email" },
-    { label: "Địa Chỉ", field: "address" },
-    { label: "Số Điện Thoại", field: "phoneNumber" },
+    { 
+      label: "Tên", 
+      field: "name",
+      width: "20%" 
+    },
+    { 
+      label: "Email", 
+      field: "email",
+      width: "25%" 
+    },
+    { 
+      label: "Địa Chỉ", 
+      field: "address",
+      width: "20%" 
+    },
+    { 
+      label: "Số Điện Thoại", 
+      field: "phoneNumber",
+      width: "15%" 
+    },
     {
       label: "Hành động",
+      width: "20%",
       render: (val, row) => (
-        <div className="flex gap-3">
+        <div className="flex gap-3 justify-center">
           <Tooltip content="Xem thông tin" position="left">
             <button
               onClick={() => {
@@ -155,24 +202,21 @@ const ReaderList = () => {
 
   const handleDelete = async () => {
     try {
-      // Gọi API xóa member
       await memberService.deleteMember(deleteTargetId);
-  
-      // Cập nhật state local sau khi xóa thành công
-      setReaderData((prev) => prev.filter((reader) => reader.memberId !== deleteTargetId));
-  
-      // Đóng modal
+      const updatedReaderData = readerData.filter((reader) => reader.memberId !== deleteTargetId);
+      setReaderData(updatedReaderData);
       setDeleteModalOpen(false);
-  
-      // Hiển thị thông báo thành công
       toast.success("Xóa độc giả thành công!");
+      
+      // Adjust pagination if needed
+      if (paginatedReaders.length === 1 && currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+      }
     } catch (error) {
-      // Hiển thị thông báo lỗi
       toast.error("Có lỗi xảy ra khi xóa độc giả!");
       console.error("Error deleting member:", error);
     }
   };
-  
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
@@ -198,37 +242,51 @@ const ReaderList = () => {
         </button>
       </div>
       {loading ? (
-        <p>Đang tải...</p>
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-blue-500"></div>
+        </div>
       ) : error ? (
         <p className="text-red-500">{error}</p>
       ) : (
-        <Table columns={columns} data={filteredReaders} />
+        <>
+          <Table columns={columns} data={paginatedReaders} />
+          {filteredReaders.length > 0 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          )}
+        </>
       )}
+      
+      {/* Modal sections remain the same as in the original code */}
       <Modal onClose={() => setVisibleForm(false)} isOpen={visibleForm}>
-      {isEdit ? (
-        <EditReaderForm
-          reader={selectedReader}
+        {isEdit ? (
+          <EditReaderForm
+            reader={selectedReader}
+            onClose={() => setVisibleForm(false)}
+            onUpdate={(updatedReader) => {
+              setReaderData((prev) =>
+                prev.map((reader) =>
+                  reader.memberId === updatedReader.memberId ? updatedReader : reader
+                )
+              );
+              setVisibleForm(false);
+            }}
+          />
+        ) : (
+          <AddReaderForm
           onClose={() => setVisibleForm(false)}
-          onUpdate={(updatedReader) => {
-        // Cập nhật state local ngay lập tức
-        setReaderData((prev) =>
-          prev.map((reader) =>
-            reader.memberId === updatedReader.memberId ? updatedReader : reader
-          )
-        );
-        setVisibleForm(false);
-      }}
-    />
-  ) : (
-    <AddReaderForm
-      onClose={() => setVisibleForm(false)}
-      onAdd={(newReader) => {
-        // Cập nhật state local ngay lập tức
-        setReaderData((prev) => [...prev, newReader]);
-      }}
-    />
-  )}
-</Modal>
+          onAdd={(newReader) => {
+            // Cập nhật state local ngay lập tức
+            setReaderData((prev) => [...prev, newReader]);
+          }}
+        />
+        )}
+      </Modal>
+      
+      {/* Existing modal components */}
       <InfoModal
         isOpen={infoModalOpen}
         onClose={() => setInfoModalOpen(false)}

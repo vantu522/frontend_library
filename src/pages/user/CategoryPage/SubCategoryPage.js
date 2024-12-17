@@ -10,7 +10,6 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'; // Assuming you're usi
 function SubCategoryPage() {
   const { bigCategoryName } = useParams();
   const navigate = useNavigate();
-
   const [subCategories, setSubCategories] = useState([]);
   const [booksByCategory, setBooksByCategory] = useState({});
   const [loading, setLoading] = useState(true);
@@ -25,6 +24,7 @@ function SubCategoryPage() {
         const slug = createSlug(bigCategoryName);
         const data = await categoryService.fetchSubCategories(slug);
         setSubCategories(data);
+        localStorage.setItem('subCategories',JSON.stringify(data));
 
         const categories = JSON.parse(localStorage.getItem('categories') || '[]');
         const original = categories.find((cat) => createSlug(cat) === slug);
@@ -130,8 +130,9 @@ function SubCategoryPage() {
                     >
                       <img src={book.img} alt={book.name} className="w-full h-64 object-cover" />
                       <div className="p-4">
-                        <p className="text-sm text-indigo-600 mb-1">{book.author}</p>
+                        <p className="text-sm text-indigo-600 mb-1">{book.author.join(", ")}</p>
                         <h3 className="text-gray-800 font-medium text-sm line-clamp-2">{book.title}</h3>
+                        <p>{book.availability ? 'Có sẵn': 'Tạm hết'}</p>
                       </div>
                     </div>
                   ))}

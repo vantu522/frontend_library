@@ -9,6 +9,7 @@ import { deleteBook, updateBook, addBook, fetchBooks } from "../../../../redux/a
 import { FaEdit, FaTrashAlt, FaPlus, FaExclamationCircle, FaTimes } from "react-icons/fa";
 import bookService from "../../../../services/admin/booksService";
 import { toast } from "react-toastify";
+import Pagination from "../../../../common/admin/Pagination";
 
 const BookList = () => {
   const books = useSelector((state) => state.books);
@@ -23,6 +24,7 @@ const BookList = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [bookToDelete, setBookToDelete] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const [booksPerPage] = useState(10);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -30,9 +32,18 @@ const BookList = () => {
     const loadBooks = async () => {
       try {
         setIsLoading(true);
-        const data = await bookService.fetchAllBooks();
-        dispatch(fetchBooks(data));
+        const resData = await bookService.fetchAllBooks(currentPage + 1, booksPerPage); // Truyền page và size
+        dispatch(
+          fetchBooks({
+            books: resData.data,
+            currentPage: resData.currentPage - 1, // Chuyển về chỉ số 0-based
+            totalPages: resData.totalPages,
+            totalItems: resData.totalItems,
+            booksPerPage: resData.size,
+          })
+        );
         toast.success("Tải sách thành công");
+        setTotalPages(resData.totalPages);
       } catch (error) {
         console.error("Failed to load books", error);
         toast.error("Không thể tải danh sách sách");
@@ -40,9 +51,10 @@ const BookList = () => {
         setIsLoading(false);
       }
     };
-
+  
     loadBooks();
-  }, [dispatch]);
+  }, [dispatch, currentPage, booksPerPage]); // Thêm dependencies để gọi lại khi `currentPage` hoặc `booksPerPage` thay đổi
+  
 
   const handleDeleteBook = async () => {
     if (bookToDelete) {
@@ -76,27 +88,30 @@ const BookList = () => {
     }
   };
 
-  const filteredBooks = Array.isArray(books) ? books.filter((book) => {
+  const filteredBooks = books?.data?.filter((book) => {
     const matchesSearch =
       book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       book.author.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || book.status === statusFilter;
     const matchesGenre = genreFilter === "all" || book.genre === genreFilter;
     return matchesSearch && matchesStatus && matchesGenre;
-  }) : [];
+  }) || [];
+   
 
-  const indexOfLastBook = currentPage * booksPerPage;
-  const indexOfFirstBook = indexOfLastBook - booksPerPage;
-  const currentBooks = filteredBooks.slice(indexOfFirstBook, indexOfLastBook);
+  // const indexOfLastBook = currentPage * booksPerPage;
+  // const indexOfFirstBook = indexOfLastBook - booksPerPage;
+  const currentBooks = Array.isArray(books?.data) ? books.data : [];
+
+  console.log("check currenBook ",currentBooks); 
 
   const columns = [
     { 
-      label: "Mã Sách", 
-      field: "id", 
+      label: "Hình ảnh", 
+      field: "img", 
       width: "10%",
       render: (val) => (
         <span className="text-gray-600 font-mono">
-          {val || 'N/A'}
+          <img src={val} ></img>
         </span>
       )
     },
@@ -114,36 +129,30 @@ const BookList = () => {
     { 
       label: "Tác giả", 
       field: "author", 
-      width: "15%",
+      width: "5%",
       render: (val) => (
         <span className="text-gray-700">{val}</span>
       )
     },
     { 
       label: "Thể loại", 
-      field: "genre", 
+      field: "bigCategory", 
       width: "10%",
       render: (val) => {
-        const genreMap = {
-          'fiction': 'Tiểu thuyết',
-          'non-fiction': 'Phi hư cấu',
-          'science': 'Khoa học'
-        };
         return (
           <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-            {genreMap[val] || val}
+            {val[0].name} 
           </span>
         );
       }
     },
     { 
       label: "Xuất bản", 
-      field: "publisher", 
-      width: "15%",
+      field: "publicationYear", 
+      width: "10%",
       render: (val, row) => (
         <div className="flex flex-col">
           <span>{val}</span>
-          <span className="text-sm text-gray-500">{row.year}</span>
         </div>
       )
     },
@@ -156,8 +165,8 @@ const BookList = () => {
           <span className={`font-bold ${val > 5 ? 'text-green-600' : val > 0 ? 'text-yellow-600' : 'text-red-600'}`}>
             {val} quyển
           </span>
-          <span className={`text-xs ${row.status === 'available' ? 'text-green-500' : 'text-red-500'}`}>
-            {row.status === 'available' ? 'Còn sách' : 'Hết sách'}
+          <span className={`text-xs ${row.availability === true ? 'text-green-500' : 'text-red-500'}`}>
+            {row.availability  ? 'Còn sách' : 'Hết sách'}
           </span>
         </div>
       )
@@ -330,6 +339,12 @@ const BookList = () => {
             data={currentBooks} 
             emptyMessage="Không có sách nào được tìm thấy" 
           />
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
+          
           {/* Optional: Add pagination component here */}
         </div>
       )}
