@@ -1,36 +1,77 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const BarChart = () => {
-  const data = {
-    labels: ['Truyện cười', 'Tiểu thuyết', 'Giáo trình', 'Truyện dân gian', 'Văn học', 'Khoa học'],
-    datasets: [
-      {
-        label: 'Số lượng sách',
-        data: [1000, 600, 800, 600, 400, 400],
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
-        ],
-        borderWidth: 1,
-      },
-    ],
+  const [chartData, setChartData] = useState({
+    labels: [],
+    datasets: [],
+  });
+
+  const [loading, setLoading] = useState(true);
+
+  // Hàm tự động sinh màu ngẫu nhiên
+  const generateRandomColors = (count) => {
+    const colors = [];
+    for (let i = 0; i < count; i++) {
+      const color = `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(
+        Math.random() * 255
+      )}, ${Math.floor(Math.random() * 255)}, 0.6)`;
+      colors.push(color);
+    }
+    return colors;
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          'https://library-mana.azurewebsites.net/books/category-distribution'
+        );
+
+        const apiData = response.data;
+
+        // Chuyển đổi dữ liệu API thành labels và values
+        const labels = Object.keys(apiData); // Tên thể loại
+        const values = Object.values(apiData); // Số lượng sách
+
+        // Tạo màu sắc ngẫu nhiên cho mỗi thể loại
+        const backgroundColors = generateRandomColors(labels.length);
+
+        setChartData({
+          labels: labels,
+          datasets: [
+            {
+              label: 'Số lượng sách',
+              data: values,
+              backgroundColor: backgroundColors, // Màu nền ngẫu nhiên
+              borderColor: backgroundColors.map((color) =>
+                color.replace('0.6', '1')
+              ), // Đổi opacity để đường viền rõ hơn
+              borderWidth: 1,
+            },
+          ],
+        });
+        setLoading(false);
+      } catch (error) {
+        console.error('Lỗi khi gọi API:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const options = {
     responsive: true,
@@ -40,7 +81,7 @@ const BarChart = () => {
       },
       title: {
         display: true,
-        text: 'Biểu thống kê số lượng sách đã được mượn theo từng thể loại',
+        text: 'Biểu đồ thống kê số lượng sách đã được mượn theo từng thể loại',
       },
       tooltip: {
         callbacks: {
@@ -54,7 +95,15 @@ const BarChart = () => {
     },
   };
 
-  return <Bar data={data} options={options} />;
+  return (
+    <div>
+      {loading ? (
+        <p style={{ textAlign: 'center' }}>Đang tải dữ liệu...</p>
+      ) : (
+        <Bar data={chartData} options={options} />
+      )}
+    </div>
+  );
 };
 
 export default BarChart;
