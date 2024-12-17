@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const ForgotPassword = () => {
-  const [step, setStep] = useState(1); // Bước 1: Nhập email, Bước 2: Nhập OTP, Bước 3: Nhập mật khẩu mới
+  const [step, setStep] = useState(1); 
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -44,15 +44,21 @@ const ForgotPassword = () => {
         newPassword,
       });
       alert("Mật khẩu đã được cập nhật thành công!");
-      setStep(1); // Quay lại bước đầu tiên
+  
+      // Reset input và trạng thái
       setEmail("");
       setOtp("");
       setNewPassword("");
       setConfirmPassword("");
+      setErrorMessage("");
+      setStep(1); // Reset về bước đầu tiên
+  
+      // Điều hướng sang trang đăng nhập
+      window.location.href = "/login"; 
     } catch (error) {
       setErrorMessage("Có lỗi xảy ra. Vui lòng thử lại.");
     }
-  };
+  };  
 
   return (
     <div className="flex justify-center items-center h-screen">

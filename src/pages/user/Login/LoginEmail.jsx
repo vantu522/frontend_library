@@ -2,14 +2,15 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { HiMail as MailIcon, HiUser as UserIcon, HiLockClosed as LockIcon, HiEye as EyeIcon, HiEyeOff as EyeOffIcon } from 'react-icons/hi'
+import { HiMail as MailIcon, HiUser as UserIcon, HiLockClosed as LockIcon, HiEye as EyeIcon, HiEyeOff as EyeOffIcon, HiPhone as PhoneIcon } from 'react-icons/hi';
 
 export default function AuthForm() {
   const [isLogin, setIsLogin] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState('')
+  const [name, setName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('')
-  const [name, setName] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
 
   const navigate = useNavigate()
@@ -36,7 +37,8 @@ export default function AuthForm() {
         }))
 
         // Điều hướng về trang chủ (HomePage)
-        navigate('/')
+        // navigate('/')
+        window.location.href = "/";
       } else {
         // Gọi API đăng ký
         const response = await axios.post('https://library-mana.azurewebsites.net/members/register', {
@@ -75,6 +77,7 @@ export default function AuthForm() {
           >
             {!isLogin && (
               <div className="space-y-2">
+                {/* Tên đầy đủ */}
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">Tên đầy đủ</label>
                 <div className="relative">
                   <UserIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
@@ -87,8 +90,23 @@ export default function AuthForm() {
                     required
                   />
                 </div>
+
+                {/* Số điện thoại */}
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Số điện thoại</label>
+                <div className="relative">
+                  <PhoneIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                  <input 
+                    id="phone" 
+                    value={phoneNumber} 
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    placeholder="0364******" 
+                    className="pl-10 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" 
+                    required
+                  />
+                </div>
               </div>
             )}
+
             <div className="space-y-2">
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
               <div className="relative">
