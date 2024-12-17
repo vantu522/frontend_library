@@ -1,77 +1,143 @@
 import React from "react";
 
-function NewPage() {
-  const cacSuKien = [
-    {
-      date: "19/11/2024",
-      title: "Triển Lãm Sách Quý: Bản Thảo Thời Phục Hưng",
-      description:
-        "Trưng bày các bản thảo quý hiếm và ấn bản đầu tiên thuộc thời kỳ Phục Hưng, khám phá sự phát triển của nghệ thuật văn học.",
-    },
-    {
-      date: "11/11/2024",
-      title: "Tọa Đàm Tác Giả: Khám Phá Văn Học Đương Đại",
-      description:
-        "Tham gia cuộc trò chuyện đặc biệt với các tác giả đoạt giải, chia sẻ về những tác phẩm mới và quá trình sáng tác.",
-    },
-    {
-      date: "05/11/2024",
-      title: "Ra Mắt Kho Lưu Trữ Số: Bảo Tồn Di Sản Văn Chương",
-      description:
-        "Thư viện giới thiệu kho lưu trữ số toàn diện các tác phẩm văn học lịch sử, mở rộng khả năng truy cập các văn bản quý hiếm trên toàn thế giới.",
-    },
-    {
-      date: "28/10/2024",
-      title: "Lớp Học Bảo Quản Sách",
-      description:
-        "Học nghệ thuật bảo quản sách từ các chuyên gia bảo tồn trong một buổi workshop thực hành chuyên sâu.",
-    },
-    {
-      date: "15/10/2024",
-      title: "Chuỗi Đọc Truyện Cho Trẻ Em",
-      description:
-        "Các buổi kể chuyện hàng tháng đưa những thế giới kỳ diệu đến gần hơn với trẻ nhỏ và gia đình.",
-    },
-    {
-      date: "30/09/2024",
-      title: "Đấu Giá Sách Quý Gây Quỹ",
-      description:
-        "Hỗ trợ các chương trình thư viện đồng thời khám phá những cuốn sách sưu tập độc đáo từ các bộ sưu tập cá nhân.",
-    },
+// Component Banner
+const NewsBanner = () => {
+  const imageData = [
+    "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg", 
+    "https://i.pinimg.com/474x/07/8e/02/078e0212bce731f1f7a202767ffd5ca8.jpg", 
+    "https://i.pinimg.com/474x/07/8e/02/078e0212bce731f1f7a202767ffd5ca8.jpg"
   ];
 
-  const diemNhanSach = [
+  const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imageData.length);
+    }, 5000); // 5 giây đổi ảnh
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="relative w-full h-[300px] overflow-hidden mt-8">
+      {/* Ảnh nền thay đổi */}
+      <div
+        className="absolute inset-0 bg-cover bg-center transition-all duration-1000"
+        style={{ backgroundImage: `url(${imageData[currentImageIndex]})` }}
+      ></div>
+
+      {/* Lớp overlay */}
+      <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-center text-white">
+        <h1 className="text-2xl md:text-4xl font-bold mb-4">Library Newsletters</h1>
+        <p className="text-sm md:text-lg mb-6">
+          Sign up for our email newsletters and get library news and information delivered directly to your inbox.
+        </p>
+        <button className="bg-white text-black py-2 px-4 rounded hover:bg-gray-200 transition">
+          Subscribe
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// Component chính cho NewsPage
+function NewsPage() {
+  const cards = [
     {
-      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/SanDiegoCityCollegeLearningResource_-_bookshelf.jpg/1200px-SanDiegoCityCollegeLearningResource_-_bookshelf.jpg",
-      date: "20/11/2024",
-      title: "Bổ Sung Mới Trong Lĩnh Vực Nghiên Cứu Trung Cổ",
+      date: "November 19, 2024",
+      title: "Art Is Technology and Technology Is Art",
+      description:
+        "Open to the public, the 8th annual Art Tech Psyche fair was a celebration of the intersection of art and technology.",
     },
     {
-      image: "https://i.pinimg.com/736x/1f/16/b5/1f16b503508ffa48c99cd97b7ea41604.jpg",
-      date: "12/11/2024",
-      title: "Mở Rộng Bộ Sưu Tập Khoa Học Viễn Tưởng",
+      date: "November 11, 2024",
+      title: "Before Grainy Smartphone Concert Footage, There Was Arthur Freedman",
+      description:
+        "An exhibit at the Loeb Music Library shares the work of one of Boston's most determined punk scene documenters.",
     },
     {
-      image: "https://i.pinimg.com/736x/0b/3c/6c/0b3c6cb9ff04ad2ca81c15e95d04cd51.jpg",
-      date: "25/10/2024",
-      title: "Dự Án Số Hóa Bản Thảo Quý",
+      date: "November 11, 2024",
+      title: "Before Grainy Smartphone Concert Footage, There Was Arthur Freedman",
+      description:
+        "An exhibit at the Loeb Music Library shares the work of one of Boston's most determined punk scene documenters.",
+    },
+    {
+      date: "November 11, 2024",
+      title: "Before Grainy Smartphone Concert Footage, There Was Arthur Freedman",
+      description:
+        "An exhibit at the Loeb Music Library shares the work of one of Boston's most determined punk scene documenters.",
+    },
+    {
+      date: "November 11, 2024",
+      title: "Before Grainy Smartphone Concert Footage, There Was Arthur Freedman",
+      description:
+        "An exhibit at the Loeb Music Library shares the work of one of Boston's most determined punk scene documenters.",
+    },
+    {
+      date: "November 11, 2024",
+      title: "Before Grainy Smartphone Concert Footage, There Was Arthur Freedman",
+      description:
+        "An exhibit at the Loeb Music Library shares the work of one of Boston's most determined punk scene documenters.",
+    },
+    // Các item còn lại...
+  ];
+
+  const newsItems = [
+    {
+      image:
+        "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg",
+      date: "November 4, 2024",
+      title: "Harvard Affiliates Celebrate Day of the Dead",
+    },
+    {
+      image:
+        "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg",
+      date: "November 4, 2024",
+      title: "Harvard Affiliates Celebrate Day of the Dead",
+    },
+    {
+      image:
+        "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg",
+      date: "November 4, 2024",
+      title: "Harvard Affiliates Celebrate Day of the Dead",
+    },
+    {
+      image:
+        "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg",
+      date: "November 4, 2024",
+      title: "Harvard Affiliates Celebrate Day of the Dead",
+    },
+    {
+      image:
+        "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg",
+      date: "November 4, 2024",
+      title: "Harvard Affiliates Celebrate Day of the Dead",
+    },
+    {
+      image:
+        "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg",
+      date: "November 4, 2024",
+      title: "Harvard Affiliates Celebrate Day of the Dead",
     },
     // Các item còn lại...
   ];
 
   return (
     <div className="grid gap-8 p-8">
-      {/* Phần Tiêu Đề */}
+      {/* Header Section */}
       <div className="text-center py-10">
-        <h1 className="text-5xl font-bold pt-20">TIN TỨC THƯ VIỆN</h1>
+        <h1 className="text-5xl font-bold pt-20">NEWS</h1>
         <p className="text-2xl text-gray-600">
-          Khám phá, nghiên cứu và kết nối thông qua thế giới sách và di sản văn chương.
+          Harvard Library is a hub for learning, sharing and the discovery of
+          new ideas. Read about that work in action.
         </p>
       </div>
 
-      {/* Phần Điểm Nổi Bật Sách */}
+      {/* Banner Section */}
+      <NewsBanner /> {/* Đây là nơi chèn banner vào */}
+
+      {/* News Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {diemNhanSach.map((item, index) => (
+        {newsItems.map((item, index) => (
           <div
             key={index}
             className="relative group overflow-hidden rounded-lg shadow-lg"
@@ -90,34 +156,43 @@ function NewPage() {
         ))}
       </div>
 
-      {/* Phần Thông Tin */}
-      <div className="grid gap-6 md:grid-cols-2">
-        <div className="bg-gray-100 p-6 rounded-lg">
-          <h3 className="text-xl font-bold mb-2">THAM GIA CỘNG ĐỒNG ĐỌC SÁCH</h3>
-          <p className="mb-4">Đăng ký nhận bản tin văn học hàng tháng</p>
+      {/* Info Section */}
+      <div className="grid gap-2 md:grid-cols-2">
+        <div className="bg-gray-100 p-6 rounded-lg max-w-md mx-auto">
+          <h3 className="text-xl font-bold mb-2">STAY IN THE KNOW</h3>
+          <p className="mb-4">Sign up for email updates from Wisdom's Beacon Library</p>
           <input
             type="email"
-            placeholder="Địa chỉ Email"
+            placeholder="Email Address"
             className="w-full p-3 border rounded-lg mb-4"
           />
           <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
-            ĐĂNG KÝ
+            SIGN UP
           </button>
         </div>
-        <div className="bg-gray-100 p-6 rounded-lg">
-          <h3 className="text-xl font-bold mb-2">KẾT NỐI VỚI CHÚNG TÔI</h3>
-          <p className="mb-4">Theo dõi hành trình văn học của chúng tôi trên mạng xã hội</p>
+        <div className="bg-gray-100 p-6 rounded-lg max-w-md mx-auto">
+          <h3 className="text-xl font-bold mb-2">FOLLOW HARVARD LIBRARY</h3>
+          <p className="mb-4">You can find us on Facebook, Twitter, and YouTube</p>
           <div className="space-y-2">
-            <span className="block">Facebook Câu Lạc Bộ Sách</span>
-            <span className="block">Twitter Cập Nhật Văn Chương</span>
-            <span className="block">Instagram Đánh Giá Sách</span>
+            <span className="flex items-center space-x-2">
+              <i className="fab fa-facebook-square text-xl text-blue-600"></i>
+              <span>Facebook</span>
+            </span>
+            <span className="flex items-center space-x-2">
+              <i className="fab fa-twitter-square text-xl text-blue-400"></i>
+              <span>Twitter</span>
+            </span>
+            <span className="flex items-center space-x-2">
+              <i className="fab fa-youtube text-xl text-red-600"></i>
+              <span>YouTube</span>
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Phần Thẻ Sự Kiện */}
+      {/* Cards Section */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {cacSuKien.map((card, index) => (
+        {cards.map((card, index) => (
           <div
             key={index}
             className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300"
@@ -132,4 +207,4 @@ function NewPage() {
   );
 }
 
-export default NewPage;
+export default NewsPage;
