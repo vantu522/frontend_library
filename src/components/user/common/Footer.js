@@ -1,9 +1,24 @@
-import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPhone, faEnvelope, faMapMarkerAlt, faClock } from '@fortawesome/free-solid-svg-icons';
-import { faFacebookF, faTwitter, faInstagram, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import React from "react";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faPhone,
+  faEnvelope,
+  faMapMarkerAlt,
+  faClock,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  faFacebookF,
+  faTwitter,
+  faInstagram,
+  faLinkedin,
+} from "@fortawesome/free-brands-svg-icons";
 
 function Footer() {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // Cuộn mượt lên đầu trang
+  };
+
   return (
     <footer className="bg-gradient-to-r from-[#2c3e50] to-[#3498db] text-white py-12 relative ">
       {/* Gradient bar */}
@@ -18,10 +33,18 @@ function Footer() {
             <div className="absolute bottom-0 left-0 w-12 h-[3px] bg-[#3498db]"></div>
           </h2>
           <ul className="list-none p-0 m-0">
-            <li className="mb-4 text-2xl cursor-pointer hover:text-[#2ecc71] hover:translate-x-2 transition-transform">Trang chủ</li>
-            <li className="mb-4 text-2xl cursor-pointer hover:text-[#2ecc71] hover:translate-x-2 transition-transform">Tin tức</li>
-            <li className="mb-4 text-2xl cursor-pointer hover:text-[#2ecc71] hover:translate-x-2 transition-transform">Danh mục</li>
-            <li className="mb-4 text-2xl cursor-pointer hover:text-[#2ecc71] hover:translate-x-2 transition-transform">Giỏ sách</li>
+            <li className="mb-4 text-2xl cursor-pointer hover:text-[#2ecc71] hover:translate-x-2 transition-transform">
+              <Link to="/" onClick={scrollToTop}>Trang chủ</Link>
+            </li>
+            <li className="mb-4 text-2xl cursor-pointer hover:text-[#2ecc71] hover:translate-x-2 transition-transform">
+              <Link to="/news" onClick={scrollToTop}>Tin tức</Link>
+            </li>
+            <li className="mb-4 text-2xl cursor-pointer hover:text-[#2ecc71] hover:translate-x-2 transition-transform">
+              <Link to="/category" onClick={scrollToTop}>Danh mục</Link>
+            </li>
+            <li className="mb-4 text-2xl cursor-pointer hover:text-[#2ecc71] hover:translate-x-2 transition-transform">
+              <Link to="/shopcart" onClick={scrollToTop}>Giỏ sách</Link>
+            </li>
           </ul>
         </div>
 
@@ -33,16 +56,26 @@ function Footer() {
           </h2>
           <ul className="list-none p-0 m-0">
             <li className="mb-4 text-2xl flex items-center gap-2">
-              <FontAwesomeIcon icon={faPhone} className="text-[#2ecc71] w-5" /> 0000-XXXXXX
+              <FontAwesomeIcon icon={faPhone} className="text-[#2ecc71] w-5" />{" "}
+              0000-XXXXXX
             </li>
             <li className="mb-4 text-2xl flex items-center gap-2">
-              <FontAwesomeIcon icon={faEnvelope} className="text-[#2ecc71] w-5" /> library@wisdombeacon.com
+              <FontAwesomeIcon
+                icon={faEnvelope}
+                className="text-[#2ecc71] w-5"
+              />{" "}
+              library@wisdombeacon.com
             </li>
             <li className="mb-4 text-2xl flex items-center gap-2">
-              <FontAwesomeIcon icon={faMapMarkerAlt} className="text-[#2ecc71] w-5" /> 122 Hoàng Quốc Việt, Cầu Giấy, HN
+              <FontAwesomeIcon
+                icon={faMapMarkerAlt}
+                className="text-[#2ecc71] w-5"
+              />{" "}
+              122 Hoàng Quốc Việt, Cầu Giấy, HN
             </li>
             <li className="mb-4 text-2xl flex items-center gap-2">
-              <FontAwesomeIcon icon={faClock} className="text-[#2ecc71] w-5" /> 08:00 - 18:00 (Thứ 2 - Thứ 7)
+              <FontAwesomeIcon icon={faClock} className="text-[#2ecc71] w-5" />{" "}
+              08:00 - 18:00 (Thứ 2 - Thứ 7)
             </li>
           </ul>
         </div>
@@ -89,7 +122,14 @@ function Footer() {
           </div>
           <ul className="list-none p-0 m-0">
             <li className="mb-4 text-2xl cursor-pointer hover:text-[#2ecc71] transition-colors">
-              Bản đồ vị trí
+              <a
+                href="https://maps.google.com/?q=122+Hoang+Quoc+Viet,+Cau+Giay,+HN"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-inherit no-underline"
+              >
+                Bản đồ vị trí
+              </a>
             </li>
             <li className="mb-4 text-2xl cursor-pointer hover:text-[#2ecc71] transition-colors">
               Chính sách bảo mật
@@ -103,7 +143,9 @@ function Footer() {
 
       {/* Footer bottom */}
       <div className="text-center mt-10 pt-5 border-t border-white/10">
-        <p className="text-md text-white/70">Copyright © 2024 Wisdom's Beacon. All Rights Reserved</p>
+        <p className="text-md text-white/70">
+          Copyright © 2024 Wisdom's Beacon. All Rights Reserved
+        </p>
       </div>
     </footer>
   );

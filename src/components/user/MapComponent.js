@@ -7,9 +7,10 @@ const MapComponent = () => {
     width: "100%"
   };
   
+  // Tọa độ mới (ví dụ: Hà Nội)
   const defaultCenter = {
-    lat: 10.762622,
-    lng: 106.660172
+    lat: 21.04639,
+    lng: 105.79221 
   };
 
   return (
@@ -17,9 +18,9 @@ const MapComponent = () => {
       <GoogleMap
         mapContainerStyle={mapStyles}
         zoom={15}
-        center={defaultCenter}
+        center={defaultCenter} // Vị trí bản đồ
       >
-        <Marker position={defaultCenter} />
+        <Marker position={defaultCenter} /> {/* Vị trí Marker */}
       </GoogleMap>
     </LoadScript>
   );

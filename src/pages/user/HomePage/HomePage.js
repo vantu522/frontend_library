@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import BarChart from "../../../components/user/BarChart";
@@ -9,7 +10,7 @@ import LoadingScreen from '../../../components/user/LoadingScreen';
 
 function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
-
+  const navigate = useNavigate();
   const mostBorrowedBooks = [
     {
       image:
@@ -90,6 +91,7 @@ function HomePage() {
         <button
           className="bg-blue-500 text-white px-30 py-4 border border-gray-600 rounded font-bold mt-5 w-32 transition-all duration-300 hover:bg-blue-700 hover:scale-105"
           data-aos="zoom-in"
+          onClick={() => navigate("/category")} 
         >
           MƯỢN NGAY
         </button>
