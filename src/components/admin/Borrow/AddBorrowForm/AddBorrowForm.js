@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "../../../../common/admin/Modal/Modal";
 import { addBorrow } from "../../../../redux/admin/borrowsReducer";
-import "./AddBorrowForm.css";
 
 const AddBorrowForm = ({ setVisibleForm }) => {
   const dispatch = useDispatch();

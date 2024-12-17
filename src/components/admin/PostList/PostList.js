@@ -1,50 +1,49 @@
 import React, { useState, useEffect } from "react";
 import { FaEdit, FaTrashAlt, FaPlus } from "react-icons/fa";
-import Modal from "../../../common/admin/Modal/Modal"; // Assume you have a common Modal component
+import postService from "../../../services/admin/postService";
+import AddPostForm from "./AddPostForm"; // Import AddPostForm
 
 const PostList = () => {
   const [posts, setPosts] = useState([]);
   const [visibleForm, setVisibleForm] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
-  const [postId, setPostId] = useState(null);
 
   useEffect(() => {
-    // Simulate fetching posts
-    setPosts([
-      { id: 1, title: "Bài viết 1", content: "Nội dung bài viết 1", author: "Tác giả A", date: "2024-12-01" },
-      { id: 2, title: "Bài viết 2", content: "Nội dung bài viết 2", author: "Tác giả B", date: "2024-12-10" },
-    ]);
+    const fetchPosts = async () => {
+      try {
+        const data = await postService.fetchAllPost();
+        setPosts(data);
+      } catch (error) {
+        console.error("Lỗi khi lấy bài viết:", error);
+      }
+    };
+    fetchPosts();
   }, []);
 
-  const handleDelete = (id) => {
-    setPosts(posts.filter((post) => post.id !== id));
+  const handleDelete = async (id) => {
+    try {
+      await postService.deletePost(id);
+      setPosts(posts.filter((post) => post.id !== id));
+    } catch (error) {
+      console.error("Lỗi khi xóa bài viết:", error);
+    }
+  };
+
+  // Cập nhật bài viết sau khi thêm mới
+  const handleAddPost = (newPost) => {
+    setPosts([...posts, newPost]);
   };
 
   return (
     <div className="p-4">
-      {/* Modal for Adding/Editing Posts */}
-      {visibleForm && (
-        <Modal onClose={() => setVisibleForm(false)}>
-          <h3 className="text-lg font-bold mb-4">
-            {isEdit ? "Chỉnh sửa bài viết" : "Thêm bài viết"}
-          </h3>
-          {/* Form content here */}
-          <button
-            onClick={() => setVisibleForm(false)}
-            className="bg-gray-500 text-white px-4 py-2 rounded"
-          >
-            Đóng
-          </button>
-        </Modal>
-      )}
-
+      <AddPostForm
+        visible={visibleForm}
+        onClose={() => setVisibleForm(false)}
+        onAddPost={handleAddPost}
+      />
       <h2 className="text-2xl font-bold mb-4">Danh sách bài viết</h2>
       <div className="flex justify-between mb-4">
         <button
-          onClick={() => {
-            setVisibleForm(true);
-            setIsEdit(false);
-          }}
+          onClick={() => setVisibleForm(true)}
           className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
         >
           <FaPlus /> Thêm bài viết
@@ -72,11 +71,7 @@ const PostList = () => {
                 <td className="px-4 py-2 text-center">
                   <div className="flex justify-center gap-2">
                     <button
-                      onClick={() => {
-                        setVisibleForm(true);
-                        setIsEdit(true);
-                        setPostId(post.id);
-                      }}
+                      onClick={() => {}}
                       className="text-blue-500 hover:text-blue-700"
                     >
                       <FaEdit />
