@@ -27,6 +27,7 @@ const BookList = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [booksPerPage] = useState(10);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
     const loadBooks = async () => {
@@ -51,10 +52,9 @@ const BookList = () => {
         setIsLoading(false);
       }
     };
-  
+
     loadBooks();
   }, [dispatch, currentPage, booksPerPage]); // Thêm dependencies để gọi lại khi `currentPage` hoặc `booksPerPage` thay đổi
-  
 
   const handleDeleteBook = async () => {
     if (bookToDelete) {
@@ -88,21 +88,29 @@ const BookList = () => {
     }
   };
 
-  const filteredBooks = books?.data?.filter((book) => {
+  const handleSearch = async (term) => {
+    setSearchTerm(term);
+    if (term.length > 2) {
+      try {
+        const searchRes = await bookService.searchBooks(term); // Gọi API tìm kiếm sách
+        setSearchResults(searchRes.data);
+      } catch (error) {
+        console.error("Failed to search books", error);
+      }
+    } else {
+      setSearchResults([]);
+    }
+  };
+
+  const filteredBooks = Array.isArray(books?.data) ? books.data.filter((book) => {
     const matchesSearch =
       (book.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (book.author || '').toLowerCase().includes(searchTerm.toLowerCase());
+      (typeof book.author === 'string' ? book.author : '').toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || book.status === statusFilter;
     const matchesGenre = genreFilter === "all" || book.genre === genreFilter;
     return matchesSearch && matchesStatus && matchesGenre;
-  }) || [];
-   
-
-  // const indexOfLastBook = currentPage * booksPerPage;
-  // const indexOfFirstBook = indexOfLastBook - booksPerPage;
-  const currentBooks = Array.isArray(books?.data) ? books.data : [];
-
-  console.log("check currenBook ",currentBooks); 
+  }) : [];
+  
 
   const columns = [
     { 
@@ -111,7 +119,7 @@ const BookList = () => {
       width: "10%",
       render: (val) => (
         <span className="text-gray-600 font-mono">
-          <img src={val} ></img>
+          <img src={val} alt="Book" />
         </span>
       )
     },
@@ -138,23 +146,17 @@ const BookList = () => {
       label: "Thể loại", 
       field: "bigCategory", 
       width: "10%",
-      render: (val) => {
-        return (
-          <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-            {val[0].name} 
-          </span>
-        );
-      }
+      render: (val) => (
+        <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+          {val[0].name} 
+        </span>
+      )
     },
     { 
       label: "Xuất bản", 
       field: "publicationYear", 
       width: "10%",
-      render: (val, row) => (
-        <div className="flex flex-col">
-          <span>{val}</span>
-        </div>
-      )
+      render: (val) => <span>{val}</span>
     },
     { 
       label: "Kho", 
@@ -166,7 +168,7 @@ const BookList = () => {
             {val} quyển
           </span>
           <span className={`text-xs ${row.availability === true ? 'text-green-500' : 'text-red-500'}`}>
-            {row.availability  ? 'Còn sách' : 'Hết sách'}
+            {row.availability ? 'Còn sách' : 'Hết sách'}
           </span>
         </div>
       )
@@ -201,20 +203,14 @@ const BookList = () => {
             </button>
           </Tooltip>
 
-          <Tooltip
-            content={row.status === "available" ? "Đánh dấu hết sách" : "Đánh dấu còn sách"}
-            position="top"
-          >
+          <Tooltip content={row.status === "available" ? "Đánh dấu hết sách" : "Đánh dấu còn sách"} position="top">
             <button onClick={() => handleUpdateBookStatus(row)}>
-              <FaExclamationCircle
-                size={18}
-                className={row.status === "available" ? "text-yellow-500" : "text-blue-500"}
-              />
+              <FaExclamationCircle size={18} className={row.status === "available" ? "text-yellow-500" : "text-blue-500"} />
             </button>
           </Tooltip>
         </div>
-      ),
-    },
+      )
+    }
   ];
 
   return (
@@ -280,7 +276,7 @@ const BookList = () => {
               type="text"
               placeholder="Tìm kiếm theo tên sách hoặc tác giả"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => handleSearch(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
             {searchTerm && (
@@ -336,16 +332,14 @@ const BookList = () => {
         <div>
           <Table 
             columns={columns} 
-            data={currentBooks} 
+            data={filteredBooks} 
             emptyMessage="Không có sách nào được tìm thấy" 
           />
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
-            onPageChange={(page) => setCurrentPage(page)}
+            onPageChange={setCurrentPage}
           />
-          
-          {/* Optional: Add pagination component here */}
         </div>
       )}
     </div>

@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import borrowService from '../../../../services/admin/borrowService';
-import Modal from '../../../../common/admin/Modal/Modal';
-import Table from '../../../../common/admin/Table/Table';
-import Button from '../../../../common/admin/Button/Button';
-import Tooltip from '../../../../common/admin/Tooltip/Tooltip';
-import { FaCheckCircle, FaTrash, FaExclamationTriangle } from 'react-icons/fa';
+import borrowService from '../../../services/admin/borrowService';
+import Modal from '../../../common/admin/Modal/Modal';
+import Table from '../../../common/admin/Table/Table';
+import Button from '../../../common/admin/Button/Button';
+import Tooltip from '../../../common/admin/Tooltip/Tooltip';
+import { FaCheckCircle, FaExclamationTriangle } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import debounce from 'lodash.debounce';
 
 const PendingBorrowList = () => {
   const [borrows, setBorrows] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(''); // Trạng thái lưu trữ từ khóa tìm kiếm
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [confirmAction, setConfirmAction] = useState({});
@@ -55,24 +55,26 @@ const PendingBorrowList = () => {
     }
   };
 
+  // Hàm tìm kiếm với debounce
   const debouncedSearch = debounce((e) => {
     setSearchTerm(e.target.value);
   }, 500);
 
+  // Định nghĩa các cột của bảng
   const columns = [
-    { label: 'Tên sách', field: 'bookTitle' },
     { label: 'Tên người mượn', field: 'memberName' },
+    { label: 'Tên sách', field: 'bookTitle' },
     { label: 'Số điện thoại', field: 'phoneNumber' },
     { label: 'Ngày mượn', field: 'transactionDate' },
     { label: 'Ngày trả dự kiến', field: 'dueDate' },
     {
       label: 'Trạng thái',
-      render: () => <span className="text-red-500">Đang chờ</span>,
+      render: () => <span className="text-red-500 font-bold">Đang chờ</span>,
     },
     {
       label: 'Hành động',
       render: (val, row) => (
-        <>
+        <div className="flex justify-center">
           <Tooltip content="Xác nhận">
             <button
               onClick={() => {
@@ -81,7 +83,7 @@ const PendingBorrowList = () => {
               }}
               className="text-green-500 hover:text-green-700 mr-2"
             >
-              <FaCheckCircle />
+              <FaCheckCircle size={25}/>
             </button>
           </Tooltip>
           <Tooltip content="Từ chối">
@@ -90,30 +92,24 @@ const PendingBorrowList = () => {
                 setConfirmAction({ borrow: row, isAprove: false });
                 setShowConfirmModal(true);
               }}
-              className="text-yellow-500 hover:text-yellow-700 mr-2"
+              className="text-red-500 hover:text-red-700 mr-2"
             >
-              <FaExclamationTriangle />
+              <FaExclamationTriangle size={25}/>
             </button>
           </Tooltip>
-          <Tooltip content="Xóa">
-            <button
-              onClick={() => {
-                setDeleteTargetId(row.id);
-                setShowDeleteModal(true);
-              }}
-              className="text-red-500 hover:text-red-700"
-            >
-              <FaTrash />
-            </button>
-          </Tooltip>
-        </>
+        </div>
       ),
     },
   ];
 
+  // Lọc danh sách mượn theo từ khóa tìm kiếm
   const filteredBorrows = borrows.filter((borrow) => {
-    return borrow.bookTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      borrow.memberName.toLowerCase().includes(searchTerm.toLowerCase());
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      borrow.bookTitle.toLowerCase().includes(searchLower) ||
+      borrow.memberName.toLowerCase().includes(searchLower) ||
+      borrow.phoneNumber.includes(searchLower)
+    );
   });
 
   return (
@@ -124,9 +120,9 @@ const PendingBorrowList = () => {
       <div className="flex justify-between mb-5">
         <input
           type="text"
-          placeholder="Tìm kiếm..."
+          placeholder="Tìm kiếm theo tên hoặc số điện thoại..."
           value={searchTerm}
-          onChange={debouncedSearch}
+          onChange={(e) => setSearchTerm(e.target.value)}
           className="p-2 border rounded-md w-64"
         />
       </div>
@@ -145,32 +141,10 @@ const PendingBorrowList = () => {
           <Button
             onClick={handleApprove}
             className={`${
-              confirmAction.isAprove ? 'bg-green-500' : 'bg-yellow-500'
-            } text-white px-4 py-2 rounded`}
+              confirmAction.isAprove ? 'bg-green-500' : 'bg-red-500'
+            } text-white px-5 py-2 text-lg rounded`}
           >
             {confirmAction.isAprove ? 'Xác nhận' : 'Từ chối'}
-          </Button>
-          <Button onClick={() => setShowConfirmModal(false)} className="bg-gray-300 px-4 py-2 rounded">
-            Hủy
-          </Button>
-        </div>
-      </Modal>
-
-      {/* Modal xác nhận xóa */}
-      <Modal isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)}>
-        <h3>Bạn có chắc chắn muốn xóa phiếu mượn này?</h3>
-        <div className="flex justify-center gap-4 mt-4">
-          <Button
-            onClick={() => {
-              toast.info('Chức năng xóa đang được xử lý!');
-              setShowDeleteModal(false);
-            }}
-            className="bg-red-500 text-white px-4 py-2 rounded"
-          >
-            Xóa
-          </Button>
-          <Button onClick={() => setShowDeleteModal(false)} className="bg-gray-300 px-4 py-2 rounded">
-            Hủy
           </Button>
         </div>
       </Modal>
