@@ -2,7 +2,8 @@ export const API_ENDPOINTS = {
   BASE_URL: 'https://library-mana.azurewebsites.net', // hoặc 'http://localhost:8080' tùy vào môi trường
   USER: {
     BOOKS: '/books/categories',
-    BOOK: '/books'
+    BOOK: '/books',
+    SUGGESTBOOK:'/books/suggest'
   },
   ADMIN: {
     BOOKS: '/books',

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createSlug } from '../../../utils/slugify';
 import categoryService from '../../../services/user/categoryService';
+import bookService from '../../../services/user/bookService';
 import { useNavigate } from 'react-router-dom';
 import { Player } from '@lottiefiles/react-lottie-player';
 import loadingAnimation from '../../../assets/aniamations/Animation - 1732875047380.json';
@@ -11,6 +12,8 @@ function CategoryPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [overlayActive, setOverlayActive] = useState(false);
+  const [query, setQuery] = useState('');
+  const [suggestedBooks, setSuggestedBooks] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,6 +32,28 @@ function CategoryPage() {
     fetchBigCategories();
   }, []);
 
+  const handleBookSuggestion = async (searchQuery) => {
+    if (searchQuery.length > 0) {
+      try {
+        const data = await bookService.fetchBookBySuggest(searchQuery);
+        setSuggestedBooks(data);
+      } catch (error) {
+        console.error('Lỗi gợi ý sách:', error);
+        setSuggestedBooks([]);
+      }
+    } else {
+      setSuggestedBooks([]);
+    }
+  };
+
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      handleBookSuggestion(query);
+    }, 300);
+
+    return () => clearTimeout(timerId);
+  }, [query]);
+
   const handleCategoryClick = async (category) => {
     setOverlayActive(true);
     try {
@@ -42,66 +67,132 @@ function CategoryPage() {
     }
   };
 
-  if (error) return <p className="text-center text-red-500 mt-10">{error}</p>;
+  const handleBookClick = (bookId) => {
+    navigate(`/book/${bookId}`);
+  };
+
+  if (error) return (
+    <div className="min-h-screen flex items-center justify-center bg-red-50">
+      <p className="text-2xl text-red-600 font-semibold">{error}</p>
+    </div>
+  );
 
   return (
-    <div className="bg-gradient-to-r from-blue-50 to-gray-100 min-h-screen flex flex-col pt-10">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 overflow-x-hidden relative">
+      {/* Background Parallax Layer */}
+      {/* <div 
+        className="absolute inset-0 z-0 bg-cover bg-center opacity-10 animate-slow-pulse" 
+        style={{
+          backgroundImage: 'url()',
+          transform: 'perspective(1000px) translateZ(-100px) scale(2)',
+          backgroundAttachment: 'fixed'
+        }}
+      /> */}
+
       {loading ? (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-white bg-opacity-80">
           <Player
             autoplay
             loop
             src={loadingg}
-            style={{ height: '150px', width: '150px' }}
+            style={{ height: '200px', width: '200px' }}
           />
         </div>
       ) : (
-        <div className="flex-grow container mx-auto px-4">
-          <h1 className="text-center pt-12 text-4xl font-bold text-blue-800 mb-8">
+        <div className="container mx-auto px-4 py-16 mt-10 relative z-10">
+          <h1 className="text-center text-5xl font-bold text-indigo-800 mb-12 
+            animate-fade-in-down 
+            transition-all duration-1000 
+            hover:scale-105 
+            hover:text-indigo-900
+            transform-gpu"
+          >
             Các danh mục sách phổ biến
           </h1>
-          <div className="flex items-center bg-white rounded-full shadow-md px-6 py-3 w-full max-w-2xl mx-auto mb-16">
-            <span className="text-blue-500 mr-3">
-              <svg className="w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path fill="currentColor" d="m17.854 18.146-3.128-3.128c.795-.954 1.275-2.18 1.275-3.519 0-3.038-2.462-5.5-5.5-5.5s-5.5 2.462-5.5 5.5 2.462 5.5 5.5 5.5c1.339 0 2.565-.479 3.518-1.274l3.128 3.128c.098.098.226.147.354.147s.256-.049.354-.146c.195-.196.195-.512-.001-.708zm-7.353-2.146c-2.481 0-4.5-2.019-4.5-4.5s2.018-4.5 4.5-4.5 4.5 2.019 4.5 4.5-2.019 4.5-4.5 4.5z"></path>
-              </svg>
-            </span>
-            <input
-              placeholder="Tìm tên sách hoặc tác giả ..."
-              className="flex-1 border-none bg-transparent text-lg outline-none text-gray-700 placeholder-gray-400"
-            />
+          
+          <div className="relative mb-16">
+            <div className="flex items-center bg-white rounded-full shadow-lg px-6 py-4 w-full max-w-2xl mx-auto transition-all duration-300 focus-within:shadow-xl">
+              <span className="text-indigo-500 mr-3">
+                <svg className="w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="currentColor" d="m17.854 18.146-3.128-3.128c.795-.954 1.275-2.18 1.275-3.519 0-3.038-2.462-5.5-5.5-5.5s-5.5 2.462-5.5 5.5 2.462 5.5 5.5 5.5c1.339 0 2.565-.479 3.518-1.274l3.128 3.128c.098.098.226.147.354.147s.256-.049.354-.146c.195-.196.195-.512-.001-.708zm-7.353-2.146c-2.481 0-4.5-2.019-4.5-4.5s2.018-4.5 4.5-4.5 4.5 2.019 4.5 4.5-2.019 4.5-4.5 4.5z"></path>
+                </svg>
+              </span>
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Tìm tên sách hoặc tác giả ..."
+                className="flex-1 border-none bg-transparent text-lg outline-none text-gray-700 placeholder-gray-400"
+              />
+            </div>
+
+            {suggestedBooks.length > 0 && (
+              <div className="absolute z-50 w-full max-w-2xl mx-auto left-0 right-0 mt-2">
+                <div className="bg-white rounded-lg shadow-xl max-h-80 overflow-y-auto animate-fade-in">
+                  {suggestedBooks.map((book) => (
+                    <div 
+                      key={book.bookId} 
+                      onClick={() => handleBookClick(book.bookId)}
+                      className="px-6 py-3 hover:bg-indigo-50 cursor-pointer transition-colors duration-200"
+                    >
+                      <p className="font-medium text-indigo-700">{book.title}</p>
+                      <p className="text-sm text-gray-500">{book.author}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {bigCategories.map((category, index) => (
               <div
-                
                 key={index}
+                className="
+                  bg-white 
+                  rounded-xl 
+                  p-8 
+                  text-center 
+                  transition-all 
+                  duration-500 
+                  transform 
+                  hover:-translate-y-4 
+                  hover:shadow-2xl 
+                  hover:rotate-3 
+                  cursor-pointer
+                  perspective-500
+                  hover:scale-105
+                  animate-float
+                "
+                style={{
+                  animationDelay: `${index * 0.2}s`
+                }}
                 onClick={() => handleCategoryClick(category)}
-                className="bg-white rounded-xl p-6 text-center transition-all duration-300 transform hover:-translate-y-2 hover:shadow-lg"
               >
-                <button
-                  onClick={() => handleCategoryClick(category)}
-                  className="text-xl font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-300"
-                >
+                <h2 className="
+                  text-2xl 
+                  font-semibold 
+                  text-indigo-600 
+                  hover:text-indigo-800 
+                  transition-colors 
+                  duration-300
+                ">
                   {category}
-                </button>
+                </h2>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* Category Transition Overlay */}
       {overlayActive && (
-        <div className="fixed inset-0 flex flex-col items-center justify-center bg-gray-800 bg-opacity-70 z-50">
+        <div className="fixed inset-0 flex flex-col items-center justify-center bg-indigo-900 bg-opacity-80 z-50">
           <Player
             autoplay
             loop
             src={loadingAnimation}
-            style={{ height: '150px', width: '150px' }}
+            style={{ height: '200px', width: '200px' }}
           />
-          <p className="text-white mt-4 text-lg font-medium animate-pulse">Đang tải ...</p>
+          <p className="text-white mt-6 text-2xl font-medium animate-pulse">Đang tải ...</p>
         </div>
       )}
     </div>
@@ -109,4 +200,3 @@ function CategoryPage() {
 }
 
 export default CategoryPage;
-

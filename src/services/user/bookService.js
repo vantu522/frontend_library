@@ -1,13 +1,12 @@
+import axios from 'axios';
 import { API_ENDPOINTS } from '../../config/apiConfig';
 
 const bookService = {
-
   fetchBooksByCategory: async (bigCategorySlug, subCategorySlug) => {
     try {      
-      const response = await fetch(
+      const response = await axios.get(
         `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.USER.BOOKS}/${bigCategorySlug}/${subCategorySlug}/books`, 
         {
-          method: 'GET',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -15,27 +14,18 @@ const bookService = {
         }
       );
       
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Error response:', errorText);
-        throw new Error(`API error: ${response.status} - ${errorText}`);
-      }
-
-
-      
-      return await response.json();
+      return response.data;
     } catch (error) {
-      console.error('Service error:', error);
+      console.error('Service error:', error.response ? error.response.data : error.message);
       throw error;
     }
   },
 
   fetchBookByBookId: async (bookId) => {
     try {
-      const response = await fetch(
+      const response = await axios.get(
         `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.USER.BOOK}/${bookId}`, 
         {
-          method: 'GET',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -43,21 +33,31 @@ const bookService = {
         }
       );
   
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Error response:', errorText);
-        throw new Error(`API error: ${response.status} - ${errorText}`);
-      }
-  
-      return await response.json();
+      return response.data;
     } catch (error) {
-      console.error('Service error:', error);
+      console.error('Service error:', error.response ? error.response.data : error.message);
+      throw error;
+    }
+  },
+
+  fetchBookBySuggest: async (query) => {
+    try {
+      const response = await axios.get(
+        `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.USER.SUGGESTBOOK}?query=${query}`,
+        {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      
+      return response.data;
+    } catch (error) {
+      console.error('Service error:', error.response ? error.response.data : error.message);
       throw error;
     }
   }
-  
-
-
 };
 
 export default bookService;
