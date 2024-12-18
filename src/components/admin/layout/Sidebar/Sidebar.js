@@ -55,6 +55,7 @@ const Sidebar = () => {
                     {openSubmenu === 'borrowing' && (
                         <ul className="bg-gray-700 pl-10 flex flex-col">
                             <li><Link to="/admin/stored-borrows" className="px-5 py-2 text-gray-300 hover:text-white">Phiếu Mượn</Link></li>
+                            <li><Link to="/admin/PendingBorrowList" className="px-5 py-2 text-gray-300 hover:text-white">Phiếu Mượn Đang Chờ</Link></li>
                             <li><Link to="/admin/borrowhistory" className="px-5 py-2 text-gray-300 hover:text-white">Lịch Sử Mượn</Link></li>
                         </ul>
                     )}
@@ -64,7 +65,7 @@ const Sidebar = () => {
                 <li>
                     <a href="#" onClick={() => toggleSubmenu('management')} className="flex items-center px-5 py-3 text-white hover:bg-gray-600 transition">
                         <FontAwesomeIcon icon={faUsers} className="mr-4 text-xl" />
-                        <span>Quản Lý</span>
+                        <span>Quản Lý</span>  
                         <FontAwesomeIcon icon={openSubmenu === 'management' ? faChevronUp : faChevronDown} className="ml-auto text-sm" />
                     </a>
                     {openSubmenu === 'management' && (

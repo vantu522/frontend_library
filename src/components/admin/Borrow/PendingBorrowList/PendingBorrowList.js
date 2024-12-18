@@ -4,34 +4,33 @@ import Modal from '../../../../common/admin/Modal/Modal';
 import Table from '../../../../common/admin/Table/Table';
 import Button from '../../../../common/admin/Button/Button';
 import Tooltip from '../../../../common/admin/Tooltip/Tooltip';
-import { FaEdit, FaTrash, FaCheck, FaPlus } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 import EditBorrowForm from '../EditBorrowForm/EditBorrowForm';
 import AddBorrowForm from '../AddBorrowForm/AddBorrowForm';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import debounce from 'lodash.debounce';
 
-const BorrowList = () => {
+const PendingBorrowList = () => {
   const [borrows, setBorrows] = useState([]);
   const [visibleForm, setVisibleForm] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [borrowId, setBorrowId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState(null);
 
-  // Fetch dữ liệu sách mượn khi component mount
+  // Fetch dữ liệu phiếu mượn đang chờ
   useEffect(() => {
-    fetchBorrowList();
+    fetchPendingBorrowList();
   }, []);
 
-  const fetchBorrowList = async () => {
+  const fetchPendingBorrowList = async () => {
     try {
-      const data = await borrowService.fetchAllBorrowed();
+      const data = await borrowService.fetchAllPending(); // Sử dụng API cho phiếu mượn đang chờ
       setBorrows(data);
     } catch (error) {
-      toast.error('Không thể tải danh sách phiếu mượn');
+      toast.error('Không thể tải danh sách phiếu mượn đang chờ');
     }
   };
 
@@ -70,15 +69,9 @@ const BorrowList = () => {
     }
   };
 
-  const filteredBorrows = borrows.filter((borrow) => {
-    const matchesSearch =
-      (borrow.bookTitle &&
-        borrow.bookTitle.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (borrow.memberName &&
-        borrow.memberName.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesStatus = statusFilter === 'all' || borrow.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
+  const debouncedSearch = debounce((e) => {
+    setSearchTerm(e.target.value);
+  }, 500);  // Delay search by 500ms
 
   const columns = [
     { label: 'Tên sách', field: 'bookTitle' },
@@ -89,9 +82,7 @@ const BorrowList = () => {
       label: 'Trạng thái',
       field: 'status',
       render: (val, row) => (
-        <span className={row.status === 'overdue' ? 'text-red-500' : 'text-green-500'}>
-          {row.status === 'overdue' ? 'Quá hạn' : 'Đang mượn'}
-        </span>
+        <span className="text-green-500">Đang mượn</span>
       ),
     },
     {
@@ -126,15 +117,16 @@ const BorrowList = () => {
     },
   ];
 
-  const debouncedSearch = debounce((e) => {
-    setSearchTerm(e.target.value);
-  }, 500);  // Delay search by 500ms
+  const filteredBorrows = borrows.filter((borrow) => {
+    return borrow.bookTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      borrow.memberName.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
   return (
     <div className="p-5">
-      <h1 className="text-2xl font-bold mb-4">Danh Sách Phiếu Mượn</h1>
+      <h1 className="text-2xl font-bold mb-4">Danh Sách Phiếu Mượn Đang Chờ</h1>
 
-      {/* Thanh tìm kiếm và lọc */}
+      {/* Thanh tìm kiếm */}
       <div className="flex justify-between mb-5">
         <input
           type="text"
@@ -143,33 +135,18 @@ const BorrowList = () => {
           onChange={debouncedSearch}
           className="p-2 border rounded-md w-64"
         />
-        <div className="flex gap-3">
-          <select
-            onChange={(e) => setStatusFilter(e.target.value)}
-            value={statusFilter}
-            className="p-2 border rounded-md"
-          >
-            <option value="all">Tất cả trạng thái</option>
-            <option value="active">Đang mượn</option>
-            <option value="returned">Đã trả</option>
-            <option value="overdue">Quá hạn</option>
-          </select>
-          <button
-            onClick={() => {
-              setVisibleForm(true);
-              setIsEdit(false);
-            }}
-            className="flex items-center bg-green-500 text-white px-4 py-2 rounded"
-          >
-            <FaPlus className="mr-2" /> Thêm Phiếu Mượn
-          </button>
-        </div>
+        <button
+          onClick={() => setVisibleForm(true)}
+          className="flex items-center bg-green-500 text-white px-4 py-2 rounded"
+        >
+          <FaPlus className="mr-2" /> Thêm Phiếu Mượn
+        </button>
       </div>
 
       {/* Bảng dữ liệu */}
       <Table columns={columns} data={filteredBorrows} />
 
-      {/* Form thêm hoặc sửa */}
+      {/* Modal thêm hoặc sửa */}
       <Modal isOpen={visibleForm} onClose={() => setVisibleForm(false)}>
         {isEdit ? (
           <EditBorrowForm
@@ -198,4 +175,4 @@ const BorrowList = () => {
   );
 };
 
-export default BorrowList;
+export default PendingBorrowList;

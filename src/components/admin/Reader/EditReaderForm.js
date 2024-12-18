@@ -94,17 +94,9 @@ const EditReaderForm = ({ reader, onClose, onUpdate }) => {
         >
           {isLoading ? "Đang lưu..." : "Lưu"}
         </button>
-        <button
-          type="button"
-          onClick={onClose}
-          className="w-full py-2 bg-gray-300 text-gray-700 font-semibold rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
-        >
-          Hủy
-        </button>
       </div>
     </form>
   );
 };
 
 export default EditReaderForm;
-

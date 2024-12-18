@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 function ChangePassword() {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -6,15 +7,29 @@ function ChangePassword() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [statusMessage, setStatusMessage] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (newPassword === confirmPassword) {
-      setStatusMessage('Đổi mật khẩu thành công!');
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
-    } else {
+    if (newPassword !== confirmPassword) {
       setStatusMessage('Mật khẩu mới và xác nhận mật khẩu không khớp.');
+      return;
+    }
+
+    try {
+      const response = await axios.post('https://library-mana.azurewebsites.net/librarians/change', {
+        currentPassword,
+        newPassword
+      });
+
+      if (response.status === 200) {
+        setStatusMessage('Đổi mật khẩu thành công!');
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+      }
+    } catch (error) {
+      setStatusMessage(
+        error.response?.data?.message || 'Có lỗi xảy ra, vui lòng thử lại.'
+      );
     }
   };
 
@@ -23,7 +38,9 @@ function ChangePassword() {
       <h2 className="text-2xl font-semibold text-center mb-6">Đổi Mật Khẩu</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label htmlFor="current-password" className="block text-sm font-medium text-gray-700">Mật khẩu hiện tại</label>
+          <label htmlFor="current-password" className="block text-sm font-medium text-gray-700">
+            Mật khẩu hiện tại
+          </label>
           <input
             id="current-password"
             type="password"
@@ -34,7 +51,9 @@ function ChangePassword() {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="new-password" className="block text-sm font-medium text-gray-700">Mật khẩu mới</label>
+          <label htmlFor="new-password" className="block text-sm font-medium text-gray-700">
+            Mật khẩu mới
+          </label>
           <input
             id="new-password"
             type="password"
@@ -45,7 +64,9 @@ function ChangePassword() {
           />
         </div>
         <div className="mb-6">
-          <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">Xác nhận mật khẩu mới</label>
+          <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">
+            Xác nhận mật khẩu mới
+          </label>
           <input
             id="confirm-password"
             type="password"
@@ -55,7 +76,10 @@ function ChangePassword() {
             className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <button type="submit" className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <button
+          type="submit"
+          className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
           Đổi Mật Khẩu
         </button>
       </form>

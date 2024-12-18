@@ -24,7 +24,6 @@ const booksSlice = createSlice({
     }
   }
 });
-
 export const { setBooks, addBook, updateBook, deleteBook } = booksSlice.actions;
 
 // Thêm action fetchBooks để gọi API
