@@ -6,11 +6,11 @@ const borrowService = {
   fetchAllBorrowed: async () => {
     try {
       const response = await axios.get(
-        `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.BORROWED}`
+        `${API_ENDPOINTS.BASE_URL}/transactions/borrowed`
       );
       return response.data;
     } catch (error) {
-      console.error('Lỗi dịch vụ:', error);
+      console.error('Lỗi dịch vụ khi lấy sách đã mượn:', error);
       throw error;
     }
   },
@@ -19,11 +19,24 @@ const borrowService = {
   fetchAllReturned: async () => {
     try {
       const response = await axios.get(
-        `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.RETURNED}`
+        `${API_ENDPOINTS.BASE_URL}/transactions/returned`
       );
       return response.data;
     } catch (error) {
-      console.error('Lỗi dịch vụ:', error);
+      console.error('Lỗi dịch vụ khi lấy sách đã trả:', error);
+      throw error;
+    }
+  },
+
+  // Lấy tất cả sách gia hạn
+  fetchAllRenewed: async () => {
+    try {
+      const response = await axios.get(
+        `${API_ENDPOINTS.BASE_URL}/transactions/renewed`
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Lỗi dịch vụ khi lấy sách gia hạn:', error);
       throw error;
     }
   },
@@ -32,34 +45,21 @@ const borrowService = {
   fetchAllPending: async () => {
     try {
       const response = await axios.get(
-        `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.PENDING}`
+        `${API_ENDPOINTS.BASE_URL}/transactions/pending`
       );
       return response.data;
     } catch (error) {
-      console.error('Lỗi dịch vụ:', error);
+      console.error('Lỗi dịch vụ khi lấy sách đang chờ duyệt:', error);
       throw error;
     }
   },
 
-  // Lấy chi tiết phiếu mượn theo ID
-  fetchBorrowById: async (borrowId) => {
-    try {
-      const response = await axios.get(
-        `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.BORROWED}/${borrowId}`
-      );
-      return response.data;
-    } catch (error) {
-      console.error('Lỗi khi lấy phiếu mượn:', error);
-      throw error;
-    }
-  },
-
-  // Chấp nhận hoặc từ chối phiếu mượn
-  approveTransaction: async (transactionData) => {
+  // Mượn sách
+  borrowBook: async (data) => {
     try {
       const response = await axios.post(
-        `${API_ENDPOINTS.BASE_URL}/transactions/approve`,
-        transactionData,
+        `${API_ENDPOINTS.BASE_URL}/transactions/borrow`,
+        data,
         {
           headers: {
             'Accept': 'application/json',
@@ -69,7 +69,7 @@ const borrowService = {
       );
       return response.data;
     } catch (error) {
-      console.error('Lỗi khi chấp thuận phiếu mượn:', error);
+      console.error('Lỗi khi mượn sách:', error);
       throw error;
     }
   },
@@ -114,25 +114,25 @@ const borrowService = {
     }
   },
 
-    // Mượn sách
-    borrowBook: async (data) => {
-      try {
-        const response = await axios.post(
-          `${API_ENDPOINTS.BASE_URL}/transactions/borrow`,
-          data,
-          {
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-            }
+  // Chấp nhận hoặc từ chối mượn sách
+  approveTransaction: async (transactionData) => {
+    try {
+      const response = await axios.post(
+        `${API_ENDPOINTS.BASE_URL}/transactions/approve`,
+        transactionData,
+        {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
           }
-        );
-        return response.data;
-      } catch (error) {
-        console.error('Lỗi khi mượn sách:', error);
-        throw error;
-      }
-    },  
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Lỗi khi chấp thuận phiếu mượn:', error);
+      throw error;
+    }
+  }
 };
 
 export default borrowService;

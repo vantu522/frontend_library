@@ -41,8 +41,8 @@ const memberService = {
         }
     },
 
-    updateMember: async(memberId, memberData) =>{
-        try{
+    updateMember: async (memberId, memberData) => {
+        try {
             const response = await axios.put(
                 `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.EDITMEMBER}/${memberId}`,
                 memberData,
@@ -55,14 +55,14 @@ const memberService = {
             );
 
             return response.data;
-         } catch(error){
-            console.error("service err", error);
+        } catch (error) {
+            console.error("Service error:", error);
             throw error;
-         }
+        }
     },
 
-    deleteMember: async(memberId) => {
-        try{
+    deleteMember: async (memberId) => {
+        try {
             const response = await axios.delete(
                 `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.DELETEMEM}/${memberId}`,
                 {
@@ -71,15 +71,33 @@ const memberService = {
                         'Content-Type': 'application/json'
                     }
                 }
-
             );
 
             return response.data;
-        } catch(error){
-            console.error("Service error: ",error);
+        } catch (error) {
+            console.error("Service error:", error);
             throw error;
         }
+    },
 
+    // Thêm API mới để xem bạn đọc đang mượn hoặc gia hạn sách
+    fetchBorrowedOrRenewedBooks: async (memberId) => {
+        try {
+            const response = await axios.get(
+                `${API_ENDPOINTS.BASE_URL}/members/${memberId}/borrowed-renewed-books`,
+                {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            return response.data;
+        } catch (error) {
+            console.error('Service error:', error);
+            throw error;
+        }
     }
 };
 

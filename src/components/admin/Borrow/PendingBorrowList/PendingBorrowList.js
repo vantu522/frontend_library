@@ -14,7 +14,7 @@ const PendingBorrowList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [confirmAction, setConfirmAction] = useState({}); // Lưu thông tin phiếu mượn và loại hành động
+  const [confirmAction, setConfirmAction] = useState({});
   const [deleteTargetId, setDeleteTargetId] = useState(null);
 
   useEffect(() => {

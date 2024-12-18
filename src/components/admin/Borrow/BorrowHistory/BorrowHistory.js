@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import borrowService from '../../../../services/admin/borrowService';
 import Table from '../../../../common/admin/Table/Table';
+import { color } from 'framer-motion';
 
 const BorrowHistory = () => {
   const [borrowHistory, setBorrowHistory] = useState([]); // Lưu trữ lịch sử phiếu mượn đã trả
@@ -29,6 +30,16 @@ const BorrowHistory = () => {
     { label: 'Số điện thoại', field: 'phoneNumber', width: '20%' },
     { label: 'Ngày mượn', field: 'transactionDate', width: '15%' },
     { label: 'Ngày dự kiến trả', field: 'dueDate', width: '15%' },
+    {
+      label: 'Trạng thái',
+      field: 'status',
+      width: '15%',
+      render: (val) => (
+        <span className="text-green-500 px-2 py-1 rounded-full">
+          {val}
+        </span>
+      ),
+    }
   ];
 
   if (loading) {

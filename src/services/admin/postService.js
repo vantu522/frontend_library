@@ -1,59 +1,55 @@
-import axios from 'axios';
+import axios from "axios";
 import { API_ENDPOINTS } from "../../config/apiConfig";
 
+const axiosInstance = axios.create({
+  baseURL: API_ENDPOINTS.BASE_URL,
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+  },
+});
+
 const postService = {
-  fetchAllPost: async () => {
+  // Lấy tất cả bài viết
+  fetchAllPosts: async () => {
     try {
-      const response = await axios.get(
-        `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.POSTS}`,
-        {
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }
-        }
-      );
+      const response = await axiosInstance.get("/posts");
       return response.data;
     } catch (error) {
-      console.error('Lỗi dịch vụ:', error);
-      throw error;
+      console.error("Lỗi khi lấy bài viết:", error.response?.data || error.message);
+      throw error.response?.data || error.message;
     }
   },
 
+  // Thêm bài viết mới
   addPost: async (postData) => {
     try {
-      const response = await axios.post(
-        `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.ADDPOSTS}`,
-        postData,
-        {
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
-        }
-      );
+      const response = await axiosInstance.post("/posts", postData);
       return response.data;
     } catch (error) {
-      console.error('Lỗi dịch vụ:', error);
-      throw error;
+      console.error("Lỗi khi thêm bài viết:", error.response?.data || error.message);
+      throw error.response?.data || error.message;
     }
   },
 
-  deletePost: async (id) => {
+  // Cập nhật bài viết
+  updatePost: async (id, postData) => {
     try {
-      const response = await axios.delete(
-        `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.DELETEPOSTS}/${id}`,
-        {
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
-        }
-      );
+      const response = await axiosInstance.put(`/posts/${id}`, postData);
       return response.data;
     } catch (error) {
-      console.error('Lỗi dịch vụ:', error);
-      throw error;
+      console.error("Lỗi khi cập nhật bài viết:", error.response?.data || error.message);
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Xóa bài viết
+  deletePost: async (id) => {
+    try {
+      await axiosInstance.delete(`/posts/${id}`);
+    } catch (error) {
+      console.error("Lỗi khi xóa bài viết:", error.response?.data || error.message);
+      throw error.response?.data || error.message;
     }
   },
 };

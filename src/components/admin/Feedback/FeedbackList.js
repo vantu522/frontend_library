@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "../../../common/admin/Modal/Modal";
 import Table from "../../../common/admin/Table/Table";
 import Button from "../../../common/admin/Button/Button";
 import { sendFeedback } from "../../../redux/admin/feedbackReducer";
+import ratingService from "../../../services//admin/ratingService"; // Đảm bảo đã import ratingService
 
 const FeedbackList = () => {
   const dispatch = useDispatch();
@@ -12,9 +13,25 @@ const FeedbackList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFeedbackId, setSelectedFeedbackId] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: '', direction: 'asc' });
+  const [ratings, setRatings] = useState([]); // State để lưu đánh giá sách
 
   const feedbacks = useSelector((state) => state.feedbacks.feedbacks);
   const currentAdmin = useSelector((state) => state.auth?.adminName || "");
+
+  // Call API lấy đánh giá khi component được mount
+  useEffect(() => {
+    const fetchRatings = async () => {
+      try {
+        const bookId = "book123"; // Giả sử bạn có bookId nào đó
+        const ratingsData = await ratingService.fetchRatingsByBook(bookId); // Gọi API lấy đánh giá sách
+        setRatings(ratingsData);
+      } catch (error) {
+        console.error("Lỗi khi lấy đánh giá sách:", error);
+      }
+    };
+
+    fetchRatings();
+  }, []); // Thêm useEffect để gọi API khi component load
 
   const filteredFeedbacks = feedbacks.filter(
     (item) =>
