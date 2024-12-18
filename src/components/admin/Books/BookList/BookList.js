@@ -90,8 +90,8 @@ const BookList = () => {
 
   const filteredBooks = books?.data?.filter((book) => {
     const matchesSearch =
-      book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      book.author.toLowerCase().includes(searchTerm.toLowerCase());
+      (book.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (book.author || '').toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || book.status === statusFilter;
     const matchesGenre = genreFilter === "all" || book.genre === genreFilter;
     return matchesSearch && matchesStatus && matchesGenre;
