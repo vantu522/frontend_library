@@ -107,22 +107,13 @@ const ReaderList = () => {
     }
   }, []);
 
-<<<<<<< HEAD
   const filteredReaders = readerData.filter((reader) => {
     const nameMatch = reader.name && reader.name.toLowerCase().includes(searchTerm.toLowerCase());
     const emailMatch = reader.email && reader.email.toLowerCase().includes(searchTerm.toLowerCase());
     return nameMatch || emailMatch;
   });
   
-=======
-  // Filter readers based on search term
-  const filteredReaders = readerData.filter(
-    (reader) =>
-      reader.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      reader.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
->>>>>>> 7ab8e19f369a64aaf3208eace2f8984e1b122e9d
-
+ 
   // Pagination logic
   const totalPages = Math.ceil(filteredReaders.length / itemsPerPage);
   const paginatedReaders = filteredReaders.slice(
