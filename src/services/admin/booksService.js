@@ -5,7 +5,7 @@ const bookService = {
   fetchAllBooks: async () => {
     try {
       const response = await axios.get(
-        `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.BOOKS}`,
+        `https://library-mana.azurewebsites.net/books?page=1&size=10`,
         {
           headers: {
             'Accept': 'application/json',
