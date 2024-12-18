@@ -29,5 +29,8 @@ export const API_ENDPOINTS = {
   },
   STATISTICS: {
     CATEGORY: '/books/category-distribution'
+  },
+  TRANSACTIONS:{
+    BORROW:'/transactions/borrow'
   }
 };
