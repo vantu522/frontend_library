@@ -16,33 +16,33 @@ import {
 
 function Footer() {
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' }); // Cuộn mượt lên đầu trang
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
-    <footer className="bg-gradient-to-r from-[#2c3e50] to-[#3498db] text-white py-12 relative ">
+    <footer className="bg-gray-950 text-white py-8 relative">
       {/* Gradient bar */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#3498db] via-[#2ecc71] to-[#3498db]"></div>
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-green-500 to-blue-500"></div>
 
       {/* Main content */}
-      <div className="max-w-screen-xl mx-auto px-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="max-w-screen-xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Section 1: Categories */}
         <div>
-          <h2 className="text-3xl font-bold mb-6 relative pb-2">
+          <h2 className="text-2xl font-bold mb-4 relative pb-2">
             Danh mục
-            <div className="absolute bottom-0 left-0 w-12 h-[3px] bg-[#3498db]"></div>
+            <div className="absolute bottom-0 left-0 w-12 h-[2px] bg-blue-500"></div>
           </h2>
           <ul className="list-none p-0 m-0">
-            <li className="mb-4 text-2xl cursor-pointer hover:text-[#2ecc71] hover:translate-x-2 transition-transform">
+            <li className="mb-2 text-base cursor-pointer hover:text-green-400 hover:translate-x-2 transition-transform">
               <Link to="/" onClick={scrollToTop}>Trang chủ</Link>
             </li>
-            <li className="mb-4 text-2xl cursor-pointer hover:text-[#2ecc71] hover:translate-x-2 transition-transform">
+            <li className="mb-2 text-base cursor-pointer hover:text-green-400 hover:translate-x-2 transition-transform">
               <Link to="/news" onClick={scrollToTop}>Tin tức</Link>
             </li>
-            <li className="mb-4 text-2xl cursor-pointer hover:text-[#2ecc71] hover:translate-x-2 transition-transform">
+            <li className="mb-2 text-base cursor-pointer hover:text-green-400 hover:translate-x-2 transition-transform">
               <Link to="/category" onClick={scrollToTop}>Danh mục</Link>
             </li>
-            <li className="mb-4 text-2xl cursor-pointer hover:text-[#2ecc71] hover:translate-x-2 transition-transform">
+            <li className="mb-2 text-base cursor-pointer hover:text-green-400 hover:translate-x-2 transition-transform">
               <Link to="/shopcart" onClick={scrollToTop}>Giỏ sách</Link>
             </li>
           </ul>
@@ -50,31 +50,25 @@ function Footer() {
 
         {/* Section 2: Contact Info */}
         <div>
-          <h2 className="text-3xl font-bold mb-6 relative pb-2">
+          <h2 className="text-2xl font-bold mb-4 relative pb-2">
             Liên hệ với chúng tôi
-            <div className="absolute bottom-0 left-0 w-12 h-[3px] bg-[#3498db]"></div>
+            <div className="absolute bottom-0 left-0 w-12 h-[2px] bg-blue-500"></div>
           </h2>
           <ul className="list-none p-0 m-0">
-            <li className="mb-4 text-2xl flex items-center gap-2">
-              <FontAwesomeIcon icon={faPhone} className="text-[#2ecc71] w-5" />{" "}
+            <li className="mb-2 text-sm flex items-center gap-2">
+              <FontAwesomeIcon icon={faPhone} className="text-green-400 w-4" />{" "}
               0000-XXXXXX
             </li>
-            <li className="mb-4 text-2xl flex items-center gap-2">
-              <FontAwesomeIcon
-                icon={faEnvelope}
-                className="text-[#2ecc71] w-5"
-              />{" "}
+            <li className="mb-2 text-sm flex items-center gap-2">
+              <FontAwesomeIcon icon={faEnvelope} className="text-green-400 w-4" />{" "}
               library@wisdombeacon.com
             </li>
-            <li className="mb-4 text-2xl flex items-center gap-2">
-              <FontAwesomeIcon
-                icon={faMapMarkerAlt}
-                className="text-[#2ecc71] w-5"
-              />{" "}
+            <li className="mb-2 text-sm flex items-center gap-2">
+              <FontAwesomeIcon icon={faMapMarkerAlt} className="text-green-400 w-4" />{" "}
               122 Hoàng Quốc Việt, Cầu Giấy, HN
             </li>
-            <li className="mb-4 text-2xl flex items-center gap-2">
-              <FontAwesomeIcon icon={faClock} className="text-[#2ecc71] w-5" />{" "}
+            <li className="mb-2 text-sm flex items-center gap-2">
+              <FontAwesomeIcon icon={faClock} className="text-green-400 w-4" />{" "}
               08:00 - 18:00 (Thứ 2 - Thứ 7)
             </li>
           </ul>
@@ -82,16 +76,16 @@ function Footer() {
 
         {/* Section 3: Social Links and Policies */}
         <div className="flex flex-col items-center text-center">
-          <h2 className="text-3xl font-bold mb-6 relative pb-2">
+          <h2 className="text-2xl font-bold mb-4 relative pb-2">
             Kết nối với chúng tôi
-            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-12 h-[3px] bg-[#3498db]"></div>
+            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-12 h-[2px] bg-blue-500"></div>
           </h2>
-          <div className="flex gap-4 mb-6">
+          <div className="flex gap-4 mb-4">
             <a
               href="https://facebook.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-3xl text-[#3498db] hover:text-[#2ecc71] transition-colors"
+              className="text-2xl text-blue-500 hover:text-green-400 transition-colors"
             >
               <FontAwesomeIcon icon={faFacebookF} />
             </a>
@@ -99,7 +93,7 @@ function Footer() {
               href="https://twitter.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-3xl text-[#3498db] hover:text-[#2ecc71] transition-colors"
+              className="text-2xl text-blue-500 hover:text-green-400 transition-colors"
             >
               <FontAwesomeIcon icon={faTwitter} />
             </a>
@@ -107,7 +101,7 @@ function Footer() {
               href="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-3xl text-[#3498db] hover:text-[#2ecc71] transition-colors"
+              className="text-2xl text-pink-500 hover:text-green-400 transition-colors"
             >
               <FontAwesomeIcon icon={faInstagram} />
             </a>
@@ -115,13 +109,13 @@ function Footer() {
               href="https://linkedin.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-3xl text-[#3498db] hover:text-[#2ecc71] transition-colors"
+              className="text-2xl text-blue-500 hover:text-green-400 transition-colors"
             >
               <FontAwesomeIcon icon={faLinkedin} />
             </a>
           </div>
           <ul className="list-none p-0 m-0">
-            <li className="mb-4 text-2xl cursor-pointer hover:text-[#2ecc71] transition-colors">
+            <li className="mb-2 text-sm cursor-pointer hover:text-green-400 transition-colors">
               <a
                 href="https://maps.google.com/?q=122+Hoang+Quoc+Viet,+Cau+Giay,+HN"
                 target="_blank"
@@ -131,10 +125,10 @@ function Footer() {
                 Bản đồ vị trí
               </a>
             </li>
-            <li className="mb-4 text-2xl cursor-pointer hover:text-[#2ecc71] transition-colors">
+            <li className="mb-2 text-sm cursor-pointer hover:text-green-400 transition-colors">
               Chính sách bảo mật
             </li>
-            <li className="mb-4 text-2xl cursor-pointer hover:text-[#2ecc71] transition-colors">
+            <li className="mb-2 text-sm cursor-pointer hover:text-green-400 transition-colors">
               Điều khoản sử dụng
             </li>
           </ul>
@@ -142,8 +136,8 @@ function Footer() {
       </div>
 
       {/* Footer bottom */}
-      <div className="text-center mt-10 pt-5 border-t border-white/10">
-        <p className="text-md text-white/70">
+      <div className="text-center mt-8 pt-4 border-t border-white/10">
+        <p className="text-xs text-white/70">
           Copyright © 2024 Wisdom's Beacon. All Rights Reserved
         </p>
       </div>
@@ -152,3 +146,4 @@ function Footer() {
 }
 
 export default Footer;
+

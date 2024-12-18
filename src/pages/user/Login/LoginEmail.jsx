@@ -32,6 +32,8 @@ export default function AuthForm() {
         localStorage.setItem('user', JSON.stringify({
           name: response.data.name || 'Người dùng', // Sử dụng tên từ response hoặc mặc định
           email: response.data.email,
+          memberId: response.data.memberId,
+          phoneNumber:response.data.phoneNumber,
           avatar: response.data.avatar || 'https://via.placeholder.com/150', // Ảnh đại diện mặc định nếu không có
           token: response.data.token // Lưu token để xác thực
         }))

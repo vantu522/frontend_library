@@ -4,6 +4,7 @@ import bookService from '../../services/user/bookService';
 import { Clock, MapPin, Star, Calendar, Book, MessageCircle, XCircle } from 'lucide-react';
 import RatingsAndComments from './RatingsAndComments';
 import ReservationPopup from './ReservationPopup';
+import transactionsService from '../../services/user/transactionsService';
 
 function LibraryBookDetail() {
   const { bookId } = useParams();
@@ -39,12 +40,33 @@ function LibraryBookDetail() {
     setShowReservationPopup(true);
   };
 
-  const handleConfirmReservation = (borrowDate) => {
-    // Implement the reservation logic here
-    console.log('Reservation confirmed for:', book.title, 'on', borrowDate);
-    setShowReservationPopup(false);
-    // You might want to navigate to a confirmation page or show a success message
+  const handleConfirmReservation = async (borrowDate) => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user')); // Lấy thông tin người dùng từ localStorage
+  
+      if (!user) {
+        throw new Error('Vui lòng đăng nhập để đặt sách.');
+      }
+
+      // Chuyển đổi `borrowDate` sang định dạng yyyy-MM-dd
+       const formattedDate = borrowDate.toISOString().split('T')[0];
+  
+      const requestData = {
+        name: user.name, 
+        title: book.title, 
+        phoneNumber: user.phoneNumber || 'Chưa cập nhật', 
+        borrowDateStr: formattedDate, // Ngày mượn (yyyy-MM-dd)
+      };
+  
+      await transactionsService.addTransaction(requestData); // Gọi API mượn sách
+      setShowReservationPopup(false); // Đóng popup
+      // alert(`Đặt sách thành công! Ngày mượn: ${borrowDateStr}`);
+    } catch (error) {
+      console.error('Đặt sách thất bại:', error.response?.data || error.message);
+      alert('Đặt sách thất bại, vui lòng thử lại.');
+    }
   };
+  
 
   if (loading) return (
     <div className="flex justify-center items-center h-screen">
