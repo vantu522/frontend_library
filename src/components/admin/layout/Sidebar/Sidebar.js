@@ -54,9 +54,10 @@ const Sidebar = () => {
                     </a>
                     {openSubmenu === 'borrowing' && (
                         <ul className="bg-gray-700 pl-10 flex flex-col">
+                        <li><Link to="/admin/PendingBorrowList" className="px-5 py-2 text-gray-300 hover:text-white">Phiếu Mượn Đang Chờ</Link></li>
                             <li><Link to="/admin/stored-borrows" className="px-5 py-2 text-gray-300 hover:text-white">Phiếu Mượn</Link></li>
-                            <li><Link to="/admin/PendingBorrowList" className="px-5 py-2 text-gray-300 hover:text-white">Phiếu Mượn Đang Chờ</Link></li>
                             <li><Link to="/admin/borrowhistory" className="px-5 py-2 text-gray-300 hover:text-white">Lịch Sử Mượn</Link></li>
+                            <li><Link to="/admin/RenewHistoryList" className="px-5 py-2 text-gray-300 hover:text-white">Lịch Gia Hạn</Link></li>
                         </ul>
                     )}
                 </li>

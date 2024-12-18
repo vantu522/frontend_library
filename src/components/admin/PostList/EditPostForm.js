@@ -1,122 +1,146 @@
 import React, { useState, useEffect } from "react";
-import postService from "../../../services/admin/postService"; // Import postService
-import Modal from "../../../common/admin/Modal/Modal"; // Modal Component
+import Modal from "../../../common/admin/Modal/Modal";
+import postService from "../../../services/admin/postService";
 
-const EditPostForm = ({ visible, onClose, postId, isEdit, onUpdate }) => {
-  const [formData, setFormData] = useState({
-    title: "",
-    content: "",
-    author: "",
-    date: ""
-  });
+const EditPostForm = ({ visible, onClose, id, isEdit, onUpdate }) => {
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [author, setAuthor] = useState("");
+  const [date, setDate] = useState("");
+  const [status, setStatus] = useState("public");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // Lấy thông tin bài viết khi modal mở và có postId
   useEffect(() => {
-    if (postId && isEdit) {
-      const fetchPostDetails = async () => {
+    if (id && isEdit) {
+      const fetchPost = async () => {
         try {
-          const post = await postService.fetchAllPost(); // Lấy tất cả bài viết
-          const currentPost = post.find((item) => item.id === postId); // Tìm bài viết theo ID
-          if (currentPost) {
-            setFormData({
-              title: currentPost.title,
-              content: currentPost.content,
-              author: currentPost.author,
-              date: currentPost.date,
-            });
+          const post = await postService.fetchPost(id); // Lấy dữ liệu bài viết
+          if (post) {
+            setTitle(post.title);
+            setContent(post.content);
+            setAuthor(post.author);
+            setDate(post.date);
+            setStatus(post.status);
           }
         } catch (error) {
-          console.error("Lỗi khi lấy thông tin bài viết:", error);
+          console.error("Lỗi khi lấy bài viết:", error);
+          setError("Không thể tải bài viết.");
         }
       };
-
-      fetchPostDetails();
+      fetchPost();
     }
-  }, [postId, isEdit]);
+  }, [id, isEdit]);
 
-  // Cập nhật giá trị trong form
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  // Xử lý khi submit form để cập nhật bài viết
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!title || !content || !author || !date) {
+      setError("Tất cả các trường là bắt buộc.");
+      return;
+    }
+
+    const updatedPost = { title, content, author, date, status, id };
+
     try {
-      const updatedPost = await postService.updatePost(postId, formData); // Gọi API cập nhật bài viết
-      onUpdate(updatedPost); // Gọi hàm callback để cập nhật giao diện
-      onClose(); // Đóng modal
+      setLoading(true);
+      await onUpdate(updatedPost); // Gọi hàm cập nhật bài viết
+      setLoading(false);
     } catch (error) {
-      console.error("Lỗi khi cập nhật bài viết:", error);
+      console.error("Lỗi khi chỉnh sửa bài viết:", error);
+      setError("Đã xảy ra lỗi khi chỉnh sửa bài viết.");
+      setLoading(false);
     }
   };
 
-  if (!visible) return null;
-
   return (
-    <Modal onClose={onClose}>
-      <h3 className="text-lg font-bold mb-4">{isEdit ? "Chỉnh sửa bài viết" : "Thêm bài viết"}</h3>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">Tiêu đề</label>
+    <Modal isOpen={visible} onClose={onClose} title="Chỉnh sửa bài viết">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {error && <p className="text-red-500">{error}</p>}
+
+        {/* Tiêu đề */}
+        <div>
+          <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+            Tiêu đề
+          </label>
           <input
             type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded"
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
             required
           />
         </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">Nội dung</label>
+
+        {/* Nội dung */}
+        <div>
+          <label htmlFor="content" className="block text-sm font-medium text-gray-700">
+            Nội dung
+          </label>
           <textarea
-            name="content"
-            value={formData.content}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded"
+            id="content"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
             required
           />
         </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">Tác giả</label>
+
+        {/* Tác giả */}
+        <div>
+          <label htmlFor="author" className="block text-sm font-medium text-gray-700">
+            Tác giả
+          </label>
           <input
             type="text"
-            name="author"
-            value={formData.author}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded"
+            id="author"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+            className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
             required
           />
         </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">Ngày đăng</label>
+
+        {/* Ngày đăng */}
+        <div>
+          <label htmlFor="date" className="block text-sm font-medium text-gray-700">
+            Ngày đăng
+          </label>
           <input
             type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded"
+            id="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
             required
           />
         </div>
-        <div className="flex justify-end gap-4">
-          <button
-            type="button"
-            onClick={onClose}
-            className="bg-gray-500 text-white px-4 py-2 rounded"
+
+        {/* Trạng thái */}
+        <div>
+          <label htmlFor="status" className="block text-sm font-medium text-gray-700">
+            Trạng thái
+          </label>
+          <select
+            id="status"
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
           >
-            Đóng
-          </button>
+            <option value="public">Công khai</option>
+            <option value="draft">Nháp</option>
+          </select>
+        </div>
+
+        {/* Nút gửi */}
+        <div className="flex justify-end">
           <button
             type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded"
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+            disabled={loading}
           >
-            {isEdit ? "Cập nhật bài viết" : "Thêm bài viết"}
+            {loading ? "Đang tải..." : "Cập nhật bài viết"}
           </button>
         </div>
       </form>

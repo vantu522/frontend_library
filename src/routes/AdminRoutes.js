@@ -12,7 +12,7 @@ import BorrowHistory from '../components/admin/Borrow/BorrowHistory/BorrowHistor
 import CategoryList from '../components/admin/Books/CategoryList/CategoryList';
 import PostList from '../components/admin/PostList/PostList';
 import PendingBorrowList from '../components/admin/Borrow/PendingBorrowList/PendingBorrowList';
-
+import RenewHistoryList from '../components/admin/Borrow/RenewHistoryList';
 
 const AdminRoutes = () => {
   return (
@@ -21,6 +21,7 @@ const AdminRoutes = () => {
       <Route path="/" element={<Dashboard/>} />
         <Route path="/readers" element={<Reader/>} />
         <Route path="/PendingBorrowList" element={<PendingBorrowList/>} />
+        <Route path="/RenewHistoryList" element={<RenewHistoryList/>} />
         <Route path="/postlist" element={<PostList/>} />
         <Route path="/feedback" element={<FeedBack/>} />
         <Route path="/borrowhistory" element={<BorrowHistory/>} />

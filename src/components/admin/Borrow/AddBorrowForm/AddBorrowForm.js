@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import Modal from "../../../../common/admin/Modal/Modal";
-import { addBorrow } from "../../../../redux/admin/borrowsReducer";
 import borrowService from "../../../../services/admin/borrowService"; // Import borrowService
 
-const AddBorrowForm = ({ setVisibleForm }) => {
-  const dispatch = useDispatch();
+const AddBorrowForm = ({ setVisibleForm, readers, books }) => {
   const [bookTitle, setBookTitle] = useState("");
   const [borrowerPhone, setBorrowerPhone] = useState("");
   const [borrowerEmail, setBorrowerEmail] = useState("");
@@ -13,9 +10,7 @@ const AddBorrowForm = ({ setVisibleForm }) => {
   const [dueDate, setDueDate] = useState("");
   const [suggestedBooks, setSuggestedBooks] = useState([]);
   const [showModalMessage, setShowModalMessage] = useState(false);
-
-  const readers = useSelector((state) => state.readers);
-  const books = useSelector((state) => state.books);
+  const [errorMessage, setErrorMessage] = useState(""); // For API error messages
 
   useEffect(() => {
     const existingReader = readers.find(
@@ -48,7 +43,7 @@ const AddBorrowForm = ({ setVisibleForm }) => {
     e.preventDefault();
 
     if (!isPhoneValid(borrowerPhone)) {
-      alert("Số điện thoại phải đủ 10 số!");
+      setErrorMessage("Số điện thoại phải đủ 10 số!");
       return;
     }
 
@@ -76,11 +71,10 @@ const AddBorrowForm = ({ setVisibleForm }) => {
       // Call borrowBook API to create the borrowing record
       const borrowResponse = await borrowService.borrowBook(newBorrow);
       console.log("Borrow Book response:", borrowResponse); // Log response if needed
-      dispatch(addBorrow({ ...newBorrow, id: borrowResponse.id }));
-      setVisibleForm(false);
+      setVisibleForm(false); // Close form on success
     } catch (error) {
       console.error("Lỗi khi mượn sách:", error);
-      alert("Lỗi khi mượn sách. Vui lòng thử lại.");
+      setErrorMessage("Lỗi khi mượn sách. Vui lòng thử lại.");
     }
   };
 
@@ -88,6 +82,8 @@ const AddBorrowForm = ({ setVisibleForm }) => {
     <div className="p-6 max-w-lg mx-auto bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold text-center mb-6">Thêm Phiếu Mượn</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
+        {errorMessage && <div className="text-red-500 text-center mb-4">{errorMessage}</div>}
+        
         <label className="block text-sm font-medium text-gray-700">
           Tên Sách:
           <input
