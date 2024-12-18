@@ -23,21 +23,21 @@ const PostList = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const data = await postService.fetchAllPosts();
-        setPosts(data);
+        const data = await postService.fetchAllPosts(); // Gọi API lấy tất cả bài viết
+        setPosts(data); // Cập nhật dữ liệu bài viết
       } catch (error) {
         console.error("Lỗi khi lấy bài viết:", error);
       }
     };
     fetchPosts();
-  }, []);
+  }, []); // Gọi API khi component mount
 
   // Xử lý xóa bài viết
   const handleDelete = async (id) => {
     try {
-      await postService.deletePost(id);
-      setPosts(posts.filter((post) => post.id !== id));
-      closeModal();
+      await postService.deletePost(id); // Gọi API xóa bài viết
+      setPosts(posts.filter((post) => post.id !== id)); // Cập nhật lại danh sách bài viết
+      closeModal(); // Đóng modal
     } catch (error) {
       console.error("Lỗi khi xóa bài viết:", error);
     }
@@ -46,9 +46,9 @@ const PostList = () => {
   // Xử lý thêm bài viết mới
   const handleAddPost = async (newPost) => {
     try {
-      const response = await postService.addPost(newPost);
-      setPosts([...posts, response]);
-      setVisibleForm(false);
+      const response = await postService.addPost(newPost); // Gọi API thêm bài viết
+      setPosts([...posts, response]); // Cập nhật danh sách bài viết
+      setVisibleForm(false); // Đóng modal thêm bài viết
     } catch (error) {
       console.error("Lỗi khi thêm bài viết:", error);
     }
@@ -62,9 +62,9 @@ const PostList = () => {
 
   const handleUpdatePost = async (updatedPost) => {
     try {
-      const response = await postService.updatePost(updatedPost.id, updatedPost);
-      setPosts(posts.map(post => post.id === updatedPost.id ? response : post));
-      closeModal();
+      const response = await postService.updatePost(updatedPost.id, updatedPost); // Gọi API cập nhật bài viết
+      setPosts(posts.map(post => post.id === updatedPost.id ? response : post)); // Cập nhật lại danh sách bài viết
+      closeModal(); // Đóng modal
     } catch (error) {
       console.error("Lỗi khi cập nhật bài viết:", error);
     }
@@ -83,12 +83,12 @@ const PostList = () => {
 
   // Cấu hình các cột cho bảng
   const columns = [
-    { label: "Tiêu đề", field: "title", width: "20%" },
-    { label: "Nội dung", field: "content", width: "40%" },
-    { label: "Tác giả", field: "author", width: "15%" },
-    { label: "Ngày đăng", field: "createdAt", width: "15%" },
-    { label: "Trạng thái", field: "status", width: "15%" },
-    { label: "Hành động", field: "actions", width: "10%", render: (value, row) => (
+    { label: "Tiêu đề", field: "title", },
+    { label: "Nội dung", field: "content", },
+    { label: "Tác giả", field: "author",  },
+    { label: "Ngày đăng", field: "createdAt", render: (value) => new Date(value).toLocaleDateString("vi-VN") },
+    { label: "Trạng thái", field: "status",  },
+    { label: "Hành động", field: "actions", render: (value, row) => (
         <div className="flex justify-center gap-2">
           <button
             onClick={() => handleEditPost(row)} // Open edit modal
@@ -103,7 +103,7 @@ const PostList = () => {
             <FaTrashAlt />
           </button>
         </div>
-    ) }
+    )}
   ];
 
   const data = posts.map(post => ({
@@ -121,12 +121,10 @@ const PostList = () => {
       />
 
       {/* Modal chỉnh sửa bài viết */}
-      {editModal.isOpen && (
+      {editModal.isOpen && selectedPost && (
         <EditPostForm
-          visible={editModal.isOpen}
+          post={selectedPost} // Đảm bảo rằng post không phải null
           onClose={closeModal}
-          id={selectedPost?.id}
-          isEdit={true}
           onUpdate={handleUpdatePost}
         />
       )}

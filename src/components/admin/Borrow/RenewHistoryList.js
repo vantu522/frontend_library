@@ -47,7 +47,7 @@ const RenewHistoryList = () => {
 
   return (
     <div className="p-5 font-sans">
-      <h1 className="text-2xl font-bold mb-4">Sách Đã Gia Hạn</h1>
+      <h1 className="text-2xl font-bold mb-4">Lịch Sử Gia Hạn</h1>
 
       {/* Tìm kiếm */}
       <div className="mb-5">

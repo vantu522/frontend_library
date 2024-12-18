@@ -1,57 +1,67 @@
-import axios from "axios";
+import axios from 'axios';
 import { API_ENDPOINTS } from "../../config/apiConfig";
-
-const axiosInstance = axios.create({
-  baseURL: API_ENDPOINTS.BASE_URL,
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-  },
-});
 
 const postService = {
   // Lấy tất cả bài viết
   fetchAllPosts: async () => {
     try {
-      const response = await axiosInstance.get("/posts");
+      const response = await axios.get(`${API_ENDPOINTS.BASE_URL}/posts`);
       return response.data;
     } catch (error) {
-      console.error("Lỗi khi lấy bài viết:", error.response?.data || error.message);
-      throw error.response?.data || error.message;
+      console.error('Lỗi khi lấy bài viết:', error);
+      throw error;
     }
   },
 
   // Thêm bài viết mới
-  addPost: async (postData) => {
+  addPost: async (data) => {
     try {
-      const response = await axiosInstance.post("/posts", postData);
+      const response = await axios.post(
+        `${API_ENDPOINTS.BASE_URL}/posts`,
+        data,
+        {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          }
+        }
+      );
       return response.data;
     } catch (error) {
-      console.error("Lỗi khi thêm bài viết:", error.response?.data || error.message);
-      throw error.response?.data || error.message;
+      console.error('Lỗi khi đăng bài viết:', error);
+      throw error;
     }
   },
 
   // Cập nhật bài viết
-  updatePost: async (id, postData) => {
+  updatePost: async (id, updatedPost) => {
     try {
-      const response = await axiosInstance.put(`/posts/${id}`, postData);
+      const response = await axios.put(
+        `${API_ENDPOINTS.BASE_URL}/posts/update/${id}`,
+        updatedPost,
+        {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          }
+        }
+      );
       return response.data;
     } catch (error) {
-      console.error("Lỗi khi cập nhật bài viết:", error.response?.data || error.message);
-      throw error.response?.data || error.message;
+      console.error('Lỗi khi cập nhật bài viết:', error);
+      throw error;
     }
   },
 
   // Xóa bài viết
   deletePost: async (id) => {
     try {
-      await axiosInstance.delete(`/posts/${id}`);
+      await axios.delete(`${API_ENDPOINTS.BASE_URL}/posts/delete/${id}`);
     } catch (error) {
-      console.error("Lỗi khi xóa bài viết:", error.response?.data || error.message);
-      throw error.response?.data || error.message;
+      console.error('Lỗi khi xóa bài viết:', error);
+      throw error;
     }
-  },
+  }
 };
 
 export default postService;

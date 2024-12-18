@@ -58,7 +58,7 @@ const BorrowHistory = () => {
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md space-y-6">
-      <h1 className="text-2xl font-semibold text-gray-800 mb-4">Lịch Sử Phiếu Mượn Đã Trả</h1>
+      <h1 className="text-2xl font-bold mb-4">Lịch Sử Phiếu Mượn Đã Trả</h1>
 
       {/* Thanh tìm kiếm */}
       <div className="mb-5">
