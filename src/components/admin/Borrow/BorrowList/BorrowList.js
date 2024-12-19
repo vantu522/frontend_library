@@ -42,7 +42,7 @@ const BorrowList = () => {
       await borrowService.returnBook({
         name: borrowData.memberName,
         title: borrowData.bookTitle,
-        numberPhone: borrowData.phoneNumber,
+        phoneNumber: borrowData.phoneNumber,
       });
       toast.success(`Sách "${borrowData.bookTitle}" đã được trả thành công.`);
       setBorrows((prev) =>

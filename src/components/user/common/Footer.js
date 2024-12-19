@@ -20,7 +20,7 @@ function Footer() {
   };
 
   return (
-    <footer className="bg-gray-950 text-white py-8 relative">
+    <footer className="bg-gray-900 text-white py-8 relative">
       {/* Gradient bar */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-green-500 to-blue-500"></div>
 
@@ -56,19 +56,19 @@ function Footer() {
           </h2>
           <ul className="list-none p-0 m-0">
             <li className="mb-2 text-sm flex items-center gap-2">
-              <FontAwesomeIcon icon={faPhone} className="text-green-400 w-4" />{" "}
+              <FontAwesomeIcon icon={faPhone} className="text-white-400 w-4" />{" "}
               0000-XXXXXX
             </li>
             <li className="mb-2 text-sm flex items-center gap-2">
-              <FontAwesomeIcon icon={faEnvelope} className="text-green-400 w-4" />{" "}
+              <FontAwesomeIcon icon={faEnvelope} className="text-white-400 w-4" />{" "}
               library@wisdombeacon.com
             </li>
             <li className="mb-2 text-sm flex items-center gap-2">
-              <FontAwesomeIcon icon={faMapMarkerAlt} className="text-green-400 w-4" />{" "}
+              <FontAwesomeIcon icon={faMapMarkerAlt} className="text-white-400 w-4" />{" "}
               122 Hoàng Quốc Việt, Cầu Giấy, HN
             </li>
             <li className="mb-2 text-sm flex items-center gap-2">
-              <FontAwesomeIcon icon={faClock} className="text-green-400 w-4" />{" "}
+              <FontAwesomeIcon icon={faClock} className="text-white-400 w-4" />{" "}
               08:00 - 18:00 (Thứ 2 - Thứ 7)
             </li>
           </ul>

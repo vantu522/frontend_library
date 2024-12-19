@@ -10,6 +10,7 @@ const Header = () => {
   const [notifications, setNotifications] = useState([]);
   const [favoriteBooks, setFavoriteBooks] = useState([]);
   const [showFavorites, setShowFavorites] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -34,6 +35,7 @@ const Header = () => {
     }
   }, []);
 
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollPos = window.pageYOffset;
@@ -44,6 +46,8 @@ const Header = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [prevScrollPos]);
+
+  
 
   const handleLogout = () => {
     // Xóa thông tin người dùng khỏi localStorage
