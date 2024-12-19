@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Modal from "../../../common/admin/Modal/Modal";
 import Table from "../../../common/admin/Table/Table";
 import Tooltip from "../../../common/admin/Tooltip/Tooltip";
-import Pagination from "../../../common/admin/Pagination"; // Adjust import path as needed
+import Pagination from "../../../common/admin/Pagination";
 import AddReaderForm from "./AddReaderForm";
 import EditReaderForm from "./EditReaderForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,9 +11,6 @@ import { faEdit, faTrash, faInfoCircle, faPlus } from "@fortawesome/free-solid-s
 import memberService from "../../../services/admin/memberService";
 import { toast } from 'react-toastify';
 
-// Keep existing Modal components (DeleteModal and InfoModal) as they were...
-// (Copy the existing DeleteModal and InfoModal code from the previous implementation)
-// Modal Xóa
 const DeleteModal = ({ isOpen, onConfirm, onCancel }) => (
   <Modal onClose={onCancel} isOpen={isOpen}>
     <div className="p-6 text-center">
@@ -30,7 +27,6 @@ const DeleteModal = ({ isOpen, onConfirm, onCancel }) => (
   </Modal>
 );
 
-// Modal Thông Tin
 const InfoModal = ({ isOpen, onClose, selectedReader }) => (
   <Modal onClose={onClose} isOpen={isOpen}>
     <div className="p-6">
@@ -40,7 +36,7 @@ const InfoModal = ({ isOpen, onClose, selectedReader }) => (
           <ul>
             {selectedReader.borrowedBooks.map((book, index) => (
               <li key={index} className="mb-4">
-                <p><strong>Tựa sách:</strong> {book.title}</p>
+                <p><strong>Tựa sách:</strong> {book.bookTitle}</p>
                 <p><strong>Ngày mượn:</strong> {book.borrowDate}</p>
                 <p><strong>Ngày trả dự kiến:</strong> {book.dueDate}</p>
                 <p>
@@ -60,13 +56,9 @@ const InfoModal = ({ isOpen, onClose, selectedReader }) => (
       ) : (
         <p>Không có thông tin độc giả.</p>
       )}
-
     </div>
   </Modal>
 );
-
-
-
 
 const ReaderList = () => {
   const reader = useSelector((state) => state.reader || []);
@@ -81,10 +73,10 @@ const ReaderList = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  
+
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 17;
 
   useEffect(() => {
     const fetchMembers = async () => {
@@ -99,7 +91,6 @@ const ReaderList = () => {
       }
     };
 
-    // Nếu dữ liệu không đến từ server mà từ Redux
     if (reader.length > 0) {
       setReaderData(reader);
     } else {
@@ -107,49 +98,33 @@ const ReaderList = () => {
     }
   }, []);
 
+  // Filter readers based on search term
   const filteredReaders = readerData.filter((reader) => {
-    const nameMatch = reader.name && reader.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const emailMatch = reader.email && reader.email.toLowerCase().includes(searchTerm.toLowerCase());
-    return nameMatch || emailMatch;
+    const search = searchTerm.toLowerCase();
+    const nameMatch = reader.name && reader.name.toLowerCase().includes(search);
+    const emailMatch = reader.email && reader.email.toLowerCase().includes(search);
+    const phoneMatch = reader.phoneNumber && reader.phoneNumber.toLowerCase().includes(search);
+    return nameMatch || emailMatch || phoneMatch;
   });
-  
- 
-  // Pagination logic
+
+  // Pagination
   const totalPages = Math.ceil(filteredReaders.length / itemsPerPage);
   const paginatedReaders = filteredReaders.slice(
     (currentPage - 1) * itemsPerPage, 
     currentPage * itemsPerPage
   );
 
-  // Reset current page when search term changes
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm]);
 
   const columns = [
-    { 
-      label: "Tên", 
-      field: "name",
-      width: "20%" 
-    },
-    { 
-      label: "Email", 
-      field: "email",
-      width: "25%" 
-    },
-    { 
-      label: "Địa Chỉ", 
-      field: "address",
-      width: "20%" 
-    },
-    { 
-      label: "Số Điện Thoại", 
-      field: "phoneNumber",
-      width: "15%" 
-    },
+    { label: "Tên", field: "name", },
+    { label: "Email", field: "email",  },
+    { label: "Địa Chỉ", field: "address",},
+    { label: "Số Điện Thoại", field: "phoneNumber",},
     {
       label: "Hành động",
-      width: "20%",
       render: (val, row) => (
         <div className="flex gap-3 justify-center">
           <Tooltip content="Xem thông tin" position="left">
@@ -199,7 +174,6 @@ const ReaderList = () => {
       setDeleteModalOpen(false);
       toast.success("Xóa độc giả thành công!");
       
-      // Adjust pagination if needed
       if (paginatedReaders.length === 1 && currentPage > 1) {
         setCurrentPage(currentPage - 1);
       }
@@ -215,7 +189,7 @@ const ReaderList = () => {
       <div className="flex justify-between items-center mb-6">
         <input
           type="text"
-          placeholder="Tìm kiếm độc giả..."
+          placeholder="Tìm kiếm độc giả theo tên, email, số điện thoại..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -250,8 +224,7 @@ const ReaderList = () => {
           )}
         </>
       )}
-      
-      {/* Modal sections remain the same as in the original code */}
+
       <Modal onClose={() => setVisibleForm(false)} isOpen={visibleForm}>
         {isEdit ? (
           <EditReaderForm
@@ -268,16 +241,14 @@ const ReaderList = () => {
           />
         ) : (
           <AddReaderForm
-          onClose={() => setVisibleForm(false)}
-          onAdd={(newReader) => {
-            // Cập nhật state local ngay lập tức
-            setReaderData((prev) => [...prev, newReader]);
-          }}
-        />
+            onClose={() => setVisibleForm(false)}
+            onAdd={(newReader) => {
+              setReaderData((prev) => [...prev, newReader]);
+            }}
+          />
         )}
       </Modal>
-      
-      {/* Existing modal components */}
+
       <InfoModal
         isOpen={infoModalOpen}
         onClose={() => setInfoModalOpen(false)}

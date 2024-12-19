@@ -4,14 +4,14 @@ import AdminLayout from '../components/admin/layout/AdminLayout/AdminLayout';
 import Dashboard from '../components/admin/AdminDashboard/AdminDashboard';
 import ChangePassword from '../components/admin/ChangePassword/ChangePassword';
 import BookList from '../components/admin/Books/BookList/BookList';
-import BorrowList from '../components/admin/Borrow/BorrowList/BorrowList';
+import BorrowList from '../components/admin/Borrow/BorrowList';
 import Reader from '../components/admin/Reader/ReaderList';
 import FeedBack from '../components/admin/Feedback/FeedbackList';
 import ArchivedFeedback from '../components/admin/Feedback/ArchivedFeedbackList';
-import BorrowHistory from '../components/admin/Borrow/BorrowHistory/BorrowHistory';
+import BorrowHistory from '../components/admin/Borrow/BorrowHistory';
 import CategoryList from '../components/admin/Books/CategoryList/CategoryList';
 import PostList from '../components/admin/PostList/PostList';
-import PendingBorrowList from '../components/admin/Borrow/PendingBorrowList/PendingBorrowList';
+import PendingBorrowList from '../components/admin/Borrow/PendingBorrowList';
 import RenewHistoryList from '../components/admin/Borrow/RenewHistoryList';
 
 const AdminRoutes = () => {

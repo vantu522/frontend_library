@@ -27,9 +27,11 @@ const RenewHistoryList = () => {
 
   // Lọc dữ liệu theo tìm kiếm
   const filteredBooks = renewedBooks.filter(item => {
+    const searchLower = searchTerm.toLowerCase();
     return (
-      item.bookTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.memberName.toLowerCase().includes(searchTerm.toLowerCase())
+      item.bookTitle.toLowerCase().includes(searchLower) ||  // Tìm theo tên sách
+      item.memberName.toLowerCase().includes(searchLower) || // Tìm theo tên người mượn
+      item.phoneNumber.includes(searchLower)                // Tìm theo số điện thoại
     );
   });
 
@@ -37,22 +39,23 @@ const RenewHistoryList = () => {
   const columns = [
     { label: 'Tên người mượn', field: 'memberName' },
     { label: 'Tên sách', field: 'bookTitle' },
+    { label: 'Tác giả', field: 'author' },
     { label: 'Số điện thoại', field: 'phoneNumber' },
-    { label: 'Ngày gia hạn', field: 'renewalDate' },
-    { label: 'Thời gian gia hạn', field: 'renewalPeriod' },
+    { label: 'Ngày gia hạn', field: 'transactionDate' },
+    { label: 'Hạn mới ', field: 'dueDate' },
   ];
 
   return (
     <div className="p-5 font-sans">
-      <h1 className="text-2xl font-bold mb-4">Sách Đã Gia Hạn</h1>
+      <h1 className="text-2xl font-bold mb-4">Lịch Sử Gia Hạn</h1>
 
       {/* Tìm kiếm */}
       <div className="mb-5">
         <input
           type="text"
-          placeholder="Tìm kiếm..."
+          placeholder="Tìm kiếm theo tên người mượn hoặc số điện thoại..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => setSearchTerm(e.target.value)}  // Cập nhật searchTerm khi người dùng nhập
           className="p-2 border rounded-md w-64"
         />
       </div>
