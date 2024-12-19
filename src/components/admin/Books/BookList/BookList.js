@@ -1,20 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import Modal from "../../../../common/admin/Modal/Modal";
 import Table from "../../../../common/admin/Table/Table";
 import Tooltip from "../../../../common/admin/Tooltip/Tooltip";
 import AddBookForm from "../AddBookForm/AddBookForm";
 import EditBookForm from "../EditBookForm/EditBookForm";
-import { deleteBook, updateBook, addBook, fetchBooks } from "../../../../redux/admin/booksReducer";
 import { FaEdit, FaTrashAlt, FaPlus, FaExclamationCircle, FaTimes } from "react-icons/fa";
 import bookService from "../../../../services/admin/booksService";
 import { toast } from "react-toastify";
 import Pagination from "../../../../common/admin/Pagination";
 
 const BookList = () => {
-  const books = useSelector((state) => state.books);
-  const dispatch = useDispatch();
-
+  const [books, setBooks] = useState([]);
   const [visibleForm, setVisibleForm] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [bookId, setBookId] = useState(null);
@@ -34,17 +30,9 @@ const BookList = () => {
       try {
         setIsLoading(true);
         const resData = await bookService.fetchAllBooks(currentPage + 1, booksPerPage); // Truyền page và size
-        dispatch(
-          fetchBooks({
-            books: resData.data,
-            currentPage: resData.currentPage - 1, // Chuyển về chỉ số 0-based
-            totalPages: resData.totalPages,
-            totalItems: resData.totalItems,
-            booksPerPage: resData.size,
-          })
-        );
-        toast.success("Tải sách thành công");
+        setBooks(resData.data);
         setTotalPages(resData.totalPages);
+        toast.success("Tải sách thành công");
       } catch (error) {
         console.error("Failed to load books", error);
         toast.error("Không thể tải danh sách sách");
@@ -54,13 +42,13 @@ const BookList = () => {
     };
 
     loadBooks();
-  }, [dispatch, currentPage, booksPerPage]); // Thêm dependencies để gọi lại khi `currentPage` hoặc `booksPerPage` thay đổi
+  }, [currentPage, booksPerPage]); // Thêm dependencies để gọi lại khi `currentPage` hoặc `booksPerPage` thay đổi
 
   const handleDeleteBook = async () => {
     if (bookToDelete) {
       try {
         await bookService.deleteBook(bookToDelete.id);
-        dispatch(deleteBook(bookToDelete.id));
+        setBooks(books.filter(book => book.id !== bookToDelete.id));
         toast.success(`Đã xóa sách "${bookToDelete.title}"`);
         setShowDeleteConfirm(false);
         setBookToDelete(null);
@@ -80,7 +68,7 @@ const BookList = () => {
       };
       
       await bookService.updateBook(book.id, updatedBook);
-      dispatch(updateBook(updatedBook));
+      setBooks(books.map(b => b.id === book.id ? updatedBook : b));
       toast.success(`Cập nhật trạng thái sách "${book.title}"`);
     } catch (error) {
       console.error("Failed to update book status", error);
@@ -101,16 +89,15 @@ const BookList = () => {
       setSearchResults([]);
     }
   };
-
-  const filteredBooks = Array.isArray(books?.data) ? books.data.filter((book) => {
+  
+  const filteredBooks = books.filter((book) => {
     const matchesSearch =
-      (book.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (typeof book.author === 'string' ? book.author : '').toLowerCase().includes(searchTerm.toLowerCase());
+      (book.title || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
+      (typeof book.author === 'string' ? book.author.toLowerCase() : '').includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || book.status === statusFilter;
     const matchesGenre = genreFilter === "all" || book.genre === genreFilter;
     return matchesSearch && matchesStatus && matchesGenre;
-  }) : [];
-  
+  });
 
   const columns = [
     { 
@@ -223,7 +210,7 @@ const BookList = () => {
             onUpdate={async (book) => {
               try {
                 await bookService.updateBook(bookId, book);
-                dispatch(updateBook(book));
+                setBooks(books.map(b => b.id === bookId ? book : b));
                 toast.success(`Cập nhật sách "${book.title}" thành công`);
                 setVisibleForm(false);
               } catch (error) {
@@ -238,7 +225,7 @@ const BookList = () => {
             onAdd={async (book) => {
               try {
                 const newBook = await bookService.addBook(book);
-                dispatch(addBook(newBook));
+                setBooks([...books, newBook]);
                 toast.success(`Thêm sách "${book.title}" thành công`);
                 setVisibleForm(false);
               } catch (error) {
@@ -324,24 +311,17 @@ const BookList = () => {
         </div>
       </div>
 
-      {isLoading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-blue-500"></div>
-        </div>
-      ) : (
-        <div>
-          <Table 
-            columns={columns} 
-            data={filteredBooks} 
-            emptyMessage="Không có sách nào được tìm thấy" 
-          />
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        </div>
-      )}
+      <Table
+        data={filteredBooks}
+        columns={columns}
+        isLoading={isLoading}
+      />
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(page) => setCurrentPage(page)}
+      />
     </div>
   );
 };
