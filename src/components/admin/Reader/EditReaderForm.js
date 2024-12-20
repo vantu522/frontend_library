@@ -7,6 +7,7 @@ const EditReaderForm = ({ reader, onClose, onUpdate }) => {
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [booksBorrowed, setBooksBorrowed] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -16,6 +17,7 @@ const EditReaderForm = ({ reader, onClose, onUpdate }) => {
       setEmail(reader.email);
       setAddress(reader.address);
       setPhoneNumber(reader.phoneNumber);
+      setBooksBorrowed(reader.booksBorrowed);
     }
   }, [reader]);
 
@@ -61,6 +63,16 @@ const EditReaderForm = ({ reader, onClose, onUpdate }) => {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
+          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
+      <div>
+        <label className="block font-medium text-gray-700">Đang mượn:</label>
+        <input
+          type="booksBorrowed"
+          value={booksBorrowed}
+          onChange={(e) => setBooksBorrowed(e.target.value)}
           required
           className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
         />

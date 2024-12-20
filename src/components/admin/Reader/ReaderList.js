@@ -123,6 +123,7 @@ const ReaderList = () => {
     { label: "Email", field: "email",  },
     { label: "Địa Chỉ", field: "address",},
     { label: "Số Điện Thoại", field: "phoneNumber",},
+    { label: "Đang mượn", field:"booksBorrowed"},
     {
       label: "Hành động",
       render: (val, row) => (
