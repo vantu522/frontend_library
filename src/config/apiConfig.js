@@ -3,7 +3,8 @@ export const API_ENDPOINTS = {
   USER: {
     BOOKS: '/books/categories',
     BOOK: '/books',
-    SUGGESTBOOK:'/books/suggest'
+    SUGGESTBOOK:'/books/suggest',
+    CATEGORYBOOK:'/books/categories'
   },
   ADMIN: {
     BOOKS: '/books',
@@ -28,7 +29,7 @@ export const API_ENDPOINTS = {
     APPROVE: '/transactions/approve',
   },
   STATISTICS: {
-    CATEGORY: '/books/category-distribution'
+    CATEGORY: '/books/category-distribution',
   },
   TRANSACTIONS:{
     BORROW:'/transactions/borrow'

@@ -14,6 +14,7 @@ module.exports = {
       },
       colors: {
         grayy: '#4B4B4B',
+        custom: 'rgba(255, 255, 255, 0.2)'
       },
       keyframes: {
         fadeIn: {
