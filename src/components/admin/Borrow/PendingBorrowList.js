@@ -39,21 +39,23 @@ const PendingBorrowList = () => {
         phoneNumber: borrow.phoneNumber,
         isAprove: isAprove,
       };
-
+  
       await borrowService.approveTransaction(payload);
-
+  
       toast.success(
         isAprove
           ? `Phiếu mượn "${borrow.bookTitle}" đã được xác nhận.`
           : `Phiếu mượn "${borrow.bookTitle}" đã bị từ chối.`
       );
-
-      setBorrows((prev) => prev.filter((b) => b.id !== borrow.id));
+  
       setShowConfirmModal(false);
+      // Tải lại danh sách từ API
+      await fetchPendingBorrowList();
     } catch (error) {
       toast.error('Lỗi khi cập nhật trạng thái phiếu mượn.');
     }
   };
+  
 
   // Hàm tìm kiếm với debounce
   const debouncedSearch = debounce((e) => {
