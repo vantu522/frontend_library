@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import memberService from "../../../services/admin/memberService";
 import { toast } from "react-toastify";
+import { motion, AnimatePresence } from 'framer-motion';
+
 
 const EditReaderForm = ({ reader, onClose, onUpdate }) => {
   const [name, setName] = useState("");
@@ -47,71 +49,81 @@ const EditReaderForm = ({ reader, onClose, onUpdate }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-4 p-6 bg-white rounded-lg shadow-lg"
+      className="space-y-6 p-6 bg-white rounded-lg shadow-lg "
     >
-      <div>
-        <label className="block font-medium text-gray-700">Id:</label>
-        <input
-          type="text"
-          disabled
-          value={reader.memberId}
-          // onChange={(e) => setMemberId(e.target.value)}
-          // required
-          className="w-full mt-1 p-2 bg-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
+      <h1 className="uppercase"><strong>Chỉnh sửa người dùng</strong></h1>
+      <div className="grid grid-cols-2 gap-10">
+        {/* Cột trái */}
+        <div className="space-y-4">
+          <div>
+            <label className="block font-medium text-gray-700">ID:</label>
+            <input
+              type="text"
+              disabled
+              value={reader.memberId}
+              className="w-full mt-1 p-2 bg-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+          <div>
+            <label className="block font-medium text-gray-700">Tên:</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+          <div>
+            <label className="block font-medium text-gray-700">Email:</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+        </div>
+
+        {/* Cột phải */}
+        <div className="space-y-4">
+          <div>
+            <label className="block font-medium text-gray-700">Đang mượn:</label>
+            <input
+              type="number"
+              value={booksBorrowed}
+              onChange={(e) => setBooksBorrowed(e.target.value)}
+              required
+              className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+          <div>
+            <label className="block font-medium text-gray-700">Địa chỉ:</label>
+            <input
+              type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+          <div>
+            <label className="block font-medium text-gray-700">Số điện thoại:</label>
+            <input
+              type="text"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+        </div>
       </div>
-      <div>
-        <label className="block font-medium text-gray-700">Tên:</label>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-      </div>
-      <div>
-        <label className="block font-medium text-gray-700">Email:</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-      </div>
-      <div>
-        <label className="block font-medium text-gray-700">Đang mượn:</label>
-        <input
-          type="number"
-          value={booksBorrowed}
-          onChange={(e) => setBooksBorrowed(e.target.value)}
-          required
-          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-      </div>
-      <div>
-        <label className="block font-medium text-gray-700">Địa Chỉ:</label>
-        <input
-          type="text"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-      </div>
-      <div>
-        <label className="block font-medium text-gray-700">Số Điện Thoại:</label>
-        <input
-          type="text"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-          className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-      </div>
+
+      {/* Phần error và button submit ở dưới cùng */}
       {error && (
         <div className="text-red-500 text-sm">{error}</div>
       )}
-      <div className="flex gap-4 mt-6">
+      <div className="flex gap-4">
         <button
           type="submit"
           disabled={isLoading}
@@ -125,3 +137,5 @@ const EditReaderForm = ({ reader, onClose, onUpdate }) => {
 };
 
 export default EditReaderForm;
+
+

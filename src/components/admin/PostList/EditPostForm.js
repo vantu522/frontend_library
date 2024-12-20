@@ -16,7 +16,6 @@ const EditPostForm = ({ post, onClose, onUpdate }) => {
       setTitle(post.title);
       setContent(post.content);
       setAuthor(post.author);
-      setCreatedAt(post.createdAt ? post.createdAt.split('T')[0] : "");
       setStatus(post.status === "công khai" ? "công khai" : "ẩn");
     }
   }, [post]);
@@ -32,7 +31,7 @@ const EditPostForm = ({ post, onClose, onUpdate }) => {
       return;
     }
 
-    const updatedPost = { title, content, author, createdAt, status };
+    const updatedPost = {id:post.id, title, content, author, status };
 
     try {
       await postService.updatePost(post.id, updatedPost);

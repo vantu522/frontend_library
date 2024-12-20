@@ -31,83 +31,64 @@ const DeleteModal = ({ isOpen, onConfirm, onCancel }) => (
 
 
 const InfoModal = ({ isOpen, onClose, selectedReader, borrowingInfo }) => (
-  <AnimatePresence>
-    {isOpen && (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-        onClick={onClose}
-      >
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-          className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 overflow-hidden"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="p-6 space-y-6">
-            <div className="flex justify-between items-center border-b pb-3">
-              <h2 className="text-2xl font-bold text-gray-800">Thông Tin Sách Đang Mượn</h2>
-              <button
-                onClick={onClose}
-                className="text-gray-400 hover:text-gray-600 transition duration-150"
-              >
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            {selectedReader ? (
-              borrowingInfo.borrowedAndRenewedBooks && borrowingInfo.borrowedAndRenewedBooks.length > 0 ? (
-                <div className="space-y-6">
-                  <div className="bg-gray-100 p-4 rounded-lg">
-                    <h3 className="font-semibold text-lg text-gray-800 mb-2">Thông tin độc giả</h3>
-                    <p><strong>Họ và tên:</strong> {borrowingInfo.memberName}</p>
-                    <p><strong>Số điện thoại:</strong> {borrowingInfo.phoneNumber}</p>
-                    <p><strong>Email:</strong> {borrowingInfo.email}</p>
-                  </div>
-                  <div className="space-y-4">
-                    <h3 className="font-semibold text-lg text-gray-800">Sách đang mượn</h3>
-                    {borrowingInfo.borrowedAndRenewedBooks.map((book, index) => (
-                      <div key={index} className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-                        <p className="font-medium text-lg text-gray-800 mb-2">{book.bookTitle}</p>
-                        <div className="grid grid-cols-2 gap-2 text-sm">
-                          <p><strong>Ngày mượn:</strong> {book.transactionDate}</p>
-                          <p><strong>Ngày trả dự kiến:</strong> {book.dueDate}</p>
-                          <p>
-                            <strong>Trạng thái:</strong>{" "}
-                            <span className={`font-medium ${
-                              book.status === "returned" ? "text-green-600" :
-                              book.status === "overdue" ? "text-red-600" : "text-blue-600"
-                            }`}>
-                              {book.status === "returned"
-                                ? "Đã trả"
-                                : book.status === "overdue"
-                                ? "Quá hạn"
-                                : "Đang mượn"}
-                            </span>
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <p className="text-gray-600 text-center py-8">Độc giả này hiện không mượn sách nào.</p>
-              )
-            ) : (
-              <p className="text-gray-600 text-center py-8">Không có thông tin độc giả.</p>
-            )}
-          </div>
-        </motion.div>
-      </motion.div>
-    )}
-  </AnimatePresence>
-);
+  <Modal isOpen={isOpen} onClose={onClose}>
+    <div className="max-h-[80vh] overflow-y-auto">
+      <div className="space-y-6">
+        <div className="flex justify-between items-center border-b pb-3 sticky top-0 bg-white z-10">
+          <h2 className="text-2xl font-bold text-gray-800">Thông Tin Sách Đang Mượn</h2>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 transition duration-150"
+          >
+          </button>
+        </div>
 
+        {selectedReader ? (
+          borrowingInfo.borrowedAndRenewedBooks && borrowingInfo.borrowedAndRenewedBooks.length > 0 ? (
+            <div className="space-y-6">
+              <div className="bg-gray-100 p-4 rounded-lg">
+                <h3 className="font-semibold text-lg text-gray-800 mb-2">Thông tin độc giả</h3>
+                <p><strong>Họ và tên:</strong> {borrowingInfo.memberName}</p>
+                <p><strong>Số điện thoại:</strong> {borrowingInfo.phoneNumber}</p>
+                <p><strong>Email:</strong> {borrowingInfo.email}</p>
+              </div>
+              
+              <div className="space-y-4">
+                <h3 className="font-semibold text-lg text-gray-800">Sách đang mượn</h3>
+                {borrowingInfo.borrowedAndRenewedBooks.map((book, index) => (
+                  <div key={index} className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                    <p className="font-medium text-lg text-gray-800 mb-2">{book.bookTitle}</p>
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <p><strong>Ngày mượn:</strong> {book.transactionDate}</p>
+                      <p><strong>Ngày trả dự kiến:</strong> {book.dueDate}</p>
+                      <p>
+                        <strong>Trạng thái:</strong>{" "}
+                        <span className={`font-medium ${
+                          book.status === "returned" ? "text-green-600" :
+                          book.status === "overdue" ? "text-red-600" : "text-blue-600"
+                        }`}>
+                          {book.status === "returned"
+                            ? "Đã trả"
+                            : book.status === "overdue"
+                            ? "Quá hạn"
+                            : "Đang mượn"}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <p className="text-gray-600 text-center py-8">Độc giả này hiện không mượn sách nào.</p>
+          )
+        ) : (
+          <p className="text-gray-600 text-center py-8">Không có thông tin độc giả.</p>
+        )}
+      </div>
+    </div>
+  </Modal>
+);
 
 
 
@@ -277,9 +258,10 @@ const ReaderList = () => {
         </button>
       </div>
       {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-blue-500"></div>
-        </div>
+        <div className="flex justify-center items-center h-screen mt-[-150px] ">
+         <div className="animate-spin rounded-full h-12 w-12 border-b-2  border-gray-900"></div>
+         <span className="ml-4 text-gray-700">Đang tải danh sách...</span>
+       </div>
       ) : error ? (
         <p className="text-red-500">{error}</p>
       ) : (

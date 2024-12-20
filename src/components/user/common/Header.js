@@ -161,7 +161,7 @@ const Header = () => {
                   aria-label="Tìm sản phẩm"
                   placeholder={placeholder}
                   autoComplete="off"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-l-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                  className="w-full px-4 py-2 border border-gray-400 rounded-l-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
                 />
                 <button
                   type="submit"
