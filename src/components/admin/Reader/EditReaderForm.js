@@ -10,6 +10,7 @@ const EditReaderForm = ({ reader, onClose, onUpdate }) => {
   const [booksBorrowed, setBooksBorrowed] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [borrowingMem, setBorrowingMem] = useState([]);
 
   useEffect(() => {
     if (reader) {
@@ -20,13 +21,14 @@ const EditReaderForm = ({ reader, onClose, onUpdate }) => {
       setBooksBorrowed(reader.booksBorrowed);
     }
   }, [reader]);
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
   
-    const updatedReader = { id: reader.memberId, name, email, address, phoneNumber };
+    const updatedReader = { id: reader.memberId, name, email, address, phoneNumber, booksBorrowed };
   
     try {
       const result = await memberService.updateMember(reader.memberId, updatedReader);
@@ -47,6 +49,17 @@ const EditReaderForm = ({ reader, onClose, onUpdate }) => {
       onSubmit={handleSubmit}
       className="space-y-4 p-6 bg-white rounded-lg shadow-lg"
     >
+      <div>
+        <label className="block font-medium text-gray-700">Id:</label>
+        <input
+          type="text"
+          disabled
+          value={reader.memberId}
+          // onChange={(e) => setMemberId(e.target.value)}
+          // required
+          className="w-full mt-1 p-2 bg-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
       <div>
         <label className="block font-medium text-gray-700">Tên:</label>
         <input
@@ -70,7 +83,7 @@ const EditReaderForm = ({ reader, onClose, onUpdate }) => {
       <div>
         <label className="block font-medium text-gray-700">Đang mượn:</label>
         <input
-          type="booksBorrowed"
+          type="number"
           value={booksBorrowed}
           onChange={(e) => setBooksBorrowed(e.target.value)}
           required

@@ -17,7 +17,7 @@ const EditPostForm = ({ post, onClose, onUpdate }) => {
       setContent(post.content);
       setAuthor(post.author);
       setCreatedAt(post.createdAt ? post.createdAt.split('T')[0] : "");
-      setStatus(post.status === "Công khai" ? "Công khai" : "Ẩn danh");
+      setStatus(post.status === "công khai" ? "công khai" : "ẩn");
     }
   }, [post]);
 
@@ -106,8 +106,8 @@ const EditPostForm = ({ post, onClose, onUpdate }) => {
             onChange={(e) => setStatus(e.target.value)}
             className="mt-1 p-3 w-full border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
           >
-            <option value="Công khai">Công khai</option>
-            <option value="Ẩn danh">Ẩn danh</option>
+            <option value="Công khai">công khai</option>
+            <option value="Ẩn danh">ẩn</option>
           </select>
         </div>
 

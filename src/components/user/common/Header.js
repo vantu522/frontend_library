@@ -2,6 +2,39 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { UserCircle, Bell, LogOut, Heart, ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import bookService from '../../../services/admin/booksService';
+import { createSlug } from '../../../utils/slugify';
+
+const MegaMenu = ({categories}) => {
+ 
+
+  return (
+    <div className="absolute top-[100%] left-0 w-full bg-white shadow-lg py-6 opacity-0 transform scale-y-0 group-hover:opacity-100 group-hover:scale-y-100 transition-all duration-300 ease-out origin-top border-t border-gray-100 z-50">
+      <div className="max-w-7xl mx-auto px-8">
+        <div className="grid grid-cols-3 gap-6">
+          {categories.map((category, index) => (
+            <a 
+              key={index}
+              href={`/category/${createSlug(category)}`}
+              className="p-3 rounded-lg transition-all duration-200 block group/item"
+            >
+              <div className="flex items-start space-x-4">
+                {/* <div className="text-2xl w-8 text-center">{category}</div> */}
+                <div className="flex-1">
+                  <h3 className="text-base uppercase font-semibold text-gray-800 hover:text-blue-600 transition-colors">
+                    {category}
+                  </h3>
+                  
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
 
 const Header = () => {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
@@ -107,7 +140,7 @@ const Header = () => {
         } bg-white shadow-md`}
       >
         {/* Top header - giới hạn width */}
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-2">
           <div className="flex justify-between items-center py-4 ">
             <a href="/" className=" items-center gap-4">
               <img
@@ -207,32 +240,34 @@ const Header = () => {
         </div>
 
         {/* Navigation Menu - full width background */}
-        <div className="w-full bg-[#0abaff]">
-          <div className="max-w-7xl mx-auto">
+        <div className="w-full bg-[#0abaff] h-12">
+          <div className="max-w-6xl mx-auto">
             <nav>
               <ul className="flex justify-center">
-                <li className="group relative px-4 py-2">
-                  <a href="/" className="flex items-center text-sm uppercase text-[#fff] p-1.5 hover:bg-[#0aa7e6] font-medium">
+                <li className="group relative px-4 py-2 hover:bg-custom">
+                  <a href="/" className="flex items-center text-sm uppercase text-[#fff] p-1.5  font-medium">
                     Trang chủ
                   </a>
                 </li>
 
-                <li className="group relative px-4 py-2">
-                  <a href="/category" className="flex items-center text-sm uppercase text-[#fff] p-1.5 hover:bg-[#0aa7e6] font-medium">
+                <li className="group  px-4 py-2 hover:bg-custom">
+                  <a href="/category" className="flex items-center text-sm uppercase text-[#fff] p-1.5  font-medium">
                     Danh mục
                     <ChevronDown className="w-4 h-4 ml-1" />
                   </a>
+                  {/* Thêm MegaMenu component ở đây */}
+                  <MegaMenu categories={categories} />
                 </li>
 
-                <li className="group relative px-4 py-2">
-                  <a href="/news" className="flex items-center text-sm uppercase text-[#fff] p-1.5 hover:bg-[#0aa7e6] font-medium">
+                <li className="group relative px-4 py-2 hover:bg-custom">
+                  <a href="/news" className="flex items-center text-sm uppercase text-[#fff] p-1.5 font-medium">
                     Tin tức
                     <ChevronDown className="w-4 h-4 ml-1" />
                   </a>
                 </li>
 
-                <li className="group relative px-4 py-2">
-                  <a href="/shopcart" className="flex items-center text-sm uppercase text-[#fff] p-1.5 hover:bg-[#0aa7e6] font-medium">
+                <li className="group relative px-4 py-2 hover:bg-custom">
+                  <a href="/shopcart" className="flex items-center text-sm uppercase text-[#fff] p-1.5  font-medium">
                     Giỏ sách
                   </a>
                 </li>

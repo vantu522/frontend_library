@@ -97,7 +97,28 @@ const memberService = {
             console.error('Service error:', error);
             throw error;
         }
-    }
+    },
+
+    fetchBorrowingMem: async(memberId) =>{
+        try{
+            const response = await axios.get(
+                `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.MEMBERS}/${memberId}/borrowed-renewed-books`,
+                {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            return response.data;
+        } catch (error) {
+            console.error("Service error:", error);
+            throw error;
+        }
+    },
+            
+    
 };
 
 export default memberService;
