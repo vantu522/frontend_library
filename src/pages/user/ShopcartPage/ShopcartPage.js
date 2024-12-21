@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const ShopCart = () => {
+const Booklist = () => {
   const [cart, setCart] = useState([]);
   const [history, setHistory] = useState([]);
   const [viewHistory, setViewHistory] = useState(false);
@@ -95,4 +95,4 @@ const ShopCart = () => {
   );
 };
 
-export default ShopCart;
+export default Booklist;
