@@ -38,8 +38,8 @@ const bookService = {
   },
 
   // Lấy sách thuộc thể loại nhỏ
-  fetchBooksBySubCategory: async (subCategoryName) => {
-    return axios.get(`${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.CATEGORIES}/${subCategoryName}/books`, {
+  fetchBooksBySubCategory: async (bigCategoryName, subCategoryName) => {
+    return axios.get(`${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.CATEGORIES}/${bigCategoryName}/${subCategoryName}/books`, {
       headers: {
         'Accept': 'application/json',
       }

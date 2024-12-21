@@ -4,20 +4,27 @@ import bookService from "../../../../services/admin/booksService";  // Import bo
 const AddBookForm = ({ setVisibleForm }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
-  const [genre, setGenre] = useState("");
   const [quantity, setQuantity] = useState(1);
-  const [status, setStatus] = useState("available");
   const [description, setDescription] = useState("");
+  const [publicationYear, setPublicationYear] = useState("");
+  const [bigCategory, setBigCategory] = useState({ name: "", smallCategory: [] });
+  const [img, setImg] = useState("");
+  const [nxb, setNxb] = useState("");
+  const [pageCount, setPageCount] = useState(0);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newBook = {
       title,
-      author,
-      genre,
-      quantity,
-      status,
       description,
+      author: [author],
+      publicationYear,
+      bigCategory,
+      quantity,
+      availability: quantity > 0,
+      img,
+      nxb,
+      pageCount,
     };
     try {
       const response = await bookService.addBook(newBook);
@@ -55,16 +62,6 @@ const AddBookForm = ({ setVisibleForm }) => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Thể loại</label>
-          <input
-            type="text"
-            value={genre}
-            onChange={(e) => setGenre(e.target.value)}
-            placeholder="Thể loại"
-            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-        <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-1">Số lượng</label>
           <input
             type="number"
@@ -75,17 +72,6 @@ const AddBookForm = ({ setVisibleForm }) => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Trạng thái</label>
-          <select
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          >
-            <option value="available">Còn Sách</option>
-            <option value="unavailable">Hết Sách</option>
-          </select>
-        </div>
-        <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-1">Mô tả</label>
           <textarea
             value={description}
@@ -93,6 +79,65 @@ const AddBookForm = ({ setVisibleForm }) => {
             placeholder="Mô tả sách"
             className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           ></textarea>
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Năm xuất bản</label>
+          <input
+            type="number"
+            value={publicationYear}
+            onChange={(e) => setPublicationYear(e.target.value)}
+            placeholder="Năm xuất bản"
+            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Hình ảnh</label>
+          <input
+            type="text"
+            value={img}
+            onChange={(e) => setImg(e.target.value)}
+            placeholder="URL hình ảnh"
+            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Nhà xuất bản</label>
+          <input
+            type="text"
+            value={nxb}
+            onChange={(e) => setNxb(e.target.value)}
+            placeholder="Nhà xuất bản"
+            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Số trang</label>
+          <input
+            type="number"
+            value={pageCount}
+            onChange={(e) => setPageCount(e.target.value)}
+            placeholder="Số trang"
+            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Thể loại lớn</label>
+          <input
+            type="text"
+            value={bigCategory.name}
+            onChange={(e) => setBigCategory({ ...bigCategory, name: e.target.value })}
+            placeholder="Thể loại lớn"
+            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Thể loại nhỏ</label>
+          <input
+            type="text"
+            onChange={(e) => setBigCategory({ ...bigCategory, smallCategory: e.target.value.split(",").map(cat => cat.trim()) })}
+            placeholder="Thể loại nhỏ (ngăn cách bằng dấu phẩy)"
+            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          />
         </div>
         <div className="mb-4 text-center">
           <button
