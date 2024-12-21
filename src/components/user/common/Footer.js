@@ -16,7 +16,14 @@ import {
 
 function Footer() {
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const scrollStep = -window.scrollY / 20; // Điều chỉnh tốc độ cuộn bằng cách thay đổi số này
+    const interval = setInterval(() => {
+      if (window.scrollY !== 0) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(interval);
+      }
+    }, 20); // Điều chỉnh thời gian giữa mỗi bước cuộn
   };
 
   return (

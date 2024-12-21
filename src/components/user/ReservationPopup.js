@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Calendar, X } from 'lucide-react';
 import DatePickerInput from './DatePickerInput';
 import { toast } from 'react-toastify';
@@ -6,7 +7,7 @@ import { toast } from 'react-toastify';
 const ReservationPopup = ({ book, onClose, onConfirm }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [borrowDate, setBorrowDate] = useState(null);
-
+  const navigate = useNavigate(); 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 50);
     return () => clearTimeout(timer);
@@ -19,19 +20,49 @@ const ReservationPopup = ({ book, onClose, onConfirm }) => {
 
   const handleConfirm = () => {
     if (borrowDate) {
-      onConfirm(borrowDate);
-      toast.success("Đặt lịch thành công!");
+      const returnDate = new Date(borrowDate);
+      returnDate.setMonth(returnDate.getMonth() + 3);
+  
+      const bookData = {
+        img: book.img,
+        title: book.title,
+        category: book.bigCategory[0]?.name || 'Không rõ',
+        borrowDate,
+        returnDate,
+        status: 'Đang chờ',
+      };
+  
+      // Lấy giỏ sách hiện tại từ Local Storage
+      const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
+      // Thêm sách mới vào đầu danh sách
+      const updatedCart = [bookData, ...savedCart];
+      // Lưu danh sách mới vào Local Storage
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
+  
+      toast.success('Đặt lịch thành công!');
+      navigate('/shopcart'); // Chuyển hướng tới trang giỏ sách
     } else {
       toast.error('Vui lòng chọn ngày mượn sách');
     }
-  };
+  };  
 
   return (
-    <div className={`fixed inset-0 bg-black flex justify-center items-center z-50 p-4 transition-opacity duration-300 ease-out ${isVisible ? 'bg-opacity-50' : 'bg-opacity-0'}`}>
-      <div className={`bg-white rounded-lg shadow-xl max-w-lg w-full transform transition-all duration-300 ease-out ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+    <div
+      className={`fixed inset-0 bg-black flex justify-center items-center z-50 p-4 transition-opacity duration-300 ease-out ${
+        isVisible ? 'bg-opacity-50' : 'bg-opacity-0'
+      }`}
+    >
+      <div
+        className={`bg-white rounded-lg shadow-xl max-w-lg w-full transform transition-all duration-300 ease-out ${
+          isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+        }`}
+      >
         <div className="flex justify-between items-center p-6 border-b border-gray-200">
           <h2 className="text-2xl font-bold text-gray-800">Đặt lịch mượn sách</h2>
-          <button onClick={handleClose} className="text-gray-500 hover:text-gray-700 transition-colors">
+          <button
+            onClick={handleClose}
+            className="text-gray-500 hover:text-gray-700 transition-colors"
+          >
             <X className="h-6 w-6" />
           </button>
         </div>
@@ -39,13 +70,21 @@ const ReservationPopup = ({ book, onClose, onConfirm }) => {
         <div className="p-6">
           <div className="mb-6">
             <h3 className="font-semibold text-xl text-gray-800 mb-2">{book.title}</h3>
-            <p className="text-gray-600 mb-1">Tác giả: {book.author.join(", ")}</p>
-            <p className='text-gray-600 mb-4'>Thể loại: {book.bigCategory[0]?.name}</p>
-            <img src={book.img} alt={book.title} className='h-48 w-auto object-cover rounded-md shadow-md'/>
+            <p className="text-gray-600 mb-1">Tác giả: {book.author.join(', ')}</p>
+            <p className="text-gray-600 mb-4">
+              Thể loại: {book.bigCategory[0]?.name}
+            </p>
+            <img
+              src={book.img}
+              alt={book.title}
+              className="h-48 w-auto object-cover rounded-md shadow-md"
+            />
           </div>
 
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Chọn ngày mượn</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Chọn ngày mượn
+            </label>
             <DatePickerInput
               selectedDate={borrowDate}
               onChangeDate={setBorrowDate}
@@ -76,4 +115,3 @@ const ReservationPopup = ({ book, onClose, onConfirm }) => {
 };
 
 export default ReservationPopup;
-

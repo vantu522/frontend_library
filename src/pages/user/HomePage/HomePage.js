@@ -1,53 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import BarChart from "../../../components/user/BarChart";
 import LineChartComponent from "../../../components/user/LineChartComponent";
 import PieChartComponent from "../../../components/user/PieChartComponent";
 import MapComponent from "../../../components/user/MapComponent";
-import LoadingScreen from '../../../components/user/LoadingScreen';
+import LoadingScreen from "../../../components/user/LoadingScreen";
 
 function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
+  const [mostBorrowedBooks, setMostBorrowedBooks] = useState([]);
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    message: "",
+  });
+  const [status, setStatus] = useState(""); // Để hiển thị thông báo
   const navigate = useNavigate();
-  const mostBorrowedBooks = [
-    {
-      image:
-        "https://i.pinimg.com/736x/99/d8/27/99d827231d297e9ddb13874878f33133.jpg",
-      title: "The Subtle Art of Not Giving a F*ck",
-      author: "Mark Manson",
-      borrowCount: 120,
-    },
-    {
-      image:
-        "https://i.pinimg.com/736x/78/34/b4/7834b4daa798890c075137730590fd40.jpg",
-      title: "Atomic Habits",
-      author: "James Clear",
-      borrowCount: 95,
-    },
-    {
-      image:
-        "https://i.pinimg.com/736x/78/34/b4/7834b4daa798890c075137730590fd40.jpg",
-      title: "Sapiens: A Brief History of Humankind",
-      author: "Yuval Noah Harari",
-      borrowCount: 80,
-    },
-    {
-      image:
-        "https://i.pinimg.com/736x/99/d8/27/99d827231d297e9ddb13874878f33133.jpg",
-      title: "The Subtle Art of Not Giving a F*ck",
-      author: "Mark Manson",
-      borrowCount: 120,
-    },
-    {
-      image:
-        "https://i.pinimg.com/736x/99/d8/27/99d827231d297e9ddb13874878f33133.jpg",
-      title: "The Subtle Art of Not Giving a F*ck",
-      author: "Mark Manson",
-      borrowCount: 120,
-    },
-  ];
 
   useEffect(() => {
     AOS.init({
@@ -57,8 +29,11 @@ function HomePage() {
 
     const loadResources = async () => {
       try {
-        // Logic tải dữ liệu (nếu cần)
-        setTimeout(() => setIsLoading(false), 2000); // Giả lập tải tài nguyên
+        const response = await axios.get(
+          "https://library-mana.azurewebsites.net/transactions/topBorrow"
+        );
+        setMostBorrowedBooks(response.data);
+        setIsLoading(false);
       } catch (error) {
         console.error("Lỗi tải tài nguyên", error);
       }
@@ -69,6 +44,34 @@ function HomePage() {
 
   const handleLoadingComplete = () => {
     setIsLoading(false);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://10.147.19.246:8080/contacts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setStatus("Thông tin của bạn đã được gửi đi!");
+        setFormData({ name: "", phone: "", email: "", message: "" }); // Reset form
+      } else {
+        setStatus("Có lỗi xảy ra, vui lòng thử lại.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setStatus("Có lỗi xảy ra, vui lòng thử lại.");
+    }
   };
 
   if (isLoading) {
@@ -91,23 +94,28 @@ function HomePage() {
         <button
           className="bg-blue-500 text-white px-30 py-4 border border-gray-600 rounded font-bold mt-5 w-32 transition-all duration-300 hover:bg-blue-700 hover:scale-105"
           data-aos="zoom-in"
-          onClick={() => navigate("/category")} 
+          onClick={() => navigate("/category")}
         >
           MƯỢN NGAY
         </button>
       </main>
 
-      {/*Collections*/}
+      {/* Collections */}
       <div className="grid gap-8 p-8">
         <div className="text-center py-5">
-          <h2 className="text-5xl font-bold pt-5">Danh sách được mượn nhiều</h2>
-          <p className="text-2xl text-gray-600">
+          <h2 className="text-5xl font-bold pt-5" data-aos="fade-right">
+            Danh sách được mượn nhiều
+          </h2>
+          <p className="text-2xl text-gray-600" data-aos="fade-up">
             Những cuốn sách được yêu thích nhất tại thư viện.
           </p>
         </div>
 
         {/* Hiển thị sách được mượn nhiều */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6"
+          data-aos="fade-right"
+        >
           {mostBorrowedBooks.map((book, index) => (
             <div
               key={index}
@@ -123,14 +131,14 @@ function HomePage() {
                 <p className="text-sm text-gray-500">{book.author}</p>
                 <h3 className="text-lg font-semibold">{book.title}</h3>
                 <p className="text-sm text-gray-400">
-                  Số lượt mượn: <span className="font-bold">{book.borrowCount}</span>
+                  Số lượt mượn:{" "}
+                  <span className="font-bold">{book.borrowCount}</span>
                 </p>
               </div>
             </div>
           ))}
         </div>
       </div>
-
       {/* Thống kê Section */}
       <div className="w-[90%] mx-auto" data-aos="fade-right">
         <h2 className="text-5xl font-bold text-center mb-10 mt-5 border-b-4 border-gray-300 pb-4">
@@ -148,15 +156,14 @@ function HomePage() {
             data-aos="fade-left"
           >
             <p className="text-lg italic">
-              Thư viện duy trì sự đa dạng các thể loại sách như tiểu thuyết, khoa học, nghiên cứu
-              và văn học thiếu nhi, đáp ứng nhu cầu phong phú của độc giả.
+              Thư viện duy trì sự đa dạng các thể loại sách như tiểu thuyết,
+              khoa học, nghiên cứu và văn học thiếu nhi, đáp ứng nhu cầu phong
+              phú của độc giả.
             </p>
           </div>
         </div>
       </div>
 
-      {/* Section khác (LineChart, PieChart, Map...) */}
-      {/* Bạn có thể giữ nguyên logic tương tự cho các phần khác đã gửi */}
       {/* Thống kê 2 Section */}
       <div className="w-[90%] mx-auto mt-10" data-aos="fade-up">
         <div className="flex gap-5 mt-10 items-center">
@@ -173,10 +180,11 @@ function HomePage() {
             data-aos="fade-left"
           >
             <p className="text-lg italic">
-              Thư viện đang phát triển mạnh với sự gia tăng số lượng tài liệu, bạn đọc và các
-              ấn phẩm số hóa được cập nhật thường xuyên. Lượng người đăng ký và truy cập trực
-              tuyến tăng đột biến, cùng với các sự kiện văn hóa, học thuật thu hút cộng đồng,
-              khẳng định vai trò hỗ trợ học tập và cung cấp kiến thức.
+              Thư viện đang phát triển mạnh với sự gia tăng số lượng tài liệu,
+              bạn đọc và các ấn phẩm số hóa được cập nhật thường xuyên. Lượng
+              người đăng ký và truy cập trực tuyến tăng đột biến, cùng với các
+              sự kiện văn hóa, học thuật thu hút cộng đồng, khẳng định vai trò
+              hỗ trợ học tập và cung cấp kiến thức.
             </p>
           </div>
         </div>
@@ -198,50 +206,84 @@ function HomePage() {
             data-aos="fade-left"
           >
             <p className="text-lg italic">
-              Số lượng mượn sách tại thư viện khác nhau theo thể loại, phản ánh sở thích đa dạng
-              của độc giả. Tiểu thuyết và sách lãng mạn được mượn nhiều nhờ tính giải trí, trong
-              khi sách nghiên cứu và học thuật có giá trị cao với sinh viên, giới nghiên cứu.
-              Sách thiếu nhi và kỹ năng sống thu hút phụ huynh, người làm giáo dục. Sự khác biệt
-              này giúp thư viện điều chỉnh tài liệu và dịch vụ phù hợp.
+              Số lượng mượn sách tại thư viện khác nhau theo thể loại, phản ánh
+              sở thích đa dạng của độc giả. Tiểu thuyết và sách lãng mạn được
+              mượn nhiều nhờ tính giải trí, trong khi sách nghiên cứu và học
+              thuật có giá trị cao với sinh viên, giới nghiên cứu. Sách thiếu
+              nhi và kỹ năng sống thu hút phụ huynh, người làm giáo dục. Sự khác
+              biệt này giúp thư viện điều chỉnh tài liệu và dịch vụ phù hợp.
             </p>
           </div>
         </div>
       </div>
 
       {/* Liên hệ Section */}
-      <div className="flex flex-col items-center px-8 py-10 min-h-screen bg-gray-50">
-        <h1 className="text-2xl font-bold bg-amber-500 text-black px-6 py-3 rounded-md text-center mb-10 shadow-lg">
+      <div className="flex flex-col lg:flex-row items-center justify-between px-8 py-10 min-h-screen bg-gray-50">
+        <h1
+          className="text-2xl font-bold bg-amber-500 text-black px-6 py-3 rounded-md text-center mb-10 shadow-lg"
+          data-aos="fade-up"
+        >
           LIÊN HỆ VỚI CHÚNG TÔI
         </h1>
 
         <div className="flex flex-wrap justify-between w-full max-w-6xl gap-8">
-          <div className="flex flex-col w-full lg:w-[45%] bg-white p-6 rounded-md shadow-lg" data-aos="fade-up">
+          <form
+            className="flex flex-col w-full lg:w-1/2 bg-white p-6 rounded-md shadow-lg"
+            data-aos="fade-up"
+            onSubmit={handleSubmit}
+          >
             <input
               type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
               placeholder="Họ tên:"
               className="w-full p-3 mb-4 rounded-md border border-gray-300 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
             />
             <input
               type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
               placeholder="Số điện thoại:"
               className="w-full p-3 mb-4 rounded-md border border-gray-300 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
             />
             <input
               type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               placeholder="Email:"
               className="w-full p-3 mb-4 rounded-md border border-gray-300 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
             />
             <textarea
+              name="message"
+              value={formData.message}
+              onChange={handleChange}
               placeholder="Gửi cho chúng tôi:"
               className="w-full p-3 mb-4 rounded-md border border-gray-300 bg-gray-100 h-36 focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"
             ></textarea>
-            <button className="w-full px-5 py-3 text-lg font-semibold text-white bg-amber-500 rounded-md hover:bg-amber-600 transition-shadow shadow-md">
+            <button
+              type="submit"
+              className="w-full px-5 py-3 text-lg font-semibold text-white bg-amber-500 rounded-md hover:bg-amber-600 transition-shadow shadow-md"
+            >
               Gửi đi
             </button>
-          </div>
+          </form>
 
-          <div className="w-full lg:w-[50%] bg-gray-100 rounded-md shadow-lg overflow-hidden">
-            <div className="h-[400px] flex items-center justify-center" data-aos="fade-up">
+          {/* Hiển thị thông báo trạng thái */}
+          {status && (
+            <p className="text-green-500 text-lg mt-4" data-aos="fade-up">
+              {status}
+            </p>
+          )}
+
+          {/* Bản đồ */}
+          <div className="w-full lg:w-1/2 bg-gray-100 rounded-md shadow-lg overflow-hidden">
+            <div
+              className="h-[400px] flex items-center justify-center"
+              data-aos="fade-up"
+            >
               <MapComponent />
             </div>
           </div>
@@ -252,6 +294,3 @@ function HomePage() {
 }
 
 export default HomePage;
-
-
-
