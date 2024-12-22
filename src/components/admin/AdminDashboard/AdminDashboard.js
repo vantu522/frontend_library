@@ -4,8 +4,8 @@ import { Bar } from 'react-chartjs-2';
 import { FaBook, FaBookOpen, FaUsers, FaUserCheck } from 'react-icons/fa';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement } from 'chart.js';
 import DonutChart from '../DonutChart ';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
 
-// Đăng ký các thành phần Chart.js
 ChartJS.register(
   ArcElement, 
   Tooltip, 
@@ -27,42 +27,8 @@ const AdminDashboard = () => {
   });
 
   // State cho các biểu đồ
-  const [weeklyStats, setWeeklyStats] = useState({
-    labels: [],
-    datasets: [
-      {
-        label: 'Mượn',
-        data: [],
-        backgroundColor: 'rgba(75, 192, 192, 0.6)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-      },
-      {
-        label: 'Trả',
-        data: [],
-        backgroundColor: 'rgba(255, 99, 132, 0.6)',
-        borderColor: 'rgba(255, 99, 132, 1)',
-      }
-    ]
-  });
-
-  const [monthlyStats, setMonthlyStats] = useState({
-    labels: [],
-    datasets: [
-      {
-        label: 'Mượn',
-        data: [],
-        backgroundColor: 'rgba(75, 192, 192, 0.6)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-      },
-      {
-        label: 'Trả',
-        data: [],
-        backgroundColor: 'rgba(255, 99, 132, 0.6)',
-        borderColor: 'rgba(255, 99, 132, 1)',
-      }
-    ]
-  });
-
+  const [weeklyStats, setWeeklyStats] = useState([]);
+  const [monthlyStats, setMonthlyStats] = useState([]);
   const [bookCategoryStats, setBookCategoryStats] = useState({
     labels: [],
     datasets: [
@@ -91,25 +57,12 @@ const AdminDashboard = () => {
   const fetchDashboardStats = async () => {
     try {
       const [totalBooks, borrowedBooks, totalUsers, returnedBooks] = await Promise.all([
-        axios.get('https://library-mana.azurewebsites.net/books/total').then(res => {
-          console.log('Total Books Response:', res.data);
-          return res.data;
-        }),
-        axios.get('https://library-mana.azurewebsites.net/transactions/count-borrowed').then(res => {
-          console.log('Borrowed Books Response:', res.data);
-          return res.data;
-        }),
-        axios.get('https://library-mana.azurewebsites.net/members/count').then(res => {
-          console.log('Total Users Response:', res.data);
-          return res.data;
-        }),
-        axios.get('https://library-mana.azurewebsites.net/books/count-returned').then(res => {
-          console.log('Returned Books Response:', res.data);
-          return res.data;
-        })
+        axios.get('https://library-mana.azurewebsites.net/books/total').then(res => res.data),
+        axios.get('https://library-mana.azurewebsites.net/transactions/count-borrowed').then(res => res.data),
+        axios.get('https://library-mana.azurewebsites.net/members/count').then(res => res.data),
+        axios.get('https://library-mana.azurewebsites.net/transactions/count-returned').then(res => res.data)
       ]);
 
-      // Validate and set stats, use default if invalid
       setDashboardStats({
         totalBooks: typeof totalBooks === 'number' ? totalBooks : 500,
         borrowedBooks: typeof borrowedBooks === 'number' ? borrowedBooks : 150,
@@ -118,7 +71,6 @@ const AdminDashboard = () => {
       });
     } catch (error) {
       console.error('Lỗi tải thống kê dashboard:', error);
-      // Set default values if all API calls fail
       setDashboardStats({
         totalBooks: 500,
         borrowedBooks: 150,
@@ -131,58 +83,68 @@ const AdminDashboard = () => {
   // Fetch dữ liệu biểu đồ
   const fetchChartStats = async () => {
     try {
-      // Biểu đồ tuần
+      // Fetch weekly data
       const weeklyResponse = await axios.get('http://127.0.0.1:5000/api/data');
       const weeklyData = weeklyResponse.data;
 
-      setWeeklyStats({
-        labels: weeklyData.map(item => item.day),
-        datasets: [
-          {
-            ...weeklyStats.datasets[0],
-            data: weeklyData.map(item => item.borrowed)
-          },
-          {
-            ...weeklyStats.datasets[1],
-            data: weeklyData.map(item => item.returned)
-          }
-        ]
-      });
+      if (Array.isArray(weeklyData)) {
+        setWeeklyStats(weeklyData.map(item => ({
+          day: item.day,
+          borrowed: item.borrowed,
+          returned: item.returned
+        })));
+      } else {
+        console.error('Dữ liệu tuần không hợp lệ:', weeklyData);
+      }
 
-      // Biểu đồ tháng
+      // Fetch monthly data
       const monthlyResponse = await axios.get('http://127.0.0.1:5000/api/monthly-data');
       const monthlyData = monthlyResponse.data;
 
-      setMonthlyStats({
-        labels: monthlyData.map(item => item.month),
-        datasets: [
-          {
-            ...monthlyStats.datasets[0],
-            data: monthlyData.map(item => item.borrowed)
-          },
-          {
-            ...monthlyStats.datasets[1],
-            data: monthlyData.map(item => item.returned)
-          }
-        ]
-      });
+      if (Array.isArray(monthlyData)) {
+        setMonthlyStats(monthlyData.map(item => ({
+          month: item.month,
+          borrowed: item.borrowed,
+          returned: item.returned
+        })));
+      } else {
+        console.error('Dữ liệu tháng không hợp lệ:', monthlyData);
+      }
 
-      // Biểu đồ thể loại sách
-      const bookCategoryResponse = await axios.get('https://library-mana.azurewebsites.net/books/category-distribution');
-      const bookCategoryData = bookCategoryResponse.data;
+      // Fetch top borrowed books
+      const topBooksResponse = await axios.get('http://127.0.0.1:5000/api/top-book-borrow');
+      const topBooksData = topBooksResponse.data;
 
       setBookCategoryStats({
-        labels: Object.keys(bookCategoryData),
+        labels: topBooksData.map(book => book.title),
         datasets: [
           {
             ...bookCategoryStats.datasets[0],
-            data: Object.values(bookCategoryData)
+            data: topBooksData.map(book => book.borrowCount)
           }
         ]
       });
 
     } catch (error) {
       console.error('Lỗi tải dữ liệu biểu đồ:', error);
+      // Set some sample data in case of error
+      setWeeklyStats([
+        { day: 'T2', borrowed: 45, returned: 32 },
+        { day: 'T3', borrowed: 55, returned: 45 },
+        { day: 'T4', borrowed: 40, returned: 38 },
+        { day: 'T5', borrowed: 65, returned: 50 },
+        { day: 'T6', borrowed: 35, returned: 40 },
+        { day: 'T7', borrowed: 50, returned: 45 },
+        { day: 'CN', borrowed: 30, returned: 25 }
+      ]);
+      
+      setMonthlyStats([
+        { month: 'Jan', borrowed: 150, returned: 130 },
+        { month: 'Feb', borrowed: 180, returned: 160 },
+        { month: 'Mar', borrowed: 200, returned: 180 },
+        { month: 'Apr', borrowed: 160, returned: 150 },
+        { month: 'May', borrowed: 190, returned: 170 }
+      ]);
     }
   };
 
@@ -201,6 +163,51 @@ const AdminDashboard = () => {
     );
   };
 
+  // Component biểu đồ đường
+  const LineChartComponent = ({ data, title }) => (
+    <div className="bg-white p-6 rounded-lg shadow-md h-80">
+      <div className="text-lg font-semibold mb-4">{title}</div>
+      {data.length > 0 ? (
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis 
+              dataKey={data === weeklyStats ? "day" : "month"}
+              tickLine={false}
+              axisLine={true}
+            />
+            <YAxis 
+              tickLine={false}
+              axisLine={true}
+              width={40}
+            />
+            <RechartsTooltip />
+            <Line 
+              type="monotone" 
+              dataKey="borrowed" 
+              stroke="#2563eb" 
+              strokeWidth={2} 
+              name="Sách mượn"
+              dot={{ fill: '#2563eb', strokeWidth: 2 }}
+            />
+            <Line 
+              type="monotone" 
+              dataKey="returned" 
+              stroke="#16a34a" 
+              strokeWidth={2} 
+              name="Sách trả"
+              dot={{ fill: '#16a34a', strokeWidth: 2 }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      ) : (
+        <div className="flex items-center justify-center h-full">
+          <div className="text-gray-500">Đang tải dữ liệu...</div>
+        </div>
+      )}
+    </div>
+  );
+
   // Fetch dữ liệu khi component mount
   useEffect(() => {
     fetchDashboardStats();
@@ -211,59 +218,24 @@ const AdminDashboard = () => {
     <div className="p-6 bg-gray-50 min-h-screen">
       {/* Thẻ thống kê */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <StatCard 
-          icon={FaBook} 
-          title="Tổng Số Sách" 
-          value={dashboardStats.totalBooks} 
-        />
-        <StatCard 
-          icon={FaBookOpen} 
-          title="Sách Đang Cho Mượn" 
-          value={dashboardStats.borrowedBooks} 
-        />
-        <StatCard 
-          icon={FaUsers} 
-          title="Tổng Số Người Dùng" 
-          value={dashboardStats.totalUsers} 
-        />
-        <StatCard 
-          icon={FaUserCheck} 
-          title="Sách Đã Trả" 
-          value={dashboardStats.returnedBooks} 
-        />
+        <StatCard icon={FaBook} title="Tổng Số Sách" value={dashboardStats.totalBooks} />
+        <StatCard icon={FaBookOpen} title="Sách Đang Cho Mượn" value={dashboardStats.borrowedBooks} />
+        <StatCard icon={FaUsers} title="Tổng Số Người Dùng" value={dashboardStats.totalUsers} />
+        <StatCard icon={FaUserCheck} title="Sách Đã Trả" value={dashboardStats.returnedBooks} />
       </div>
 
       {/* Biểu đồ */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Biểu đồ Donut */}
         <DonutChart />
-
-        {/* Biểu đồ Cột Tuần */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <div className="text-lg font-semibold mb-4">Biểu đồ Mượn Trả Theo Tuần</div>
-          {weeklyStats.labels.length > 0 ? (
-            <Bar 
-              data={weeklyStats} 
-              options={{ 
-                responsive: true,
-                scales: {
-                  y: {
-                    beginAtZero: true
-                  }
-                }
-              }} 
-              height={250} 
-            />
-          ) : (
-            <div>Đang tải dữ liệu...</div>
-          )}
-        </div>
+        <LineChartComponent 
+          data={weeklyStats} 
+          title="Biểu đồ Mượn Trả Theo Tuần" 
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-        {/* Biểu đồ Thể Loại Sách */}
-        <div className="bg-white p-6 rounded-lg shadow-md" style={{ height: '350px' }}>
-          <div className="text-lg font-semibold mb-4">Số Lượng Sách Theo Thể Loại</div>
+        <div className="bg-white p-6 rounded-lg shadow-md h-80">
+          <div className="text-lg font-semibold mb-4">Top sách mượn nhiều nhất</div>
           {bookCategoryStats.labels.length > 0 ? (
             <Bar 
               data={bookCategoryStats} 
@@ -284,34 +256,18 @@ const AdminDashboard = () => {
                     display: false
                   }
                 }
-              }} 
-              height={300} 
+              }}
             />
           ) : (
-            <div>Đang tải dữ liệu...</div>
+            <div className="flex items-center justify-center h-full">
+              <div className="text-gray-500">Đang tải dữ liệu...</div>
+            </div>
           )}
         </div>
-
-        {/* Biểu đồ Cột Tháng */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <div className="text-lg font-semibold mb-4">Biểu đồ Mượn Trả Theo Tháng</div>
-          {monthlyStats.labels.length > 0 ? (
-            <Bar 
-              data={monthlyStats} 
-              options={{ 
-                responsive: true,
-                scales: {
-                  y: {
-                    beginAtZero: true
-                  }
-                }
-              }} 
-              height={250} 
-            />
-          ) : (
-            <div>Đang tải dữ liệu...</div>
-          )}
-        </div>
+        <LineChartComponent 
+          data={monthlyStats} 
+          title="Biểu đồ Mượn Trả Theo Tháng" 
+        />
       </div>
     </div>
   );

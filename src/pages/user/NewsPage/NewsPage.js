@@ -1,11 +1,13 @@
 import React from "react";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 // Component Banner
 const NewsBanner = () => {
   const imageData = [
-    "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg", 
-    "https://i.pinimg.com/474x/07/8e/02/078e0212bce731f1f7a202767ffd5ca8.jpg", 
-    "https://i.pinimg.com/474x/07/8e/02/078e0212bce731f1f7a202767ffd5ca8.jpg"
+    "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg",
+    "https://i.pinimg.com/474x/07/8e/02/078e0212bce731f1f7a202767ffd5ca8.jpg",
+    "https://i.pinimg.com/474x/07/8e/02/078e0212bce731f1f7a202767ffd5ca8.jpg",
+    "https://i.pinimg.com/474x/fe/d3/af/fed3af57eb72d547d800287bd8220955.jpg",
   ];
 
   const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
@@ -13,12 +15,12 @@ const NewsBanner = () => {
   React.useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imageData.length);
-    }, 5000); // 5 giây đổi ảnh
+    }, 3000); // 5 giây đổi ảnh
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="relative w-full h-[300px] overflow-hidden mt-8">
+    <div className="relative w-full h-[350px] overflow-hidden mt-8">
       {/* Ảnh nền thay đổi */}
       <div
         className="absolute inset-0 bg-cover bg-center transition-all duration-1000"
@@ -27,9 +29,12 @@ const NewsBanner = () => {
 
       {/* Lớp overlay */}
       <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-center text-white">
-        <h1 className="text-2xl md:text-4xl font-bold mb-4">Library Newsletters</h1>
-        <p className="text-sm md:text-lg mb-6">
-          Sign up for our email newsletters and get library news and information delivered directly to your inbox.
+        <h1 className="text-2xl md:text-4xl font-bold mb-4 italic">
+          Library Newsletters
+        </h1>
+        <p className="text-sm md:text-lg mb-4">
+          Sign up for our email newsletters and get library news and information
+          delivered directly to your inbox.
         </p>
         <button className="bg-white text-black py-2 px-4 rounded hover:bg-gray-200 transition">
           Subscribe
@@ -43,98 +48,96 @@ const NewsBanner = () => {
 function NewsPage() {
   const cards = [
     {
-      date: "November 19, 2024",
-      title: "Art Is Technology and Technology Is Art",
+      date: "December 21, 2024",
+      title: "The Evolution of Digital Art in the 21st Century",
       description:
-        "Open to the public, the 8th annual Art Tech Psyche fair was a celebration of the intersection of art and technology.",
+        "This exhibition explores the innovative ways artists are integrating technology into their creative processes.",
     },
     {
-      date: "November 11, 2024",
-      title: "Before Grainy Smartphone Concert Footage, There Was Arthur Freedman",
+      date: "December 20, 2024",
+      title: "Wisdom's Beacon: A Journey Through History",
       description:
-        "An exhibit at the Loeb Music Library shares the work of one of Boston's most determined punk scene documenters.",
+        "Join us for a special exhibit showcasing the evolution of Harvard's library and its impact on knowledge dissemination.",
     },
     {
-      date: "November 11, 2024",
-      title: "Before Grainy Smartphone Concert Footage, There Was Arthur Freedman",
+      date: "December 19, 2024",
+      title: "The Future of Artificial Intelligence in Libraries",
       description:
-        "An exhibit at the Loeb Music Library shares the work of one of Boston's most determined punk scene documenters.",
+        "A look at how AI technologies are revolutionizing library management and data organization.",
     },
     {
-      date: "November 11, 2024",
-      title: "Before Grainy Smartphone Concert Footage, There Was Arthur Freedman",
+      date: "December 18, 2024",
+      title: "Exploring the Secret Archives of Harvard Library",
       description:
-        "An exhibit at the Loeb Music Library shares the work of one of Boston's most determined punk scene documenters.",
+        "Uncover hidden treasures from Harvard’s secret archives in a rare behind-the-scenes tour.",
     },
     {
-      date: "November 11, 2024",
-      title: "Before Grainy Smartphone Concert Footage, There Was Arthur Freedman",
+      date: "December 17, 2024",
+      title: "Sustainability in the Digital Age",
       description:
-        "An exhibit at the Loeb Music Library shares the work of one of Boston's most determined punk scene documenters.",
+        "This seminar focuses on the environmental impact of digital technology and strategies for reducing its carbon footprint.",
     },
     {
-      date: "November 11, 2024",
-      title: "Before Grainy Smartphone Concert Footage, There Was Arthur Freedman",
+      date: "December 16, 2024",
+      title: "The Impact of Technology on Traditional Publishing",
       description:
-        "An exhibit at the Loeb Music Library shares the work of one of Boston's most determined punk scene documenters.",
+        "An in-depth discussion on how digital tools and platforms are transforming the publishing world.",
     },
-    // Các item còn lại...
   ];
 
   const newsItems = [
     {
       image:
         "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg",
-      date: "November 4, 2024",
+      date: "December 21, 2024",
       title: "Harvard Affiliates Celebrate Day of the Dead",
     },
     {
       image:
-        "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg",
-      date: "November 4, 2024",
-      title: "Harvard Affiliates Celebrate Day of the Dead",
+        "https://i.pinimg.com/474x/f1/26/c6/f126c69e40473c81a2ae7dc900c6a4a5.jpg",
+      date: "December 20, 2024",
+      title: "Exploring the Hidden Corners of Harvard Library",
     },
     {
       image:
-        "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg",
-      date: "November 4, 2024",
-      title: "Harvard Affiliates Celebrate Day of the Dead",
+        "https://i.pinimg.com/736x/fa/1b/04/fa1b0435208b02f9350e93a1b814dc39.jpg",
+      date: "December 19, 2024",
+      title: "Wisdom's Beacon: A New Era in Library Research",
     },
     {
       image:
-        "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg",
-      date: "November 4, 2024",
-      title: "Harvard Affiliates Celebrate Day of the Dead",
+        "https://i.pinimg.com/474x/ad/72/67/ad7267e32e6a8298b79da501d64da0c2.jpg",
+      date: "December 18, 2024",
+      title: "Unlocking the Past: Harvard's Rich History",
     },
     {
       image:
-        "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg",
-      date: "November 4, 2024",
-      title: "Harvard Affiliates Celebrate Day of the Dead",
+        "https://i.pinimg.com/736x/c6/12/c0/c612c003e3207d22bd5aa23dc6faac38.jpg",
+      date: "December 17, 2024",
+      title: "Exploring New Technologies in Library Management",
     },
     {
       image:
-        "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg",
-      date: "November 4, 2024",
-      title: "Harvard Affiliates Celebrate Day of the Dead",
+        "https://i.pinimg.com/474x/a1/ab/6f/a1ab6f109de474abcd87a5e6407322c9.jpg",
+      date: "December 16, 2024",
+      title: "Wisdom's Beacon: The Future of Digital Libraries",
     },
-    // Các item còn lại...
   ];
 
   return (
     <div className="grid gap-8 p-8">
       {/* Header Section */}
       <div className="text-center py-10">
-        <h1 className="text-5xl font-bold pt-20">NEWS</h1>
-        <p className="text-2xl text-gray-600">
-          Harvard Library is a hub for learning, sharing and the discovery of
-          new ideas. Read about that work in action.
+        <h1 className="text-5xl font-bold pt-10 text-blue-800 italic transform transition duration-300 hover:translate-y-2">
+          NEWS
+        </h1>
+        <p className="text-3xl text-gray-600 italic transform transition duration-300">
+          Wisdom's Beacon Library is a hub for learning, sharing and the
+          discovery of new ideas. Read about that work in action.
         </p>
       </div>
-
       {/* Banner Section */}
       <NewsBanner /> {/* Đây là nơi chèn banner vào */}
-
       {/* News Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {newsItems.map((item, index) => (
@@ -155,51 +158,62 @@ function NewsPage() {
           </div>
         ))}
       </div>
-
       {/* Info Section */}
-      <div className="grid gap-2 md:grid-cols-2">
-        <div className="bg-gray-100 p-6 rounded-lg max-w-md mx-auto">
-          <h3 className="text-xl font-bold mb-2">STAY IN THE KNOW</h3>
-          <p className="mb-4">Sign up for email updates from Wisdom's Beacon Library</p>
-          <input
-            type="email"
-            placeholder="Email Address"
-            className="w-full p-3 border rounded-lg mb-4"
-          />
-          <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
-            SIGN UP
-          </button>
-        </div>
-        <div className="bg-gray-100 p-6 rounded-lg max-w-md mx-auto">
-          <h3 className="text-xl font-bold mb-2">FOLLOW HARVARD LIBRARY</h3>
-          <p className="mb-4">You can find us on Facebook, Twitter, and YouTube</p>
-          <div className="space-y-2">
-            <span className="flex items-center space-x-2">
-              <i className="fab fa-facebook-square text-xl text-blue-600"></i>
-              <span>Facebook</span>
-            </span>
-            <span className="flex items-center space-x-2">
-              <i className="fab fa-twitter-square text-xl text-blue-400"></i>
-              <span>Twitter</span>
-            </span>
-            <span className="flex items-center space-x-2">
-              <i className="fab fa-youtube text-xl text-red-600"></i>
-              <span>YouTube</span>
-            </span>
-          </div>
-        </div>
-      </div>
+{/* Info Section */}
+<div className="grid gap-4 md:grid-cols-2 items-start">
+  {/* Subscribe Section */}
+  <div className="bg-gray-100 p-6 rounded-lg max-w-md mx-auto">
+    <h3 className="text-xl font-bold mb-2">STAY IN THE KNOW</h3>
+    <p className="mb-4">
+      Sign up for email updates from Wisdom's Beacon Library
+    </p>
+    <input
+      type="email"
+      placeholder="Email Address"
+      className="w-full p-2 border rounded-lg mb-4"
+    />
+    <button className="w-full bg-blue-600 text-white py-1.5 text-sm rounded-lg hover:bg-blue-700">
+      SIGN UP
+    </button>
+  </div>
+
+  {/* Social Media Section */}
+  <div className="bg-gray-100 p-6 rounded-lg max-w-md mx-auto">
+    <h3 className="text-xl font-bold mb-2">FOLLOW WISDOM'S BEACON</h3>
+    <p className="mb-4">
+      You can find us on Facebook, Twitter, YouTube, Instagram, and LinkedIn
+    </p>
+    <div className="space-y-2">
+      <span className="flex items-center space-x-2">
+        <i className="fab fa-facebook-square text-xl text-blue-600"></i>
+        <span>Facebook</span>
+      </span>
+      <span className="flex items-center space-x-2">
+        <i className="fab fa-youtube text-xl text-red-600"></i>
+        <span>YouTube</span>
+      </span>
+      <span className="flex items-center space-x-2">
+        <i className="fab fa-instagram text-xl text-pink-500"></i>
+        <span>Instagram</span>
+      </span>
+    </div>
+  </div>
+</div>
 
       {/* Cards Section */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {cards.map((card, index) => (
           <div
             key={index}
-            className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300"
+            className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl hover:scale-105 transition-all duration-300"
           >
             <p className="text-sm text-gray-500 mb-2">{card.date}</p>
-            <h2 className="text-lg font-semibold mb-4">{card.title}</h2>
-            <p className="text-gray-600">{card.description}</p>
+            <h2 className="text-2xl font-bold text-blue-600 mb-4">
+              {card.title}
+            </h2>
+            <p className="text-large italic text-gray-600">
+              {card.description}
+            </p>
           </div>
         ))}
       </div>

@@ -28,11 +28,24 @@ const LiteratureCategoryList = () => {
     fetchCategories();
   }, []);
 
+<<<<<<< HEAD
   const handleEditCategory = (id) => {
     setEditCategoryId(id);
     const category = categories.find((category) => category.id === id);
     setNewCategoryName(category.name);
   };
+=======
+  // Lấy sách thuộc thể loại nhỏ
+  fetchBooksBySubCategory: async (bigCategoryName, subCategoryName) => {
+    return axios.get(`${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.CATEGORIES}/${bigCategoryName}/${subCategoryName}/books`, {
+      headers: {
+        'Accept': 'application/json',
+      }
+    })
+    .then(response => response.data)
+    .catch(error => { throw error; });
+  },
+>>>>>>> 9afd62669f0c6c9c98f096eb3762cb979ab0b5d6
 
   const handleSaveCategory = (id) => {
     const updatedCategories = categories.map((category) =>

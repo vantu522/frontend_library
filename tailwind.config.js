@@ -10,6 +10,8 @@ module.exports = {
         'gradient-x': 'gradient-x 15s ease infinite',
         'slow-pulse': 'pulse 10s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         float: 'float 4s ease-in-out infinite',
+        'modal-appear': 'modal-appear 0.5s ease-out',
+        'overlay-appear': 'overlay-appear 0.5s ease-in-out',
         'fade-in-down': 'fade-in-down 1s ease-out',
       },
       colors: {
@@ -29,16 +31,20 @@ module.exports = {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-15px)' },
         },
-        'fade-in-down': {
-          '0%': { 
-            opacity: '0', 
-            transform: 'translateY(-20px)' 
+        'modal-appear': {
+          '0%': {
+            opacity: '0',
+            transform: 'scale(0.95) translateY(-10px)'
           },
-          '100%': { 
-            opacity: '1', 
-            transform: 'translateY(0)' 
-          },
+          '100%': {
+            opacity: '1',
+            transform: 'scale(1) translateY(0)'
+          }
         },
+        'overlay-appear': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' }
+        }
       },
     },
   },

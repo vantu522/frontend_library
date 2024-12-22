@@ -16,7 +16,10 @@ const EditPostForm = ({ post, onClose, onUpdate }) => {
       setTitle(post.title);
       setContent(post.content);
       setAuthor(post.author);
+<<<<<<< HEAD
       setCreatedAt(post.createdAt ? post.createdAt.split('T')[0] : "");
+=======
+>>>>>>> 9afd62669f0c6c9c98f096eb3762cb979ab0b5d6
       setStatus(post.status === "công khai" ? "công khai" : "ẩn");
     }
   }, [post]);
@@ -32,7 +35,11 @@ const EditPostForm = ({ post, onClose, onUpdate }) => {
       return;
     }
 
+<<<<<<< HEAD
     const data = { title, content, author, createdAt, status };
+=======
+    const updatedPost = {id:post.id, title, content, author, status };
+>>>>>>> 9afd62669f0c6c9c98f096eb3762cb979ab0b5d6
 
     try {
       // Gọi API cập nhật bài viết
@@ -107,8 +114,13 @@ const EditPostForm = ({ post, onClose, onUpdate }) => {
             onChange={(e) => setStatus(e.target.value)}
             className="mt-1 p-3 w-full border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
           >
+<<<<<<< HEAD
             <option value="công khai">Công khai</option>
             <option value="ẩn">Ẩn</option>
+=======
+            <option value="Công khai">công khai</option>
+            <option value="Ẩn danh">ẩn</option>
+>>>>>>> 9afd62669f0c6c9c98f096eb3762cb979ab0b5d6
           </select>
         </div>
 
