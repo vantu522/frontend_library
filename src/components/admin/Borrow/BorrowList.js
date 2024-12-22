@@ -44,9 +44,14 @@ const BorrowList = () => {
         title: borrowData.bookTitle,
         phoneNumber: borrowData.phoneNumber,
       });
+
+      // Cập nhật danh sách mượn (trực tiếp)
+      setBorrows((prevBorrows) =>
+        prevBorrows.filter((borrow) => borrow.id !== borrowData.id)
+      );
+
+      // Hiển thị thông báo
       toast.success(`Sách "${borrowData.bookTitle}" đã được trả thành công.`);
-      const updatedBorrows = await borrowService.fetchAllBorrowed();
-      setBorrows(updatedBorrows);
     } catch (error) {
       toast.error('Lỗi khi trả sách.');
     } finally {
@@ -65,6 +70,7 @@ const BorrowList = () => {
         title: borrowData.bookTitle,
         phoneNumber: borrowData.phoneNumber,
       });
+
       toast.success(`Sách "${borrowData.bookTitle}" đã được gia hạn thành công.`);
       const updatedBorrows = await borrowService.fetchAllBorrowed();
       setBorrows(updatedBorrows);
@@ -102,6 +108,12 @@ const BorrowList = () => {
     return matchesSearch && matchesStatus;
   });
 
+  // Định dạng ngày, chỉ lấy phần ngày
+  const formatDate = (date) => {
+    const d = new Date(date);
+    return d.toLocaleDateString(); // Trả về định dạng ngày (DD/MM/YYYY)
+  };
+
   // So sánh ngày quá hạn
   const isOverdue = (dueDate) => {
     const today = new Date();
@@ -113,16 +125,14 @@ const BorrowList = () => {
     { label: 'Tên người mượn', field: 'memberName' },
     { label: 'Tên sách', field: 'bookTitle' },
     { label: 'Số điện thoại', field: 'phoneNumber' },
-    { label: 'Ngày mượn', field: 'transactionDate' },
-    { label: 'Ngày trả dự kiến', field: 'dueDate' },
+    { label: 'Ngày mượn', field: 'transactionDate', render: (val) => formatDate(val) },
+    { label: 'Ngày trả dự kiến', field: 'dueDate', render: (val) => formatDate(val) },
     {
       label: 'Trạng thái',
       field: 'status',
       render: (val, row) => (
         <span
-          className={`font-bold ${
-            isOverdue(row.dueDate) ? 'text-red-500' : 'text-green-500'
-          }`}
+          className={`font-bold ${isOverdue(row.dueDate) ? 'text-red-500' : 'text-green-500'}`}
         >
           {isOverdue(row.dueDate) ? 'Quá hạn' : 'Đang mượn'}
         </span>
@@ -135,24 +145,24 @@ const BorrowList = () => {
         <>
           <div className="flex justify-center">
             {/* Trả sách */}
-          <Tooltip content="Đánh dấu đã trả" position="left">
-            <button
-              onClick={() => openConfirmModal('return', row)}
-              className="text-green-500 hover:text-green-700 mx-2"
-            >
-              <FaCheckCircle size={25} />
-            </button>
-          </Tooltip>
+            <Tooltip content="Đánh dấu đã trả" position="left">
+              <button
+                onClick={() => openConfirmModal('return', row)}
+                className="text-green-500 hover:text-green-700 mx-2"
+              >
+                <FaCheckCircle size={25} />
+              </button>
+            </Tooltip>
 
-          {/* Gia hạn sách */}
-          <Tooltip content="Gia hạn sách" position="left">
-            <button
-              onClick={() => openConfirmModal('renew', row)}
-              className="text-blue-500 hover:text-blue-700 mx-2"
-            >
-              <FaRecycle size={25} />
-            </button>
-          </Tooltip>
+            {/* Gia hạn sách */}
+            <Tooltip content="Gia hạn sách" position="left">
+              <button
+                onClick={() => openConfirmModal('renew', row)}
+                className="text-blue-500 hover:text-blue-700 mx-2"
+              >
+                <FaRecycle size={25} />
+              </button>
+            </Tooltip>
           </div>
         </>
       ),
@@ -164,40 +174,35 @@ const BorrowList = () => {
       {/* Modal xác nhận */}
       {confirmModal.isOpen && (
         <Modal isOpen={confirmModal.isOpen} onClose={closeConfirmModal}>
-  <h2 className="text-xl font-semibold mb-4">
-    {confirmModal.actionType === 'return'
-      ? 'Xác nhận trả sách'
-      : 'Xác nhận gia hạn sách'}
-  </h2>
-  <p className="mb-4">
-    Bạn có chắc muốn{' '}
-    <strong>
-      {confirmModal.actionType === 'return' ? 'trả sách' : 'gia hạn sách'}
-    </strong>{' '}
-    <span className="text-blue-500">
-      "{confirmModal.borrowData.bookTitle}"
-    </span>{' '}
-    cho{' '}
-    <span className="text-green-500">
-      {confirmModal.borrowData.memberName}
-    </span>
-    ?
-  </p>
-  <div className="flex justify-end gap-3">
-    <Button
-      label="Xác nhận"
-      onClick={
-        confirmModal.actionType === 'return'
-          ? handleReturnBook
-          : handleRenewBook
-      }
-      className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 text-xl rounded-lg"
-    >
-      Xác nhận
-    </Button>
-  </div>
-</Modal>
-
+          <h2 className="text-xl font-semibold mb-4">
+            {confirmModal.actionType === 'return'
+              ? 'Xác nhận trả sách'
+              : 'Xác nhận gia hạn sách'}
+          </h2>
+          <p className="mb-4">
+            Bạn có chắc muốn{' '}
+            <strong>
+              {confirmModal.actionType === 'return' ? 'trả sách' : 'gia hạn sách'}
+            </strong>{' '}
+            <span className="text-blue-500">
+              "{confirmModal.borrowData.bookTitle}"
+            </span>{' '}
+            cho{' '}
+            <span className="text-green-500">
+              {confirmModal.borrowData.memberName}
+            </span>
+            ?
+          </p>
+          <div className="flex justify-end gap-3">
+            <Button
+              onClick={confirmModal.actionType === 'return' ? handleReturnBook : handleRenewBook}
+              disabled={isLoading}
+              className={`bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 text-xl rounded-lg ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              {isLoading ? 'Đang xử lý...' : 'Xác nhận'}
+            </Button>
+          </div>
+        </Modal>
       )}
 
       {/* Tiêu đề */}
@@ -216,9 +221,11 @@ const BorrowList = () => {
 
       {/* Bảng */}
       {isLoading ? (
-        <p>Đang tải...</p>
+        <div className="flex items-center justify-center h-20">
+          <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full"></div>
+        </div>
       ) : (
-        <Table columns={columns} data={filteredBorrows} />
+        <Table columns={columns} data={filteredBorrows} className="text-center" />
       )}
     </div>
   );

@@ -30,6 +30,8 @@ const PendingBorrowList = () => {
     }
   };
 
+  
+
   const handleApprove = async () => {
     const { borrow, isAprove } = confirmAction;
     try {
@@ -40,6 +42,7 @@ const PendingBorrowList = () => {
         isAprove: isAprove,
       };
   
+      // Gọi API để xác nhận hoặc từ chối phiếu mượn
       await borrowService.approveTransaction(payload);
   
       toast.success(
@@ -48,13 +51,21 @@ const PendingBorrowList = () => {
           : `Phiếu mượn "${borrow.bookTitle}" đã bị từ chối.`
       );
   
+      // Cập nhật lại trạng thái của phiếu mượn đã được xử lý
+      setBorrows((prevBorrows) =>
+        prevBorrows.map((b) =>
+          b._id === borrow._id
+            ? { ...b, status: isAprove ? 'Đã xác nhận' : 'Đã từ chối' }
+            : b
+        )
+      );
+  
       setShowConfirmModal(false);
-      // Tải lại danh sách từ API
-      await fetchPendingBorrowList();
     } catch (error) {
       toast.error('Lỗi khi cập nhật trạng thái phiếu mượn.');
     }
   };
+  
   
 
   // Hàm tìm kiếm với debounce

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import Modal from '../../../common/admin/Modal/Modal'; // Import Modal component
 import axios from 'axios';
 
-function ChangePassword() {
+function ChangePassword({ isOpen, onClose }) {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -34,8 +35,7 @@ function ChangePassword() {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold text-center mb-6">Đổi Mật Khẩu</h2>
+    <Modal isOpen={isOpen} onClose={onClose} title="Đổi Mật Khẩu">
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="current-password" className="block text-sm font-medium text-gray-700">
@@ -76,15 +76,17 @@ function ChangePassword() {
             className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <button
-          type="submit"
-          className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          Đổi Mật Khẩu
-        </button>
+        <div className="flex justify-end gap-2">
+          <button
+            type="submit"
+            className="py-1 px-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+          >
+            Đổi Mật Khẩu
+          </button>
+        </div>
       </form>
       {statusMessage && <p className="mt-4 text-center text-sm text-red-500">{statusMessage}</p>}
-    </div>
+    </Modal>
   );
 }
 

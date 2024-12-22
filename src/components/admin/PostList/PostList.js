@@ -56,8 +56,8 @@ const PostList = () => {
 
   // Xử lý chỉnh sửa bài viết
   const handleEditPost = (post) => {
-    setSelectedPost(post);
-    setEditModal({ isOpen: true, id: post.id });
+    setSelectedPost(post); // Cập nhật bài viết đã chọn
+    setEditModal({ isOpen: true, id: post.id }); // Mở modal chỉnh sửa
   };
 
   const handleUpdatePost = async (updatedPost) => {
@@ -83,11 +83,11 @@ const PostList = () => {
 
   // Cấu hình các cột cho bảng
   const columns = [
-    { label: "Tiêu đề", field: "title", },
-    { label: "Nội dung", field: "content", },
-    { label: "Tác giả", field: "author",  },
+    { label: "Tiêu đề", field: "title" },
+    { label: "Nội dung", field: "content" },
+    { label: "Tác giả", field: "author" },
     { label: "Ngày đăng", field: "createdAt", render: (value) => new Date(value).toLocaleDateString("vi-VN") },
-    { label: "Trạng thái", field: "status",  },
+    { label: "Trạng thái", field: "status" },
     { label: "Hành động", field: "actions", render: (value, row) => (
         <div className="flex justify-center gap-2">
           <button
