@@ -3,11 +3,50 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import BarChart from "../../../components/user/BarChart";
 import LineChartComponent from "../../../components/user/LineChartComponent";
 import PieChartComponent from "../../../components/user/PieChartComponent";
 import MapComponent from "../../../components/user/MapComponent";
 import LoadingScreen from "../../../components/user/LoadingScreen";
+
+const NextArrow = (props) => {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={`${className} custom-arrow custom-next`}
+      style={{ ...style, display: "block", right: "10px", zIndex: 1 }}
+      onClick={onClick}
+    >
+      ▶
+    </div>
+  );
+};
+
+const PrevArrow = (props) => {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={`${className} custom-arrow custom-prev`}
+      style={{ ...style, display: "block", left: "10px", zIndex: 1 }}
+      onClick={onClick}
+    >
+      ◀
+    </div>
+  );
+};
+
+const settings = {
+  dots: false,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 5,
+  slidesToScroll: 1,
+  nextArrow: <NextArrow />,
+  prevArrow: <PrevArrow />,
+};
 
 function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -54,13 +93,16 @@ function HomePage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://10.147.19.246:8080/contacts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "https://library-mana.azurewebsites.net/contacts",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (response.ok) {
         setStatus("Thông tin của bạn đã được gửi đi!");
@@ -109,36 +151,37 @@ function HomePage() {
           <p className="text-2xl text-gray-600" data-aos="fade-up">
             Những cuốn sách được yêu thích nhất tại thư viện.
           </p>
-        </div>
-
-        {/* Hiển thị sách được mượn nhiều */}
-        <div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6"
-          data-aos="fade-right"
-        >
-          {mostBorrowedBooks.map((book, index) => (
-            <div
-              key={index}
-              className="relative group overflow-hidden rounded-lg shadow-lg"
-            >
-              <img
-                src={book.image}
-                alt={book.title}
-                className="w-full h-60 object-cover transform group-hover:scale-110 transition duration-300"
-              />
-              <div className="absolute inset-0 bg-gray-900 bg-opacity-30 opacity-0 group-hover:opacity-100 transition duration-300"></div>
-              <div className="p-4 bg-white">
-                <p className="text-sm text-gray-500">{book.author}</p>
-                <h3 className="text-lg font-semibold">{book.title}</h3>
-                <p className="text-sm text-gray-400">
-                  Số lượt mượn:{" "}
-                  <span className="font-bold">{book.borrowCount}</span>
-                </p>
-              </div>
-            </div>
-          ))}
+          <div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6"
+            data-aos="fade-right"
+          >
+            <Slider {...settings}>
+              {mostBorrowedBooks.map((book, index) => (
+                <div
+                  key={index}
+                  className="relative group overflow-hidden rounded-lg shadow-lg"
+                >
+                  <img
+                    src={book.image}
+                    alt={book.title}
+                    className="w-full h-60 object-cover transform group-hover:scale-110 transition duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gray-900 bg-opacity-30 opacity-0 group-hover:opacity-100 transition duration-300"></div>
+                  <div className="p-4 bg-white">
+                    <p className="text-sm text-gray-500">{book.author}</p>
+                    <h3 className="text-lg font-semibold">{book.title}</h3>
+                    <p className="text-sm text-gray-400">
+                      Số lượt mượn:{" "}
+                      <span className="font-bold">{book.borrowCount}</span>
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </Slider>
+          </div>
         </div>
       </div>
+
       {/* Thống kê Section */}
       <div className="w-[90%] mx-auto" data-aos="fade-right">
         <h2 className="text-5xl font-bold text-center mb-10 mt-5 border-b-4 border-gray-300 pb-4">
@@ -167,14 +210,12 @@ function HomePage() {
       {/* Thống kê 2 Section */}
       <div className="w-[90%] mx-auto mt-10" data-aos="fade-up">
         <div className="flex gap-5 mt-10 items-center">
-          {/* Biểu đồ LineChart chiếm 3 phần */}
           <div
             className="flex-[60%] bg-white rounded shadow-md h-[70vh] p-5"
             data-aos="fade-up"
           >
             <LineChartComponent />
           </div>
-          {/* Phần text chiếm 2 phần */}
           <div
             className="flex-[40%] bg-gray-100 rounded p-5 flex items-center justify-center h-[70vh]"
             data-aos="fade-left"
@@ -193,14 +234,12 @@ function HomePage() {
       {/* Thống kê 3 Section */}
       <div className="w-[90%] mx-auto mt-10" data-aos="fade-up">
         <div className="flex gap-5 mt-16">
-          {/* Biểu đồ PieChart chiếm 3 phần */}
           <div
             className="flex-[60%] bg-white rounded shadow-md h-[70vh] p-5"
             data-aos="fade-up"
           >
             <PieChartComponent />
           </div>
-          {/* Phần text chiếm 2 phần */}
           <div
             className="flex-[40%] bg-gray-100 rounded p-5 flex items-center justify-center h-[70vh]"
             data-aos="fade-left"
@@ -218,19 +257,20 @@ function HomePage() {
       </div>
 
       {/* Liên hệ Section */}
-      <div className="flex flex-col lg:flex-row items-center justify-between px-8 py-10 min-h-screen bg-gray-50">
+      <div className="flex flex-col items-center justify-start px-8 py-10 min-h-screen bg-gray-50">
         <h1
-          className="text-2xl font-bold bg-amber-500 text-black px-6 py-3 rounded-md text-center mb-10 shadow-lg"
+          className="text-2xl font-bold bg-[#0abaff] text-white px-6 py-3 rounded-md text-center shadow-lg mb-10"
           data-aos="fade-up"
         >
           LIÊN HỆ VỚI CHÚNG TÔI
         </h1>
 
-        <div className="flex flex-wrap justify-between w-full max-w-6xl gap-8">
+        <div className="flex flex-row justify-between w-full max-w-6xl gap-8">
+          {/* Form điền thông tin */}
           <form
             className="flex flex-col w-full lg:w-1/2 bg-white p-6 rounded-md shadow-lg"
             data-aos="fade-up"
-            onSubmit={handleSubmit}
+            onSubmit={(e) => handleSubmit(e)}
           >
             <input
               type="text"
@@ -238,7 +278,7 @@ function HomePage() {
               value={formData.name}
               onChange={handleChange}
               placeholder="Họ tên:"
-              className="w-full p-3 mb-4 rounded-md border border-gray-300 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+              className="w-full p-3 mb-4 rounded-md border border-gray-300 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
             />
             <input
               type="text"
@@ -246,7 +286,7 @@ function HomePage() {
               value={formData.phone}
               onChange={handleChange}
               placeholder="Số điện thoại:"
-              className="w-full p-3 mb-4 rounded-md border border-gray-300 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+              className="w-full p-3 mb-4 rounded-md border border-gray-300 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
             />
             <input
               type="email"
@@ -254,29 +294,22 @@ function HomePage() {
               value={formData.email}
               onChange={handleChange}
               placeholder="Email:"
-              className="w-full p-3 mb-4 rounded-md border border-gray-300 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+              className="w-full p-3 mb-4 rounded-md border border-gray-300 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
             />
             <textarea
               name="message"
               value={formData.message}
               onChange={handleChange}
               placeholder="Gửi cho chúng tôi:"
-              className="w-full p-3 mb-4 rounded-md border border-gray-300 bg-gray-100 h-36 focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"
+              className="w-full p-3 mb-4 rounded-md border border-gray-300 bg-gray-100 h-36 focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
             ></textarea>
             <button
               type="submit"
-              className="w-full px-5 py-3 text-lg font-semibold text-white bg-amber-500 rounded-md hover:bg-amber-600 transition-shadow shadow-md"
+              className="w-full px-5 py-3 text-lg font-semibold text-white bg-[#0abaff] rounded-md hover:bg-green-600 transition-shadow shadow-md"
             >
               Gửi đi
             </button>
           </form>
-
-          {/* Hiển thị thông báo trạng thái */}
-          {status && (
-            <p className="text-green-500 text-lg mt-4" data-aos="fade-up">
-              {status}
-            </p>
-          )}
 
           {/* Bản đồ */}
           <div className="w-full lg:w-1/2 bg-gray-100 rounded-md shadow-lg overflow-hidden">
@@ -288,6 +321,13 @@ function HomePage() {
             </div>
           </div>
         </div>
+
+        {/* Hiển thị thông báo trạng thái */}
+        {status && (
+          <p className="text-green-500 text-lg mt-4" data-aos="fade-up">
+            {status}
+          </p>
+        )}
       </div>
     </div>
   );

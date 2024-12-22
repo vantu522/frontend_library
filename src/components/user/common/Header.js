@@ -1,18 +1,16 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { UserCircle, Bell, LogOut, Heart, ChevronDown } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import bookService from '../../../services/admin/booksService';
-import { createSlug } from '../../../utils/slugify';
+import React, { useState, useEffect, useCallback } from "react";
+import { UserCircle, Bell, LogOut, Heart, ChevronDown } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import bookService from "../../../services/admin/booksService";
+import { createSlug } from "../../../utils/slugify";
 
-const MegaMenu = ({categories}) => {
- 
-
+const MegaMenu = ({ categories }) => {
   return (
     <div className="absolute top-[100%] left-0 w-full bg-white shadow-lg py-6 opacity-0 transform scale-y-0 group-hover:opacity-100 group-hover:scale-y-100 transition-all duration-300 ease-out origin-top border-t border-gray-100 z-50">
       <div className="max-w-7xl mx-auto px-8">
         <div className="grid grid-cols-3 gap-6">
           {categories.map((category, index) => (
-            <a 
+            <a
               key={index}
               href={`/category/${createSlug(category)}`}
               className="p-3 rounded-lg transition-all duration-200 block group/item"
@@ -23,7 +21,6 @@ const MegaMenu = ({categories}) => {
                   <h3 className="text-base uppercase font-semibold text-gray-800 hover:text-blue-600 transition-colors">
                     {category}
                   </h3>
-                  
                 </div>
               </div>
             </a>
@@ -33,8 +30,6 @@ const MegaMenu = ({categories}) => {
     </div>
   );
 };
-
-
 
 const Header = () => {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
@@ -46,25 +41,25 @@ const Header = () => {
   const [showFavorites, setShowFavorites] = useState(false);
   const [megaMenuOpen, setMegaMenuOpen] = useState(false);
   const [categories, setCategories] = useState([]); // Added state for categories
-  const [placeholder, setPlaceholder] = useState('');
+  const [placeholder, setPlaceholder] = useState("");
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0); // Added state for current category index
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
+    const storedUser = localStorage.getItem("user");
     if (storedUser) {
       const userData = JSON.parse(storedUser);
       setIsLoggedIn(true);
       setUser(userData);
       setNotifications([
-        { id: 1, message: 'Bạn có sách mới' },
-        { id: 2, message: 'Ưu đãi đặc biệt' },
+        { id: 1, message: "Bạn có sách mới" },
+        { id: 2, message: "Ưu đãi đặc biệt" },
       ]);
       setFavoriteBooks([
-        { id: 1, title: 'Đắc Nhân Tâm' },
-        { id: 2, title: 'Nhà Giả Kim' },
+        { id: 1, title: "Đắc Nhân Tâm" },
+        { id: 2, title: "Nhà Giả Kim" },
       ]);
     }
   }, []);
@@ -76,23 +71,22 @@ const Header = () => {
       setPrevScrollPos(currentScrollPos);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [prevScrollPos]);
 
   const handleLogout = () => {
-    localStorage.removeItem('user');
+    localStorage.removeItem("user");
     setIsLoggedIn(false);
     setUser(null);
     setNotifications([]);
     setFavoriteBooks([]);
-    navigate('/loginemail');
+    navigate("/loginemail");
   };
 
   const toggleFavorites = () => {
     setShowFavorites(!showFavorites);
   };
-
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -100,10 +94,10 @@ const Header = () => {
         const data = await bookService.fetchCategories();
         setCategories(data);
         // Đặt placeholder ban đầu
-        setPlaceholder('Tìm kiếm sách');
+        setPlaceholder("Tìm kiếm sách");
       } catch (error) {
         console.error("Failed to fetch categories:", error);
-        setPlaceholder('Tìm kiếm sách');
+        setPlaceholder("Tìm kiếm sách");
       }
     };
     loadCategories();
@@ -117,13 +111,15 @@ const Header = () => {
     const fullText = `Tìm kiếm trong ${currentCategory}`;
 
     if (placeholderIndex < fullText.length) {
-      setPlaceholder(prev => fullText.slice(0, placeholderIndex + 1));
-      setPlaceholderIndex(prevIndex => prevIndex + 1);
+      setPlaceholder((prev) => fullText.slice(0, placeholderIndex + 1));
+      setPlaceholderIndex((prevIndex) => prevIndex + 1);
     } else {
       // Chuyển sang danh mục tiếp theo
-      setCurrentCategoryIndex((prevIndex) => (prevIndex + 1) % categories.length);
+      setCurrentCategoryIndex(
+        (prevIndex) => (prevIndex + 1) % categories.length
+      );
       setPlaceholderIndex(0);
-      setPlaceholder('');
+      setPlaceholder("");
     }
   }, [categories, currentCategoryIndex, placeholderIndex]);
 
@@ -136,7 +132,7 @@ const Header = () => {
     <>
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-500 ${
-          visible ? 'translate-y-0' : '-translate-y-full'
+          visible ? "translate-y-0" : "-translate-y-full"
         } bg-white shadow-md`}
       >
         {/* Top header - giới hạn width */}
@@ -181,7 +177,6 @@ const Header = () => {
               </form>
             </div>
 
-
             <div className="flex items-center space-x-4">
               {isLoggedIn ? (
                 <>
@@ -207,9 +202,9 @@ const Header = () => {
                   </div>
 
                   <div className="flex items-center space-x-2">
-                    <img 
+                    <img
                       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS075s728_EWpOqKmQl3L-_4qGiNIDbuoRxGw&s"
-                      alt={user?.name} 
+                      alt={user?.name}
                       className="w-10 h-10 rounded-full object-cover border-2 border-blue-500"
                     />
                     <span className="hidden md:inline text-gray-800 font-medium">
@@ -235,23 +230,38 @@ const Header = () => {
                 </a>
               )}
             </div>
-
           </div>
         </div>
 
         {/* Navigation Menu - full width background */}
-        <div className="w-full bg-[#0abaff] h-12">
+        <div className="w-full bg-[#0abaff] h-16">
           <div className="max-w-6xl mx-auto">
             <nav>
               <ul className="flex justify-center">
-                <li className="group relative px-4 py-2 hover:bg-custom">
-                  <a href="/" className="flex items-center text-sm uppercase text-[#fff] p-1.5  font-medium">
+                <li className="group relative px-4 py-4 hover:bg-custom">
+                  <a
+                    href="/"
+                    className="flex items-center text-large uppercase text-[#fff] p-1.5  font-medium"
+                  >
                     Trang chủ
                   </a>
                 </li>
 
-                <li className="group  px-4 py-2 hover:bg-custom">
-                  <a href="/category" className="flex items-center text-sm uppercase text-[#fff] p-1.5  font-medium">
+                <li className="group relative px-4 py-4 hover:bg-custom">
+                  <a
+                    href="/news"
+                    className="flex items-center text-large uppercase text-[#fff] p-1.5 font-medium"
+                  >
+                    Tin tức
+                    <ChevronDown className="w-4 h-4 ml-1" />
+                  </a>
+                </li>
+
+                <li className="group  px-4 py-4 hover:bg-custom">
+                  <a
+                    href="/category"
+                    className="flex items-center text-large uppercase text-[#fff] p-1.5  font-medium"
+                  >
                     Danh mục
                     <ChevronDown className="w-4 h-4 ml-1" />
                   </a>
@@ -259,15 +269,11 @@ const Header = () => {
                   <MegaMenu categories={categories} />
                 </li>
 
-                <li className="group relative px-4 py-2 hover:bg-custom">
-                  <a href="/news" className="flex items-center text-sm uppercase text-[#fff] p-1.5 font-medium">
-                    Tin tức
-                    <ChevronDown className="w-4 h-4 ml-1" />
-                  </a>
-                </li>
-
-                <li className="group relative px-4 py-2 hover:bg-custom">
-                  <a href="/shopcart" className="flex items-center text-sm uppercase text-[#fff] p-1.5  font-medium">
+                <li className="group relative px-4 py-4 hover:bg-custom">
+                  <a
+                    href="/shopcart"
+                    className="flex items-center text-large uppercase text-[#fff] p-1.5  font-medium"
+                  >
                     Giỏ sách
                   </a>
                 </li>
@@ -275,9 +281,8 @@ const Header = () => {
             </nav>
           </div>
         </div>
-
       </header>
-      
+
       {/* Spacer để tránh content bị che bởi fixed header */}
       <div className="h-32"></div>
     </>

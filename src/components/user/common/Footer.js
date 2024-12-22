@@ -82,10 +82,10 @@ function Footer() {
         </div>
 
         {/* Section 3: Social Links and Policies */}
-        <div className="flex flex-col items-center text-center">
+        <div className="flex flex-col items-left text-left">
           <h2 className="text-2xl font-bold mb-4 relative pb-2">
             Kết nối với chúng tôi
-            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-12 h-[2px] bg-blue-500"></div>
+            <div className="absolute bottom-0 left-0 w-12 h-[2px] bg-blue-500"></div>
           </h2>
           <div className="flex gap-4 mb-4">
             <a
