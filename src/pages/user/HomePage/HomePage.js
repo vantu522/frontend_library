@@ -16,8 +16,8 @@ const NextArrow = (props) => {
   const { className, style, onClick } = props;
   return (
     <div
-      className={`${className} custom-arrow custom-next`}
-      style={{ ...style, display: "block", right: "10px", zIndex: 1 }}
+      className={`${className} bg-blue-500 text-white w-12 h-12 flex items-center justify-center rounded-full shadow-md hover:bg-blue-600 hover:scale-110 transition-transform duration-200 absolute right-2 z-10`}
+      style={{ ...style }}
       onClick={onClick}
     >
       ▶
@@ -29,8 +29,8 @@ const PrevArrow = (props) => {
   const { className, style, onClick } = props;
   return (
     <div
-      className={`${className} custom-arrow custom-prev`}
-      style={{ ...style, display: "block", left: "10px", zIndex: 1 }}
+      className={`${className} bg-blue-500 text-white w-12 h-12 flex items-center justify-center rounded-full shadow-md hover:bg-blue-600 hover:scale-110 transition-transform duration-200 absolute left-2 z-10`}
+      style={{ ...style }}
       onClick={onClick}
     >
       ◀
@@ -103,7 +103,7 @@ function HomePage() {
           body: JSON.stringify(formData),
         }
       );
-
+ 
       if (response.ok) {
         setStatus("Thông tin của bạn đã được gửi đi!");
         setFormData({ name: "", phone: "", email: "", message: "" }); // Reset form
@@ -143,44 +143,39 @@ function HomePage() {
       </main>
 
       {/* Collections */}
-      <div className="grid gap-8 p-8">
-  <div className="text-center py-5">
-    <h2 className="text-5xl font-bold pt-5" data-aos="fade-right">
-      Danh sách được mượn nhiều
-    </h2>
-    <p className="text-2xl text-gray-600" data-aos="fade-up">
-      Những cuốn sách được yêu thích nhất tại thư viện.
-    </p>
-    <div
-      className="grid grid-cols-1 gap-10 pt-20 "
-      data-aos="fade-right"
-    >
-      <Slider {...settings}>
-        {mostBorrowedBooks.map((book, index) => (
-          <div
-            key={index}
-            className="relative group overflow-hidden rounded-lg shadow-lg"
-          >
-            <img
-              src={book.img}
-              alt={book.title}
-              className="w-[600px] h-[300px] object-cover transform group-hover:scale-105 transition duration-300"
-            />
-            <div className="absolute inset-0 bg-gray-900 bg-opacity-30 opacity-0 group-hover:opacity-100 transition duration-300"></div>
-            <div className="p-4 bg-white">
-              <p className="text-sm text-gray-500">{book.author}</p>
-              <h3 className="text-lg font-semibold">{book.title}</h3>
-              <p className="text-sm text-gray-400">
-                Số lượt mượn:{" "}
-                <span className="font-bold">{book.borrowCount}</span>
-              </p>
-            </div>
-          </div>
-        ))}
-      </Slider>
-    </div>
-  </div>
-</div>
+      <div className="px-8 py-5">
+        <h2 className="text-5xl font-bold text-center mb-5">
+          Danh sách được mượn nhiều
+        </h2>
+        <p className="text-2xl text-gray-600 text-center mb-10">
+          Những cuốn sách được yêu thích nhất tại thư viện.
+        </p>
+        <div className="relative border-2 border-blue-500 rounded-lg p-5">
+          <Slider {...settings}>
+            {mostBorrowedBooks.map((book, index) => (
+              <div
+                key={index}
+                className="px-2 relative group overflow-hidden rounded-lg shadow-lg"
+              >
+                <img
+                  src={book.img}
+                  alt={book.title}
+                  className="w-full h-[300px] object-cover transform group-hover:scale-105 transition duration-300"
+                />
+                <div className="absolute inset-0 bg-gray-900 bg-opacity-30 opacity-0 group-hover:opacity-100 transition duration-300"></div>
+                <div className="p-4 bg-white">
+                  <p className="text-sm text-gray-500">{book.author}</p>
+                  <h3 className="text-lg font-semibold">{book.title}</h3>
+                  <p className="text-sm text-gray-400">
+                    Số lượt mượn:{" "}
+                    <span className="font-bold">{book.borrowCount}</span>
+                  </p>
+                </div>
+              </div>
+            ))}
+          </Slider>
+        </div>
+      </div>
 
       {/* Thống kê Section */}
       <div className="w-[90%] mx-auto" data-aos="fade-right">
