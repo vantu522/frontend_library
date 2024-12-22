@@ -36,7 +36,7 @@ const AddBookForm = ({ setVisibleForm }) => {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 ">
       <h2 className="text-2xl font-bold mb-4">Thêm Sách</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">

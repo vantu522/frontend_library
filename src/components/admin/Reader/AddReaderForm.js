@@ -7,6 +7,7 @@ const AddReaderForm = ({ onClose, onAdd }) => {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -36,7 +37,7 @@ const AddReaderForm = ({ onClose, onAdd }) => {
       setError("");
 
       // Gọi API thêm thành viên
-      const memberData = { name, email, phoneNumber, address };
+      const memberData = { name, email, phoneNumber, address, password };
       const response = await memberService.addMember(memberData);
      
 
@@ -58,7 +59,8 @@ const AddReaderForm = ({ onClose, onAdd }) => {
   // Phần còn lại của component giữ nguyên
 
   return (
-    <div className="space-y-4 p-6 bg-white rounded-lg shadow-lg">
+    <div className="space-y-5 p-6 bg-white rounded-lg shadow-lg">
+      <h2 className="text-2xl font-bold mb-4">Thêm Bạn Đọc</h2>
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
           {error}
@@ -102,6 +104,16 @@ const AddReaderForm = ({ onClose, onAdd }) => {
           placeholder="Số điện thoại"
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
+      <div>
+        <label className="block font-medium text-gray-700">Mật khẩu:</label>
+        <input
+          type="text"
+          placeholder="mật khẩu"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
       </div>

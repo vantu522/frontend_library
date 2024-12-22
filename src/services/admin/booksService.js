@@ -53,7 +53,7 @@ const bookService = {
     return axios.get(`${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.USER.SUGGESTBOOK}`, {
       params: { query },
       headers: {
-        'Accept': 'application/json',
+        'Accept': 'application/json', 
       }
     })
     .then(response => response.data)

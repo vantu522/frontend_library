@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 import { motion, AnimatePresence } from 'framer-motion';
 
 
-const DeleteModal = ({ isOpen, onConfirm, onCancel }) => (
+const DeleteModal = ({ isOpen, onConfirm, onCancel }) => ( 
   <Modal onClose={onCancel} isOpen={isOpen}>
     <div className="p-6 text-center">
       <h3 className="text-lg font-semibold">Bạn có chắc chắn muốn xóa độc giả này?</h3>
@@ -164,10 +164,10 @@ const ReaderList = () => {
         <div className="flex gap-3 justify-center">
           <Tooltip content="Xem thông tin" position="left">
             <button
-              onClick={async () => {
+              onClick={() => {
                 setSelectedReader(row);
                 setInfoModalOpen(true);
-                await fetchBorrowingInfo(row.memberId);
+                fetchBorrowingInfo(row.memberId);
               }}
               className="text-blue-500 hover:text-blue-700"
             >
@@ -204,17 +204,15 @@ const ReaderList = () => {
 
   const fetchBorrowingInfo = async (memberId) => {
     try {
-      setLoading(true);
       const data = await memberService.fetchBorrowingMem(memberId);
       setBorrowingInfo(data);
       console.log("Borrowing info:", data);
     } catch (err) {
-      setError(err.message);
       console.error("Error fetching borrowing info:", err);
-    } finally {
-      setLoading(false);
+      // Handle error appropriately, maybe show a toast notification
     }
   };
+  
 
 
   const handleDelete = async () => {

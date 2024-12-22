@@ -22,25 +22,15 @@ const memberService = {
     },
 
     addMember: async (memberData) => {
-        try {
-            const response = await axios.post(
-                `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.ADDMEM}`,
-                memberData,
-                {
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    }
-                }
-            );
-
-            return response.data;
-        } catch (error) {
-            console.error('Service error:', error);
-            throw error;
-        }
-    },
-
+        return axios.post(`${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.ADDMEM}`, memberData, {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          }
+        })
+        .then(response => response.data)
+        .catch(error => { throw error; });
+      },
     updateMember: async (memberId, memberData) => {
         try {
             const response = await axios.put(

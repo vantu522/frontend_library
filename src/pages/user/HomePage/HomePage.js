@@ -69,7 +69,7 @@ function HomePage() {
     const loadResources = async () => {
       try {
         const response = await axios.get(
-          "https://library-mana.azurewebsites.net/transactions/topBorrow"
+          "https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/transactions/topBorrow"
         );
         setMostBorrowedBooks(response.data);
         setIsLoading(false);
@@ -144,43 +144,43 @@ function HomePage() {
 
       {/* Collections */}
       <div className="grid gap-8 p-8">
-        <div className="text-center py-5">
-          <h2 className="text-5xl font-bold pt-5" data-aos="fade-right">
-            Danh sách được mượn nhiều
-          </h2>
-          <p className="text-2xl text-gray-600" data-aos="fade-up">
-            Những cuốn sách được yêu thích nhất tại thư viện.
-          </p>
+  <div className="text-center py-5">
+    <h2 className="text-5xl font-bold pt-5" data-aos="fade-right">
+      Danh sách được mượn nhiều
+    </h2>
+    <p className="text-2xl text-gray-600" data-aos="fade-up">
+      Những cuốn sách được yêu thích nhất tại thư viện.
+    </p>
+    <div
+      className="grid grid-cols-1 gap-10 pt-20 "
+      data-aos="fade-right"
+    >
+      <Slider {...settings}>
+        {mostBorrowedBooks.map((book, index) => (
           <div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6"
-            data-aos="fade-right"
+            key={index}
+            className="relative group overflow-hidden rounded-lg shadow-lg"
           >
-            <Slider {...settings}>
-              {mostBorrowedBooks.map((book, index) => (
-                <div
-                  key={index}
-                  className="relative group overflow-hidden rounded-lg shadow-lg"
-                >
-                  <img
-                    src={book.image}
-                    alt={book.title}
-                    className="w-full h-60 object-cover transform group-hover:scale-110 transition duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gray-900 bg-opacity-30 opacity-0 group-hover:opacity-100 transition duration-300"></div>
-                  <div className="p-4 bg-white">
-                    <p className="text-sm text-gray-500">{book.author}</p>
-                    <h3 className="text-lg font-semibold">{book.title}</h3>
-                    <p className="text-sm text-gray-400">
-                      Số lượt mượn:{" "}
-                      <span className="font-bold">{book.borrowCount}</span>
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </Slider>
+            <img
+              src={book.img}
+              alt={book.title}
+              className="w-[600px] h-[300px] object-cover transform group-hover:scale-105 transition duration-300"
+            />
+            <div className="absolute inset-0 bg-gray-900 bg-opacity-30 opacity-0 group-hover:opacity-100 transition duration-300"></div>
+            <div className="p-4 bg-white">
+              <p className="text-sm text-gray-500">{book.author}</p>
+              <h3 className="text-lg font-semibold">{book.title}</h3>
+              <p className="text-sm text-gray-400">
+                Số lượt mượn:{" "}
+                <span className="font-bold">{book.borrowCount}</span>
+              </p>
+            </div>
           </div>
-        </div>
-      </div>
+        ))}
+      </Slider>
+    </div>
+  </div>
+</div>
 
       {/* Thống kê Section */}
       <div className="w-[90%] mx-auto" data-aos="fade-right">

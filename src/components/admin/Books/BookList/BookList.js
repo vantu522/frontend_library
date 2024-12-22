@@ -45,8 +45,10 @@ const BookList = () => {
     const loadSubCategories = async () => {
       if (selectedBigCategory !== "all") {
         try {
+          console.log(selectedBigCategory)
           const subCats = await bookService.fetchSubCategories(selectedBigCategory);
           setSubCategories(subCats || []);
+          console.log(subCategories)
         } catch (error) {
           console.error("Failed to load sub-categories", error);
           toast.error("Không thể tải danh mục con");
@@ -212,6 +214,7 @@ const BookList = () => {
 
   return (
     <div className="p-4">
+    
       {showDeleteConfirm && (
         <Modal onClose={() => setShowDeleteConfirm(false)} isOpen={showDeleteConfirm}>
           <h2 className="text-lg font-bold">Xác nhận xóa sách</h2>
@@ -286,8 +289,8 @@ const BookList = () => {
             className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
           >
             <option value="all">Tất cả trạng thái</option>
-            <option value="available">Còn trong kho</option>
-            <option value="unavailable">H��t hàng</option>
+            <option value="available">Còn sách</option>
+            <option value="unavailable">Hết sách</option>
           </select>
 
           <select
@@ -299,9 +302,9 @@ const BookList = () => {
             className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
           >
             <option value="all">Tất cả thể loại</option>
-            {bigCategories.map(category => (
-              <option key={category.id} value={category.name}>
-                {category.name}
+            {bigCategories.map((category,index) => (
+              <option key={category.id} value={category}>
+                {category}
               </option>
             ))}
           </select>
@@ -317,8 +320,8 @@ const BookList = () => {
             >
               <option value="all">Tất cả thể loại con</option>
               {subCategories.map(category => (
-                <option key={category.id} value={category.name}>
-                  {category.name}
+                <option key={category.id} value={category}>
+                  {category}
                 </option>
               ))}
             </select>
