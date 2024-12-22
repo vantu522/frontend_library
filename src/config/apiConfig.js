@@ -1,5 +1,5 @@
 export const API_ENDPOINTS = {
-  BASE_URL: 'https://library-mana.azurewebsites.net', // hoặc 'http://localhost:8080' tùy vào môi trường 'http://localhost:8080' tùy vào môi trường
+  BASE_URL: 'https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net', // hoặc 'http://localhost:8080' tùy vào môi trường 'http://localhost:8080' tùy vào môi trường
   USER: {
     BOOKS: '/books/categories',
     BOOK: '/books',
