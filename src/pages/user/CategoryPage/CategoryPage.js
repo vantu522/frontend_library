@@ -79,16 +79,6 @@ function CategoryPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 overflow-x-hidden relative">
-      {/* Background Parallax Layer */}
-      {/* <div 
-        className="absolute inset-0 z-0 bg-cover bg-center opacity-10 animate-slow-pulse" 
-        style={{
-          backgroundImage: 'url()',
-          transform: 'perspective(1000px) translateZ(-100px) scale(2)',
-          backgroundAttachment: 'fixed'
-        }}
-      /> */}
-
       {loading ? (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-white bg-opacity-80">
           <Player

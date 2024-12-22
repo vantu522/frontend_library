@@ -2,6 +2,9 @@ import React, { useState, useEffect, useCallback } from "react";
 import { UserCircle, Bell, LogOut, Heart, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import bookService from "../../../services/admin/booksService";
+// import FavoriteBooks from "../../../pages/user/CategoryPage/FavoriteBooks";
+// import EditProfile from "../../../pages/user/Login/EditProfile";
+
 import { createSlug } from "../../../utils/slugify";
 
 const MegaMenu = ({ categories }) => {
@@ -44,6 +47,7 @@ const Header = () => {
   const [placeholder, setPlaceholder] = useState("");
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0); // Added state for current category index
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const navigate = useNavigate();
 
@@ -180,7 +184,10 @@ const Header = () => {
             <div className="flex items-center space-x-4">
               {isLoggedIn ? (
                 <>
-                  <div className="relative">
+                  <div
+                    className="relative"
+                    onClick={() => navigate("/favorite_books")} // Điều hướng đến danh sách yêu thích
+                  >
                     <Heart
                       className="w-6 h-6 text-gray-600 cursor-pointer hover:text-red-600"
                       onClick={toggleFavorites}
@@ -201,24 +208,37 @@ const Header = () => {
                     )}
                   </div>
 
-                  <div className="flex items-center space-x-2">
+                  {/* Avatar với menu thả xuống */}
+                  <div
+                    className="relative"
+                    onMouseEnter={() => setShowDropdown(true)} // Hiển thị menu khi hover
+                    onMouseLeave={() => setShowDropdown(false)} // Ẩn menu khi rời chuột
+                  >
                     <img
                       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS075s728_EWpOqKmQl3L-_4qGiNIDbuoRxGw&s"
                       alt={user?.name}
-                      className="w-10 h-10 rounded-full object-cover border-2 border-blue-500"
+                      className="w-10 h-10 rounded-full object-cover border-2 border-blue-500 cursor-pointer"
                     />
-                    <span className="hidden md:inline text-gray-800 font-medium">
-                      {user?.name}
-                    </span>
+                    {showDropdown && (
+                      <div className="absolute top-full right-0 mt-2 w-48 bg-white shadow-lg rounded-md border border-gray-200">
+                        <p className="px-4 py-2 text-sm text-gray-800 font-medium border-b">
+                          {user?.name}
+                        </p>
+                        <button
+                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                          onClick={() => navigate("/edit_profile")}
+                        >
+                          Chỉnh sửa hồ sơ
+                        </button>
+                        <button
+                          className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                          onClick={handleLogout}
+                        >
+                          Đăng xuất
+                        </button>
+                      </div>
+                    )}
                   </div>
-
-                  <button
-                    onClick={handleLogout}
-                    className="inline-flex items-center px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-red-600 hover:bg-red-700"
-                  >
-                    <LogOut className="h-4 w-4 mr-2" />
-                    Đăng xuất
-                  </button>
                 </>
               ) : (
                 <a

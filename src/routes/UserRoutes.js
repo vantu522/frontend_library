@@ -10,7 +10,8 @@ import SubCategoryPage from "../pages/user/CategoryPage/SubCategoryPage";
 import BooksBySubCategory from "../pages/user/CategoryPage/BooksBySubCategory";
 import ShopcartPage from "../pages/user/ShopcartPage/ShopcartPage";
 import LoginEmail from "../pages/user/Login/LoginEmail";
-// import Signup from "../pages/user/Login/Signup";
+import FavoriteBooks from "../pages/user/CategoryPage/FavoriteBooks";
+import EditProfile from "../pages/user/Login/EditProfile";
 import BookDetail from "../components/user/BookDetail";
 import ForgotPassword from "../pages/user/Login/ForgotPassword";
 
@@ -30,8 +31,10 @@ const UserRoutes = () => {
           element={<BooksBySubCategory />}
         />
         <Route path="/book/:bookId" element={<BookDetail />} /> 
+        <Route path="/favorite_books" element={<FavoriteBooks />} /> 
         <Route path="/shopcart" element={<ShopcartPage />} />
         <Route path="/loginemail" element={<LoginEmail />} />
+        <Route path="/edit_profile" element={<EditProfile />} />
         {/* <Route path="/signup" element={<Signup />} /> */}
         <Route path="/forgotpassword" element={<ForgotPassword />} />
       </Routes>
