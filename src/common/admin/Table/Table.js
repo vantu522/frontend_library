@@ -26,7 +26,7 @@ const Table = ({ columns, data }) => {
               {columns.map((column, colIndex) => (
                 <td
                   key={colIndex}
-                  className="py-2 px-4 text-left border border-gray-300"
+                  className="py-2 px-4 text-center border border-gray-300"
                 >
                   {column.render
                     ? column.render(row[column.field], row)

@@ -97,8 +97,8 @@ const AddPostForm = ({ visible, onClose, onAddPost }) => {
             onChange={(e) => setStatus(e.target.value)}
             className="mt-1 p-2 w-full border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
           >
-            <option value="public">Công khai</option>
-            <option value="draft">Nháp</option>
+            <option value="Công khai">Công khai</option>
+            <option value="Ẩn">Ẩn</option>
           </select>
         </div>
 

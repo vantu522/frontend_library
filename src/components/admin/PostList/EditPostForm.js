@@ -7,7 +7,7 @@ const EditPostForm = ({ post, onClose, onUpdate }) => {
   const [content, setContent] = useState("");
   const [author, setAuthor] = useState("");
   const [createdAt, setCreatedAt] = useState("");
-  const [status, setStatus] = useState("Công khai");
+  const [status, setStatus] = useState("công khai");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -17,7 +17,7 @@ const EditPostForm = ({ post, onClose, onUpdate }) => {
       setContent(post.content);
       setAuthor(post.author);
       setCreatedAt(post.createdAt ? post.createdAt.split('T')[0] : "");
-      setStatus(post.status === "Công khai" ? "Công khai" : "Ẩn danh");
+      setStatus(post.status === "công khai" ? "công khai" : "ẩn");
     }
   }, [post]);
 
@@ -32,11 +32,12 @@ const EditPostForm = ({ post, onClose, onUpdate }) => {
       return;
     }
 
-    const updatedPost = { title, content, author, createdAt, status };
+    const data = { title, content, author, createdAt, status };
 
     try {
-      await postService.updatePost(post.id, updatedPost);
-      onUpdate(updatedPost);
+      // Gọi API cập nhật bài viết
+      const response = await postService.updatePost(post.id, data);
+      onUpdate(response); // Gửi lại response từ API vào onUpdate
       setLoading(false);
       onClose();
     } catch (error) {
@@ -106,8 +107,8 @@ const EditPostForm = ({ post, onClose, onUpdate }) => {
             onChange={(e) => setStatus(e.target.value)}
             className="mt-1 p-3 w-full border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
           >
-            <option value="Công khai">Công khai</option>
-            <option value="Ẩn danh">Ẩn danh</option>
+            <option value="công khai">Công khai</option>
+            <option value="ẩn">Ẩn</option>
           </select>
         </div>
 

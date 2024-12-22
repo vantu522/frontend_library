@@ -1,136 +1,187 @@
-import axios from 'axios';
-import { API_ENDPOINTS } from "../../config/apiConfig";
+import React, { useState, useEffect } from "react";
+import Table from "../../common/admin/Table/Table";
+import { FaCheck, FaTimes } from "react-icons/fa";
+import bookService from "../../services/admin/booksService"; // Đường dẫn phù hợp với cấu trúc dự án của bạn.
 
-const bookService = {
-  // Lấy tất cả sách
-  fetchAllBooks: async (page = 1, size = 10) => {
-    return axios.get(`${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.BOOKS}`, {
-      params: { page, size },
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      }
-    })
-    .then(response => response.data)
-    .catch(error => { throw error; });
-  },
+const LiteratureCategoryList = () => {
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true); // Trạng thái loading
+  const [editCategoryId, setEditCategoryId] = useState(null);
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [editSubCategoryId, setEditSubCategoryId] = useState(null);
+  const [newSubCategoryName, setNewSubCategoryName] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
-  // Lấy tất cả thể loại sách
-  fetchCategories: async () => {
-    return axios.get(`${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.CATEGORIES}`, {
-      headers: {
-        'Accept': 'application/json',
+  useEffect(() => {
+    // Gọi API lấy danh sách thể loại lớn và nhỏ
+    const fetchCategories = async () => {
+      try {
+        const data = await bookService.fetchAllCategories();
+        setCategories(data);
+      } catch (error) {
+        console.error("Lỗi khi lấy danh sách thể loại:", error);
+      } finally {
+        setLoading(false);
       }
-    })
-    .then(response => response.data)
-    .catch(error => { throw error; });
-  },
+    };
 
-  // Lấy các thể loại nhỏ theo thể loại lớn
-  fetchSubCategories: async (bigCategoryName) => {
-    return axios.get(`${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.CATEGORIES}/${bigCategoryName}`, {
-      headers: {
-        'Accept': 'application/json',
-      }
-    })
-    .then(response => response.data)
-    .catch(error => { throw error; });
-  },
+    fetchCategories();
+  }, []);
 
-  // Lấy sách thuộc thể loại nhỏ
-  fetchBooksBySubCategory: async (subCategoryName) => {
-    return axios.get(`${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.CATEGORIES}/${subCategoryName}/books`, {
-      headers: {
-        'Accept': 'application/json',
-      }
-    })
-    .then(response => response.data)
-    .catch(error => { throw error; });
-  },
+  const handleEditCategory = (id) => {
+    setEditCategoryId(id);
+    const category = categories.find((category) => category.id === id);
+    setNewCategoryName(category.name);
+  };
 
-  // Tìm sách theo tên sách hoặc tác giả
-  searchBooks: async (query) => {
-    return axios.get(`${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.USER.SUGGESTBOOK}`, {
-      params: { query },
-      headers: {
-        'Accept': 'application/json',
-      }
-    })
-    .then(response => response.data)
-    .catch(error => { throw error; });
-  },
+  const handleSaveCategory = (id) => {
+    const updatedCategories = categories.map((category) =>
+      category.id === id ? { ...category, name: newCategoryName } : category
+    );
+    setCategories(updatedCategories);
+    setEditCategoryId(null);
+    setNewCategoryName("");
+  };
 
-  // Thêm sách mới
-  addBook: async (bookData) => {
-    return axios.post(`${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.ADDBOOKS}`, bookData, {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      }
-    })
-    .then(response => response.data)
-    .catch(error => { throw error; });
-  },
+  const handleCancelCategory = () => {
+    setEditCategoryId(null);
+    setNewCategoryName("");
+  };
 
-  // Cập nhật sách
-  updateBook: async (bookId, bookData) => {
-    return axios.put(`${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.EDITBOOKS}/${bookId}`, bookData, {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      }
-    })
-    .then(response => response.data)
-    .catch(error => { throw error; });
-  },
+  const handleEditSubCategory = (id, parentId) => {
+    setEditSubCategoryId(id);
+    const category = categories.find((category) => category.id === parentId);
+    const subCategory = category.subCategories.find((sub) => sub.id === id);
+    setNewSubCategoryName(subCategory.name);
+  };
 
-  // Xóa sách
-  deleteBook: async (bookId) => {
-    return axios.delete(`${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.DELETEBOOKS}/${bookId}`, {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      }
-    })
-    .then(response => response.data)
-    .catch(error => { throw error; });
-  },
+  const handleSaveSubCategory = (id, parentId) => {
+    const updatedCategories = categories.map((category) =>
+      category.id === parentId
+        ? {
+            ...category,
+            subCategories: category.subCategories.map((subCategory) =>
+              subCategory.id === id
+                ? { ...subCategory, name: newSubCategoryName }
+                : subCategory
+            ),
+          }
+        : category
+    );
+    setCategories(updatedCategories);
+    setEditSubCategoryId(null);
+    setNewSubCategoryName("");
+  };
 
-  // Cập nhật tên thể loại lớn
-  updateBigCategory: async (oldName, newName) => {
-    return axios.put(`${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.CATEGORIES}/update-big-category`, null, {
-      params: { oldName, newName },
-      headers: {
-        'Accept': 'application/json',
-      }
-    })
-    .then(response => response.data)
-    .catch(error => { throw error; });
-  },
+  const handleCancelSubCategory = () => {
+    setEditSubCategoryId(null);
+    setNewSubCategoryName("");
+  };
 
-  // Xóa thể loại lớn
-  deleteBigCategory: async (bigCategoryName) => {
-    return axios.delete(`${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.CATEGORIES}/delete-big-category`, {
-      params: { bigCategoryName },
-      headers: {
-        'Accept': 'application/json',
-      }
+  const filteredCategories = categories
+    .map((category) => {
+      const filteredSubCategories = category.subCategories.filter((subCategory) =>
+        subCategory.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      return {
+        ...category,
+        matchesSearch: category.name.toLowerCase().includes(searchTerm.toLowerCase()),
+        subCategories: filteredSubCategories,
+      };
     })
-    .then(response => response.data)
-    .catch(error => { throw error; });
-  },
+    .filter(
+      (category) => category.matchesSearch || category.subCategories.length > 0
+    );
 
-  // Cập nhật thể loại nhỏ
-  updateSmallCategory: async (oldName, newName) => {
-    return axios.put(`${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.CATEGORIES}/update-small-category`, null, {
-      params: { oldName, newName },
-      headers: {
-        'Accept': 'application/json',
-      }
-    })
-    .then(response => response.data)
-    .catch(error => { throw error; });
-  },
+  const columns = [
+    { label: "Thể Loại Lớn", field: "name" },
+    {
+      label: "Thể Loại Nhỏ",
+      render: (val, row) => (
+        <div>
+          {editCategoryId === row.id ? (
+            <div className="flex items-center">
+              <input
+                type="text"
+                value={newCategoryName}
+                onChange={(e) => setNewCategoryName(e.target.value)}
+                className="p-2 border border-gray-300 rounded-md shadow-sm"
+              />
+              <FaCheck
+                onClick={() => handleSaveCategory(row.id)}
+                style={{ cursor: "pointer", marginLeft: 8 }}
+                className="text-green-500"
+              />
+              <FaTimes
+                onClick={handleCancelCategory}
+                style={{ cursor: "pointer", marginLeft: 8 }}
+                className="text-red-500"
+              />
+            </div>
+          ) : (
+            <span
+              onClick={() => handleEditCategory(row.id)}
+              className="cursor-pointer text-blue-500 hover:underline"
+            >
+              {row.name}
+            </span>
+          )}
+
+          {row.subCategories.map((subCategory) => (
+            <div key={subCategory.id} className="ml-4 mt-2">
+              {editSubCategoryId === subCategory.id ? (
+                <div className="flex items-center">
+                  <input
+                    type="text"
+                    value={newSubCategoryName}
+                    onChange={(e) => setNewSubCategoryName(e.target.value)}
+                    className="p-2 border border-gray-300 rounded-md shadow-sm"
+                  />
+                  <FaCheck
+                    onClick={() => handleSaveSubCategory(subCategory.id, row.id)}
+                    style={{ cursor: "pointer", marginLeft: 8 }}
+                    className="text-green-500"
+                  />
+                  <FaTimes
+                    onClick={handleCancelSubCategory}
+                    style={{ cursor: "pointer", marginLeft: 8 }}
+                    className="text-red-500"
+                  />
+                </div>
+              ) : (
+                <span
+                  onClick={() => handleEditSubCategory(subCategory.id, row.id)}
+                  className="cursor-pointer text-blue-500 hover:underline"
+                >
+                  {subCategory.name}
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <div className="p-6">
+      <h2 className="text-2xl font-bold mb-4 text-gray-800">Danh Sách Thể Loại</h2>
+
+      <input
+        type="text"
+        placeholder="Tìm kiếm thể loại"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="p-2 border border-gray-300 rounded-md mb-4 w-full"
+      />
+
+      {loading ? (
+        <div>Đang tải dữ liệu...</div>
+      ) : (
+        <Table columns={columns} data={filteredCategories} type="category" />
+      )}
+    </div>
+  );
 };
 
-export default bookService;
+export default LiteratureCategoryList;

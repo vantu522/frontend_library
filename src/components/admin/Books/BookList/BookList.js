@@ -13,7 +13,7 @@ const BookList = () => {
   const [books, setBooks] = useState([]);
   const [visibleForm, setVisibleForm] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const [bookId, setBookId] = useState(null);
+  const [bookbookId, setBookbookId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [genreFilter, setGenreFilter] = useState("all");
@@ -42,13 +42,13 @@ const BookList = () => {
     };
 
     loadBooks();
-  }, [currentPage, booksPerPage]); // Thêm dependencies để gọi lại khi `currentPage` hoặc `booksPerPage` thay đổi
+  }, [currentPage, booksPerPage]);
 
   const handleDeleteBook = async () => {
     if (bookToDelete) {
       try {
-        await bookService.deleteBook(bookToDelete.id);
-        setBooks(books.filter(book => book.id !== bookToDelete.id));
+        await bookService.deleteBook(bookToDelete.bookId);
+        setBooks(books.filter(book => book.bookId !== bookToDelete.bookId));
         toast.success(`Đã xóa sách "${bookToDelete.title}"`);
         setShowDeleteConfirm(false);
         setBookToDelete(null);
@@ -67,8 +67,8 @@ const BookList = () => {
         quantity: book.status === "available" ? 0 : book.quantity || 1,
       };
       
-      await bookService.updateBook(book.id, updatedBook);
-      setBooks(books.map(b => b.id === book.id ? updatedBook : b));
+      await bookService.updateBook(book.bookId, updatedBook);
+      setBooks(books.map(b => b.bookId === book.bookId ? updatedBook : b));
       toast.success(`Cập nhật trạng thái sách "${book.title}"`);
     } catch (error) {
       console.error("Failed to update book status", error);
@@ -90,6 +90,18 @@ const BookList = () => {
     }
   };
   
+  const handleAddBook = async (bookData) => {
+    try {
+      const newBook = await bookService.addBook(bookData);
+      setBooks((prevBooks) => [...prevBooks, newBook]);
+      toast.success(`Thêm sách "${bookData.title}" thành công`);
+      setVisibleForm(false);
+    } catch (error) {
+      console.error("Failed to add book", error);
+      toast.error("Không thể thêm sách");
+    }
+  };
+
   const filteredBooks = books.filter((book) => {
     const matchesSearch =
       (book.title || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -103,7 +115,6 @@ const BookList = () => {
     { 
       label: "Hình ảnh", 
       field: "img", 
-      width: "10%",
       render: (val) => (
         <span className="text-gray-600 font-mono">
           <img src={val} alt="Book" />
@@ -113,7 +124,6 @@ const BookList = () => {
     { 
       label: "Tên sách", 
       field: "title", 
-      width: "20%",
       render: (val, row) => (
         <div className="flex flex-col">
           <span className="font-semibold">{val}</span>
@@ -124,7 +134,6 @@ const BookList = () => {
     { 
       label: "Tác giả", 
       field: "author", 
-      width: "5%",
       render: (val) => (
         <span className="text-gray-700">{val}</span>
       )
@@ -132,7 +141,6 @@ const BookList = () => {
     { 
       label: "Thể loại", 
       field: "bigCategory", 
-      width: "10%",
       render: (val) => (
         <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
           {val[0].name} 
@@ -142,13 +150,11 @@ const BookList = () => {
     { 
       label: "Xuất bản", 
       field: "publicationYear", 
-      width: "10%",
       render: (val) => <span>{val}</span>
     },
     { 
       label: "Kho", 
       field: "quantity", 
-      width: "10%",
       render: (val, row) => (
         <div className="flex flex-col items-center">
           <span className={`font-bold ${val > 5 ? 'text-green-600' : val > 0 ? 'text-yellow-600' : 'text-red-600'}`}>
@@ -162,7 +168,6 @@ const BookList = () => {
     },
     {
       label: "Hành động",
-      width: "10%",
       render: (val, row) => (
         <div className="flex space-x-2 justify-center">
           <Tooltip content="Chỉnh sửa" position="top">
@@ -170,7 +175,7 @@ const BookList = () => {
               onClick={() => {
                 setVisibleForm(true);
                 setIsEdit(true);
-                setBookId(row.id);
+                setBookbookId(row.bookId);
               }}
               className="text-blue-500 hover:text-blue-700"
             >
@@ -205,35 +210,12 @@ const BookList = () => {
       <Modal onClose={() => setVisibleForm(false)} isOpen={visibleForm}>
         {isEdit ? (
           <EditBookForm
-            bookId={bookId}
+            bookbookId={bookbookId}
             setVisibleForm={setVisibleForm}
-            onUpdate={async (book) => {
-              try {
-                await bookService.updateBook(bookId, book);
-                setBooks(books.map(b => b.id === bookId ? book : b));
-                toast.success(`Cập nhật sách "${book.title}" thành công`);
-                setVisibleForm(false);
-              } catch (error) {
-                console.error("Failed to update book", error);
-                toast.error("Không thể cập nhật sách");
-              }
-            }}
+            onUpdate={handleAddBook}
           />
         ) : (
-          <AddBookForm
-            setVisibleForm={setVisibleForm}
-            onAdd={async (book) => {
-              try {
-                const newBook = await bookService.addBook(book);
-                setBooks([...books, newBook]);
-                toast.success(`Thêm sách "${book.title}" thành công`);
-                setVisibleForm(false);
-              } catch (error) {
-                console.error("Failed to add book", error);
-                toast.error("Không thể thêm sách");
-              }
-            }}
-          />
+          <AddBookForm setVisibleForm={setVisibleForm} onAdd={handleAddBook} />
         )}
       </Modal>
 
@@ -296,26 +278,18 @@ const BookList = () => {
             <option value="all">Tất cả thể loại</option>
             <option value="fiction">Tiểu thuyết</option>
             <option value="non-fiction">Phi hư cấu</option>
-            <option value="science">Khoa học</option>
           </select>
 
           <button
-            onClick={() => {
-              setVisibleForm(true);
-              setIsEdit(false);
-            }}
-            className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+            onClick={() => setVisibleForm(true)}
+            className="bg-blue-500 hover:bg-blue-700 text-white p-2 rounded-md flex items-center gap-2"
           >
             <FaPlus /> Thêm sách
           </button>
         </div>
       </div>
 
-      <Table
-        data={filteredBooks}
-        columns={columns}
-        isLoading={isLoading}
-      />
+      <Table columns={columns} data={filteredBooks} isLoading={isLoading} />
 
       <Pagination
         currentPage={currentPage}
