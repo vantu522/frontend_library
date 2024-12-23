@@ -79,19 +79,22 @@ const PendingBorrowList = () => {
     { label: "Ngày trả dự kiến", field: "dueDate" },
     {
       label: "Trạng thái",
-      render: (val) => (
-        <span
-          className={`font-bold ${
-            val?.status === "Đang chờ"
-              ? "text-red-500"
-              : val?.status === "Đã trả"
-              ? "text-green-500"
-              : "text-gray-500"
-          }`}
-        >
-          {val?.status || "Đang chờ"}
-        </span>
-      ),
+      render: (val,row) => {
+        console.log("Giá trị của val:", val); // In ra giá trị của val
+        return (
+          <span
+            className={`font-bold ${
+              val?.status === "Đang chờ"
+                ? "text-red-500"
+                : val?.status === "Đã duyệt"
+                ? "text-green-500"
+                : "text-gray-500"
+            }`}
+          >
+            {row.status || "Không xác định"}
+          </span>
+        );
+      },
     },
     {
       label: "Hành động",

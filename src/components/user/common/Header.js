@@ -138,7 +138,7 @@ const Header = () => {
       >
         {/* Top Header Section */}
         <div className="mx-auto max-w-7xl px-2">
-          <div className="flex items-center justify-between py-0">
+          <div className="flex items-center justify-between h-17">
             {/* Logo Section */}
             <a href="/" className="flex items-center gap-4">
               <img
@@ -182,7 +182,7 @@ const Header = () => {
                 autoplay
                 loop
                 src={hotline}
-                style={{ height: '150px', width: '150px' }}
+                style={{ height: '100px', width: '100px' }}
               />
               <p className="ml-1 text-red-500 text-lg font-semibold italic">0123456789</p>
 
