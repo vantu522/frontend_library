@@ -1,221 +1,288 @@
 import React from "react";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
-// Component Banner
 const NewsBanner = () => {
-  const imageData = [
-    "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg",
-    "https://i.pinimg.com/474x/07/8e/02/078e0212bce731f1f7a202767ffd5ca8.jpg",
-    "https://i.pinimg.com/474x/07/8e/02/078e0212bce731f1f7a202767ffd5ca8.jpg",
-    "https://i.pinimg.com/474x/fe/d3/af/fed3af57eb72d547d800287bd8220955.jpg",
-  ];
-
-  const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
-
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imageData.length);
-    }, 3000); // 5 giây đổi ảnh
-    return () => clearInterval(interval);
-  }, []);
+  const bannerImage =
+    "https://i.pinimg.com/474x/36/10/f7/3610f7e77169c14dd96666579c8d8320.jpg";
 
   return (
-    <div className="relative w-full h-[350px] overflow-hidden mt-8">
-      {/* Ảnh nền thay đổi */}
+    <div className="relative w-[90%] h-[550px] overflow-hidden mt-8 mx-auto">
       <div
-        className="absolute inset-0 bg-cover bg-center transition-all duration-1000"
-        style={{ backgroundImage: `url(${imageData[currentImageIndex]})` }}
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage: `url(${bannerImage})`,
+          imageRendering: "auto",
+        }}
       ></div>
-
-      {/* Lớp overlay */}
-      <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-center text-white">
-        <h1 className="text-2xl md:text-4xl font-bold mb-4 italic">
-          Library Newsletters
-        </h1>
-        <p className="text-sm md:text-lg mb-4">
-          Sign up for our email newsletters and get library news and information
-          delivered directly to your inbox.
-        </p>
-        <button className="bg-white text-black py-2 px-4 rounded hover:bg-gray-200 transition">
-          Subscribe
-        </button>
-      </div>
     </div>
   );
 };
 
-// Component chính cho NewsPage
 function NewsPage() {
+  const [showAll, setShowAll] = React.useState(false);
   const cards = [
     {
       date: "December 21, 2024",
-      title: "The Evolution of Digital Art in the 21st Century",
+      title: "The Evolution of Digital Art",
       description:
-        "This exhibition explores the innovative ways artists are integrating technology into their creative processes.",
+        "Explore how technology is redefining the boundaries of creativity, offering artists innovative ways to express themselves through mediums like VR and AI.",
+      image:
+        "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg",
     },
     {
       date: "December 20, 2024",
-      title: "Wisdom's Beacon: A Journey Through History",
+      title: "Harvard's Hidden Corners",
       description:
-        "Join us for a special exhibit showcasing the evolution of Harvard's library and its impact on knowledge dissemination.",
+        "Uncover the untold stories of Harvard Library's hidden treasures, a journey through its secret archives and rare manuscripts.",
+      image:
+        "https://i.pinimg.com/474x/f1/26/c6/f126c69e40473c81a2ae7dc900c6a4a5.jpg",
     },
     {
       date: "December 19, 2024",
-      title: "The Future of Artificial Intelligence in Libraries",
+      title: "AI in Libraries",
       description:
-        "A look at how AI technologies are revolutionizing library management and data organization.",
+        "Discover the groundbreaking impact of artificial intelligence on library management, from cataloging to personalized user experiences.",
+      image:
+        "https://i.pinimg.com/736x/fa/1b/04/fa1b0435208b02f9350e93a1b814dc39.jpg",
     },
     {
       date: "December 18, 2024",
-      title: "Exploring the Secret Archives of Harvard Library",
+      title: "Harvard's Secret Archives",
       description:
-        "Uncover hidden treasures from Harvard’s secret archives in a rare behind-the-scenes tour.",
-    },
-    {
-      date: "December 17, 2024",
-      title: "Sustainability in the Digital Age",
-      description:
-        "This seminar focuses on the environmental impact of digital technology and strategies for reducing its carbon footprint.",
-    },
-    {
-      date: "December 16, 2024",
-      title: "The Impact of Technology on Traditional Publishing",
-      description:
-        "An in-depth discussion on how digital tools and platforms are transforming the publishing world.",
+        "Dive deep into Harvard's rich history with exclusive access to its secret archives and explore their cultural significance.",
+      image:
+        "https://i.pinimg.com/474x/ad/72/67/ad7267e32e6a8298b79da501d64da0c2.jpg",
     },
   ];
 
-  const newsItems = [
+  const boxs = [
     {
-      image:
-        "https://i.pinimg.com/736x/d8/ae/c4/d8aec4549b5612d008e31e3be96bde0f.jpg",
-      date: "December 21, 2024",
-      title: "Harvard Affiliates Celebrate Day of the Dead",
+      image: "https://images.unsplash.com/photo-1512820790803-83ca734da794",
+      date: "December 10, 2024",
+      title: "Cuốn sách của năm",
+      description:
+        "Đây là một tác phẩm xuất sắc, khai phá những khía cạnh tâm lý và triết học sâu sắc.",
+    },
+    {
+      image: "https://images.unsplash.com/photo-1553729459-efe14ef6055d",
+      date: "December 8, 2024",
+      title: "Hành trình khám phá",
+      description:
+        "Tác phẩm này kể về một cuộc phiêu lưu kỳ thú qua những vùng đất xa xôi.",
     },
     {
       image:
-        "https://i.pinimg.com/474x/f1/26/c6/f126c69e40473c81a2ae7dc900c6a4a5.jpg",
-      date: "December 20, 2024",
-      title: "Exploring the Hidden Corners of Harvard Library",
+        "https://i.pinimg.com/474x/25/5b/2e/255b2e5562fd8efba07a58b0e7150cde.jpg",
+      date: "December 7, 2024",
+      title: "Sách cho tâm hồn",
+      description:
+        "Một quyển sách chữa lành, mang lại sự bình yên cho tâm hồn người đọc.",
+    },
+    {
+      image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c",
+      date: "December 5, 2024",
+      title: "Bí mật vũ trụ",
+      description:
+        "Khám phá những bí mật thú vị và những câu chuyện khoa học đầy bất ngờ.",
+    },
+  ];
+  const quote = [
+    {
+      image:
+        "https://i.pinimg.com/474x/35/75/cc/3575cc36a19c5791e65d04a3daa8587e.jpg",
+      date: "November 28, 2024",
+      title: "Ánh sáng hy vọng",
+      description:
+        "Cuốn sách khắc họa hành trình vượt qua những thử thách của con người để tìm kiếm ánh sáng hy vọng. Mỗi trang sách là một thông điệp đầy ý nghĩa về việc không bao giờ bỏ cuộc, dù con đường phía trước có mù mịt đến đâu. 'Hãy luôn hướng về phía mặt trời, và bóng tối sẽ ngả phía sau bạn.'",
     },
     {
       image:
-        "https://i.pinimg.com/736x/fa/1b/04/fa1b0435208b02f9350e93a1b814dc39.jpg",
-      date: "December 19, 2024",
-      title: "Wisdom's Beacon: A New Era in Library Research",
+        "https://i.pinimg.com/474x/af/ac/74/afac745e98b1f8ab415aa4f8dc466a48.jpg",
+      date: "December 8, 2024",
+      title: "Những dòng suy tưởng",
+      description:
+        "Tác phẩm chứa đựng những trích dẫn nổi bật từ các triết gia, nhà văn, và nhà khoa học vĩ đại. 'Cuộc sống không phải là việc chờ đợi cơn bão qua đi, mà là học cách nhảy múa dưới mưa.' Đây là lời nhắn gửi tới độc giả rằng chúng ta luôn có thể tìm thấy niềm vui và ý nghĩa trong chính khoảnh khắc hiện tại.",
     },
     {
       image:
-        "https://i.pinimg.com/474x/ad/72/67/ad7267e32e6a8298b79da501d64da0c2.jpg",
-      date: "December 18, 2024",
-      title: "Unlocking the Past: Harvard's Rich History",
+        "https://i.pinimg.com/474x/d8/05/66/d80566e323c722f232f39c01a7614fa5.jpg",
+      date: "December 7, 2024",
+      title: "Hành trình của tâm hồn",
+      description:
+        "Được viết với giọng văn nhẹ nhàng nhưng đầy sức mạnh, cuốn sách dẫn dắt người đọc bước qua những nỗi đau, sợ hãi để tìm lại bản ngã. 'Hãy tha thứ cho chính mình, bởi bạn xứng đáng với sự bình yên hơn bất kỳ ai khác.' Đây là một thông điệp sâu sắc và đầy tính nhân văn.",
     },
     {
       image:
-        "https://i.pinimg.com/736x/c6/12/c0/c612c003e3207d22bd5aa23dc6faac38.jpg",
-      date: "December 17, 2024",
-      title: "Exploring New Technologies in Library Management",
-    },
-    {
-      image:
-        "https://i.pinimg.com/474x/a1/ab/6f/a1ab6f109de474abcd87a5e6407322c9.jpg",
-      date: "December 16, 2024",
-      title: "Wisdom's Beacon: The Future of Digital Libraries",
+        "https://i.pinimg.com/474x/10/c3/4d/10c34dc363b946117595bfaa3b16fa49.jpg",
+      date: "December 5, 2024",
+      title: "Sự cân bằng của cuộc sống",
+      description:
+        "Tác phẩm này là lời nhắc nhở rằng cuộc sống là một chuỗi các mảnh ghép giữa niềm vui và nỗi buồn. 'Khi bạn học cách tận hưởng những điều nhỏ bé, cuộc sống sẽ trở nên phong phú và ý nghĩa hơn.' Đây là quyển sách dành cho những ai đang tìm kiếm cách cân bằng trong cuộc sống hiện đại bận rộn.",
     },
   ];
 
   return (
-    <div className="grid gap-8 p-8">
+    <div className="p-8">
       {/* Header Section */}
       <div className="text-center py-10">
-        <h1 className="text-5xl font-bold pt-10 text-blue-800 italic transform transition duration-300 hover:translate-y-2">
-          NEWS
+        <h1 className="text-5xl font-extrabold text-blue-800 italic relative overflow-hidden animate-slideIn">
+          <span className="inline-block">NEWS</span>
         </h1>
-        <p className="text-3xl text-gray-600 italic transform transition duration-300">
-          Wisdom's Beacon Library is a hub for learning, sharing and the
-          discovery of new ideas. Read about that work in action.
+        <p className="text-2xl text-gray-600 italic animate-slideIn">
+          Explore the latest updates and events at Wisdom's Beacon Library.
         </p>
       </div>
+
       {/* Banner Section */}
-      <NewsBanner /> {/* Đây là nơi chèn banner vào */}
-      {/* News Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {newsItems.map((item, index) => (
+      <NewsBanner />
+
+      <div className="mt-10 bg-white shadow-lg rounded-lg overflow-hidden">
+        <h1 className="text-4xl font-extrabold text-blue-900 text-left pl-8 pt-6">
+          Bài viết mới
+        </h1>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-[90%] mx-auto">
+          {[
+            {
+              title: "The Evolution of Digital Art in the 21st Century",
+              date: "December 15, 2024",
+              description:
+                "Explore how digital art has transformed in the modern age and its implications for creative expression.",
+              image:
+                "https://i.pinimg.com/474x/07/8e/02/078e0212bce731f1f7a202767ffd5ca8.jpg",
+            },
+            {
+              title: "Wisdom's Beacon: A Journey Through History",
+              date: "December 14, 2024",
+              description:
+                "Discover the untold stories of Wisdom's Beacon Library and its impact on preserving historical treasures.",
+              image:
+                "https://i.pinimg.com/474x/de/48/a2/de48a213f60861a343930890d40f87ed.jpg",
+            },
+            {
+              title: "The Future of Artificial Intelligence in Libraries",
+              date: "December 13, 2024",
+              description:
+                "Delve into the potential of AI technologies in revolutionizing library systems worldwide.",
+              image:
+                "https://i.pinimg.com/474x/1a/fe/17/1afe17ee750143879cefa3357a4a74f9.jpg",
+            },
+          ].map((event, index) => (
+            <div key={index} className="p-6 rounded-lg shadow-lg">
+              <div
+                className="w-full h-48 bg-cover bg-center rounded-lg"
+                style={{
+                  backgroundImage: `url('${event.image}')`,
+                }}
+              ></div>
+              <h3 className="text-2xl font-bold text-blue-700 mt-4 mb-2">
+                {event.title}
+              </h3>
+              <p className="text-md text-gray-500 mb-4">{event.date}</p>
+              <p className="text-gray-600 italic">{event.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Old Cards Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-10 w-[90%] mx-auto">
+        {cards.map((card, index) => (
           <div
             key={index}
-            className="relative group overflow-hidden rounded-lg shadow-lg"
+            className="flex flex-col md:flex-row bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105"
           >
-            <img
-              src={item.image}
-              alt={item.title}
-              className="w-full h-48 object-cover transform group-hover:scale-110 transition duration-300"
-            />
-            <div className="absolute inset-0 bg-gray-900 bg-opacity-30 opacity-0 group-hover:opacity-100 transition duration-300"></div>
-            <div className="p-4 bg-white">
-              <p className="text-sm text-gray-500">{item.date}</p>
-              <h3 className="text-lg font-semibold">{item.title}</h3>
+            <div
+              className="w-full md:w-1/3 h-48 bg-cover bg-center"
+              style={{
+                backgroundImage: `url(${card.image})`,
+              }}
+            ></div>
+            {/* Content */}
+            <div className="p-6 flex flex-col justify-between">
+              <p className="text-md text-gray-500 mb-2">{card.date}</p>
+              <h3 className="text-2xl font-bold text-blue-700 mb-4">
+                {card.title}
+              </h3>
+              <p className="text-gray-600 italic">{card.description}</p>
             </div>
           </div>
         ))}
       </div>
-      {/* Info Section */}
-{/* Info Section */}
-<div className="grid gap-4 md:grid-cols-2 items-start">
-  {/* Subscribe Section */}
-  <div className="bg-gray-100 p-6 rounded-lg max-w-md mx-auto">
-    <h3 className="text-xl font-bold mb-2">STAY IN THE KNOW</h3>
-    <p className="mb-4">
-      Sign up for email updates from Wisdom's Beacon Library
-    </p>
-    <input
-      type="email"
-      placeholder="Email Address"
-      className="w-full p-2 border rounded-lg mb-4"
-    />
-    <button className="w-full bg-blue-600 text-white py-1.5 text-sm rounded-lg hover:bg-blue-700">
-      SIGN UP
-    </button>
-  </div>
 
-  {/* Social Media Section */}
-  <div className="bg-gray-100 p-6 rounded-lg max-w-md mx-auto">
-    <h3 className="text-xl font-bold mb-2">FOLLOW WISDOM'S BEACON</h3>
-    <p className="mb-4">
-      You can find us on Facebook, Twitter, YouTube, Instagram, and LinkedIn
-    </p>
-    <div className="space-y-2">
-      <span className="flex items-center space-x-2">
-        <i className="fab fa-facebook-square text-xl text-blue-600"></i>
-        <span>Facebook</span>
-      </span>
-      <span className="flex items-center space-x-2">
-        <i className="fab fa-youtube text-xl text-red-600"></i>
-        <span>YouTube</span>
-      </span>
-      <span className="flex items-center space-x-2">
-        <i className="fab fa-instagram text-xl text-pink-500"></i>
-        <span>Instagram</span>
-      </span>
-    </div>
-  </div>
-</div>
-
-      {/* Cards Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {cards.map((card, index) => (
+      {/* 1 Card Section */}
+      <div className="grid grid-cols-1 gap-8 mt-10 w-[90%] mx-auto">
+        <h1 className="text-4xl font-extrabold text-blue-900 text-left pl-8 pt-6 -ml-8">
+          Review sách
+        </h1>
+        {boxs.slice(0, showAll ? boxs.length : 3).map((card, index) => (
           <div
             key={index}
-            className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl hover:scale-105 transition-all duration-300"
+            className="flex flex-col md:flex-row bg-white shadow-lg rounded-lg overflow-hidden"
           >
-            <p className="text-sm text-gray-500 mb-2">{card.date}</p>
-            <h2 className="text-2xl font-bold text-blue-600 mb-4">
-              {card.title}
-            </h2>
-            <p className="text-large italic text-gray-600">
-              {card.description}
-            </p>
+            {/* Image */}
+            <div
+              className="w-full md:w-1/3 h-48 bg-cover bg-center rounded-lg"
+              style={{
+                backgroundImage: `url(${card.image})`,
+              }}
+            ></div>
+            {/* Content */}
+            <div className="p-6 flex flex-col justify-between">
+              <p className="text-md text-gray-500 mb-2">{card.date}</p>
+              <h3 className="text-2xl font-bold text-blue-700 mb-4">
+                {card.title}
+              </h3>
+              <p className="text-gray-600 italic">{card.description}</p>
+            </div>
           </div>
         ))}
+        {/* "Xem thêm" Button */}
+        {boxs.length > 3 && (
+          <button
+            onClick={() => setShowAll(!showAll)}
+            className="mt-4 px-6 py-3 bg-blue-700 text-white text-lg font-semibold rounded-md hover:bg-blue-800 mx-auto block"
+          >
+            {showAll ? "Thu gọn" : "Xem thêm"}
+          </button>
+        )}
+      </div>
+
+      {/* 1 Cards Section */}
+      <div className="grid grid-cols-1 gap-8 mt-10 w-[90%] mx-auto">
+        <h1 className="text-4xl font-extrabold text-blue-900 text-left pl-8 pt-6 -ml-8">
+          Trích dẫn hay
+        </h1>
+        {quote.slice(0, showAll ? quote.length : 3).map((card, index) => (
+          <div
+            key={index}
+            className="flex flex-col md:flex-row bg-white shadow-lg rounded-lg overflow-hidden"
+          >
+            {/* Image */}
+            <div
+              className="w-full md:w-1/3 h-60 bg-cover bg-center rounded-lg flex-shrink-0"
+              style={{
+                backgroundImage: `url(${card.image})`,
+              }}
+            ></div>
+            {/* Content */}
+            <div className="p-6 flex flex-col justify-between">
+              <p className="text-md text-gray-500 mb-2">{card.date}</p>
+              <h3 className="text-2xl font-bold text-blue-700 mb-4">
+                {card.title}
+              </h3>
+              <p className="text-gray-600 italic">{card.description}</p>
+            </div>
+          </div>
+        ))}
+        {/* "Xem thêm" Button */}
+        {quote.length > 3 && (
+          <button
+            onClick={() => setShowAll(!showAll)}
+            className="mt-4 px-6 py-3 bg-blue-700 text-white text-lg font-semibold rounded-md hover:bg-blue-800 mx-auto block"
+          >
+            {showAll ? "Thu gọn" : "Xem thêm"}
+          </button>
+        )}
       </div>
     </div>
   );
