@@ -30,8 +30,6 @@ const PendingBorrowList = () => {
     }
   };
 
-  
-
   const handleApprove = async () => {
     const { borrow, isAprove } = confirmAction;
     try {
@@ -71,6 +69,7 @@ const PendingBorrowList = () => {
     );
   });
 
+
   const columns = [
     { label: "Tên người mượn", field: "memberName" },
     { label: "Tên sách", field: "bookTitle" },
@@ -82,14 +81,14 @@ const PendingBorrowList = () => {
       render: (val) => (
         <span
           className={`font-bold ${
-            val.status === "Đang chờ"
+            val?.status === "Đang chờ"
               ? "text-red-500"
-              : val.status === "Đã duyệt"
+              : val?.status === "Đã trả"
               ? "text-green-500"
               : "text-gray-500"
           }`}
         >
-          {val.status}
+          {val?.status || "khong xac dinh"}
         </span>
       ),
     },
