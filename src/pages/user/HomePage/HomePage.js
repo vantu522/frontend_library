@@ -144,13 +144,13 @@ function HomePage() {
 
       {/* Collections */}
       <div className="px-8 py-5">
-        <h2 className="text-5xl font-bold text-center mb-5">
+        <h2 className="text-5xl font-bold text-center mb-5" data-aos= "fade-right">
           Danh sách được mượn nhiều
         </h2>
-        <p className="text-2xl text-gray-600 text-center mb-10">
+        <p className="text-2xl text-gray-600 text-center mb-10" data-aos="fade-right">
           Những cuốn sách được yêu thích nhất tại thư viện.
         </p>
-        <div className="relative border-2 border-blue-500 rounded-lg p-5">
+        <div className="relative border-2 border-blue-500 rounded-lg p-5" data-aos="fade-right">
           <Slider {...settings}>
             {mostBorrowedBooks.map((book, index) => (
               <div

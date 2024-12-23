@@ -2,8 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import { UserCircle, Bell, LogOut, Heart, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import bookService from "../../../services/admin/booksService";
-// import FavoriteBooks from "../../../pages/user/CategoryPage/FavoriteBooks";
-// import EditProfile from "../../../pages/user/Login/EditProfile";
 
 import { createSlug } from "../../../utils/slugify";
 
@@ -97,7 +95,6 @@ const Header = () => {
       try {
         const data = await bookService.fetchCategories();
         setCategories(data);
-        // Đặt placeholder ban đầu
         setPlaceholder("Tìm kiếm sách");
       } catch (error) {
         console.error("Failed to fetch categories:", error);
@@ -186,7 +183,7 @@ const Header = () => {
                 <>
                   <div
                     className="relative"
-                    onClick={() => navigate("/favorite_books")} // Điều hướng đến danh sách yêu thích
+                    onClick={() => navigate("/favorite_books")}
                   >
                     <Heart
                       className="w-6 h-6 text-gray-600 cursor-pointer hover:text-red-600"
@@ -220,7 +217,11 @@ const Header = () => {
                       className="w-10 h-10 rounded-full object-cover border-2 border-blue-500 cursor-pointer"
                     />
                     {showDropdown && (
-                      <div className="absolute top-full right-0 mt-2 w-48 bg-white shadow-lg rounded-md border border-gray-200">
+                      <div
+                        className="absolute top-full right-0 mt-2 w-48 bg-white shadow-lg rounded-md border border-gray-200 z-10"
+                        onMouseEnter={() => setShowDropdown(true)} // Giữ menu mở khi di chuột vào dropdown
+                        onMouseLeave={() => setShowDropdown(false)} // Ẩn menu khi rời toàn bộ container
+                      >
                         <p className="px-4 py-2 text-sm text-gray-800 font-medium border-b">
                           {user?.name}
                         </p>
