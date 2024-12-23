@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import AdminLayout from '../components/admin/layout/AdminLayout/AdminLayout';
+import AdminLayout from '../components/admin/layout/AdminLayout';
 import Dashboard from '../components/admin/AdminDashboard/AdminDashboard';
 import ChangePassword from '../components/admin/ChangePassword/ChangePassword';
 import BookList from '../components/admin/Books/BookList';

@@ -6,11 +6,11 @@ import "aos/dist/aos.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import BarChart from "../../../components/user/BarChart";
-import LineChartComponent from "../../../components/user/LineChartComponent";
-import PieChartComponent from "../../../components/user/PieChartComponent";
-import MapComponent from "../../../components/user/MapComponent";
-import LoadingScreen from "../../../components/user/LoadingScreen";
+import BarChart from "../../components/user/BarChart";
+import LineChartComponent from "../../components/user/LineChartComponent";
+import PieChartComponent from "../../components/user/PieChartComponent";
+import MapComponent from "../../components/user/MapComponent";
+import LoadingScreen from "../../components/user/LoadingScreen";
 
 const NextArrow = (props) => {
   const { className, style, onClick } = props;
@@ -53,9 +53,9 @@ function HomePage() {
   const [mostBorrowedBooks, setMostBorrowedBooks] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
-    phone: "",
+    phoneNumber: "",
     email: "",
-    message: "",
+    content: "",
   });
   const [status, setStatus] = useState(""); // Để hiển thị thông báo
   const navigate = useNavigate();
@@ -94,7 +94,7 @@ function HomePage() {
     e.preventDefault();
     try {
       const response = await fetch(
-        "https://library-mana.azurewebsites.net/contacts",
+        "https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/feedback",
         {
           method: "POST",
           headers: {
@@ -106,7 +106,7 @@ function HomePage() {
  
       if (response.ok) {
         setStatus("Thông tin của bạn đã được gửi đi!");
-        setFormData({ name: "", phone: "", email: "", message: "" }); // Reset form
+        setFormData({ name: "", phoneNumber: "", email: "", content: "" }); // Reset form
       } else {
         setStatus("Có lỗi xảy ra, vui lòng thử lại.");
       }
@@ -277,8 +277,8 @@ function HomePage() {
             />
             <input
               type="text"
-              name="phone"
-              value={formData.phone}
+              name="phoneNumber"
+              value={formData.phoneNumber}
               onChange={handleChange}
               placeholder="Số điện thoại:"
               className="w-full p-3 mb-4 rounded-md border border-gray-300 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -292,8 +292,8 @@ function HomePage() {
               className="w-full p-3 mb-4 rounded-md border border-gray-300 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
             />
             <textarea
-              name="message"
-              value={formData.message}
+              name="content"
+              value={formData.content}
               onChange={handleChange}
               placeholder="Gửi cho chúng tôi:"
               className="w-full p-3 mb-4 rounded-md border border-gray-300 bg-gray-100 h-36 focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"

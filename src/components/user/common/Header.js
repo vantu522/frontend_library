@@ -2,24 +2,24 @@ import React, { useState, useEffect, useCallback } from "react";
 import { UserCircle, Bell, LogOut, Heart, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import bookService from "../../../services/admin/booksService";
-
+import { Player } from '@lottiefiles/react-lottie-player';
+import hotline from "../../../assets/aniamations/Animation - loading.json";
 import { createSlug } from "../../../utils/slugify";
 
 const MegaMenu = ({ categories }) => {
   return (
-    <div className="absolute top-[100%] left-0 w-full bg-white shadow-lg py-6 opacity-0 transform scale-y-0 group-hover:opacity-100 group-hover:scale-y-100 transition-all duration-300 ease-out origin-top border-t border-gray-100 z-50">
-      <div className="max-w-7xl mx-auto px-8">
+    <div className="absolute top-[100%] left-0 z-50 w-full origin-top border-t border-gray-100 bg-white py-6 shadow-lg transition-all duration-300 ease-out opacity-0 transform scale-y-0 group-hover:opacity-100 group-hover:scale-y-100">
+      <div className="mx-auto max-w-7xl px-8">
         <div className="grid grid-cols-3 gap-6">
           {categories.map((category, index) => (
             <a
               key={index}
               href={`/category/${createSlug(category)}`}
-              className="p-3 rounded-lg transition-all duration-200 block group/item"
+              className="group/item block rounded-lg p-3 transition-all duration-200"
             >
               <div className="flex items-start space-x-4">
-                {/* <div className="text-2xl w-8 text-center">{category}</div> */}
                 <div className="flex-1">
-                  <h3 className="text-base uppercase font-semibold text-gray-800 hover:text-blue-600 transition-colors">
+                  <h3 className="text-base font-semibold uppercase text-gray-800 transition-colors hover:text-blue-600">
                     {category}
                   </h3>
                 </div>
@@ -33,6 +33,7 @@ const MegaMenu = ({ categories }) => {
 };
 
 const Header = () => {
+  // ... state declarations remain the same ...
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -132,25 +133,26 @@ const Header = () => {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-500 ${
-          visible ? "translate-y-0" : "-translate-y-full"
-        } bg-white shadow-md`}
+        className={`fixed left-0 right-0 top-0 z-50 bg-white shadow-md transition-transform duration-500 
+          ${visible ? "translate-y-0" : "-translate-y-full"}`}
       >
-        {/* Top header - giới hạn width */}
-        <div className="max-w-7xl mx-auto px-2">
-          <div className="flex justify-between items-center py-4 ">
-            <a href="/" className=" items-center gap-4">
+        {/* Top Header Section */}
+        <div className="mx-auto max-w-7xl px-2">
+          <div className="flex items-center justify-between py-4">
+            {/* Logo Section */}
+            <a href="/" className="flex items-center gap-4">
               <img
                 src="/assets/images/logo-preview.png"
                 alt="Logo"
-                className="w-20 h-12 object-contain "
+                className="h-12 w-20 object-contain"
               />
-              <span className="text-2xl font-bold text-gray-800 hidden md:block">
+              <span className="hidden text-2xl font-bold text-gray-800 md:block">
                 Wisdom's Beacon
               </span>
             </a>
 
-            <div className="w-full max-w-lg relative">
+            {/* Search Section */}
+            <div className="relative w-full max-w-lg">
               <form action="/search" method="get" className="flex items-center">
                 <input
                   type="text"
@@ -158,81 +160,82 @@ const Header = () => {
                   aria-label="Tìm sản phẩm"
                   placeholder={placeholder}
                   autoComplete="off"
-                  className="w-full px-4 py-2 border border-gray-400 rounded-l-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                  className="w-full rounded-l-md border border-gray-400 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
                 <button
                   type="submit"
                   aria-label="Tìm kiếm"
-                  className="px-4 py-3 bg-[#0abaff] text-white rounded-r-md  focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                  className="rounded-r-md bg-[#0abaff] px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
                 >
-                  <svg
-                    viewBox="0 0 451 451"
-                    className="w-5 h-5"
-                    fill="currentColor"
-                  >
+                  <svg viewBox="0 0 451 451" className="h-5 w-5" fill="currentColor">
                     <g>
-                      <path d="M447.05,428l-109.6-109.6c29.4-33.8,47.2-77.9,47.2-126.1C384.65,86.2,298.35,0,192.35,0C86.25,0,0.05,86.3,0.05,192.3 s86.3,192.3,192.3,192.3c48.2,0,92.3-17.8,126.1-47.2L428.05,447c2.6,2.6,6.1,4,9.5,4s6.9-1.3,9.5-4 C452.25,441.8,452.25,433.2,447.05,428z M26.95,192.3c0-91.2,74.2-165.3,165.3-165.3c91.2,0,165.3,74.2,165.3,165.3 s-74.1,165.4-165.3,165.4C101.15,357.7,26.95,283.5,26.95,192.3z"></path>
+                      <path d="M447.05,428l-109.6-109.6c29.4-33.8,47.2-77.9,47.2-126.1C384.65,86.2,298.35,0,192.35,0C86.25,0,0.05,86.3,0.05,192.3 s86.3,192.3,192.3,192.3c48.2,0,92.3-17.8,126.1-47.2L428.05,447c2.6,2.6,6.1,4,9.5,4s6.9-1.3,9.5-4 C452.25,441.8,452.25,433.2,447.05,428z M26.95,192.3c0-91.2,74.2-165.3,165.3-165.3c91.2,0,165.3,74.2,165.3,165.3 s-74.1,165.4-165.3,165.4C101.15,357.7,26.95,283.5,26.95,192.3z" />
                     </g>
                   </svg>
                 </button>
               </form>
             </div>
 
+            {/* Hotline Section */}
+            <div className="flex items-center">
+              <Player
+                autoplay
+                loop
+                src={hotline}
+                style={{ height: '150px', width: '150px' }}
+              />
+              <p className="ml-1 text-red-500 text-lg font-semibold italic">0123456789</p>
+
+            </div> 
+
+            {/* User Actions Section */}
             <div className="flex items-center space-x-4">
               {isLoggedIn ? (
                 <>
-                  <div
-                    className="relative"
-                    onClick={() => navigate("/favorite_books")}
-                  >
-                    <Heart
-                      className="w-6 h-6 text-gray-600 cursor-pointer hover:text-red-600"
-                      onClick={toggleFavorites}
-                    />
+                  {/* Favorites Button */}
+                  <div className="relative" onClick={() => navigate("/favorite_books")}>
+                    <Heart className="h-6 w-6 cursor-pointer text-gray-600 hover:text-red-600" />
                     {favoriteBooks.length > 0 && (
-                      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                      <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
                         {favoriteBooks.length}
                       </span>
                     )}
                   </div>
 
+                  {/* Notifications Button */}
                   <div className="relative">
-                    <Bell className="w-6 h-6 text-gray-600 cursor-pointer hover:text-blue-600" />
+                    <Bell className="h-6 w-6 cursor-pointer text-gray-600 hover:text-blue-600" />
                     {notifications.length > 0 && (
-                      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                      <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
                         {notifications.length}
                       </span>
                     )}
                   </div>
 
-                  {/* Avatar với menu thả xuống */}
+                  {/* User Profile Dropdown */}
                   <div
                     className="relative"
-                    onMouseEnter={() => setShowDropdown(true)} // Hiển thị menu khi hover
-                    onMouseLeave={() => setShowDropdown(false)} // Ẩn menu khi rời chuột
+                    onMouseEnter={() => setShowDropdown(true)}
+                    onMouseLeave={() => setShowDropdown(false)}
                   >
                     <img
                       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS075s728_EWpOqKmQl3L-_4qGiNIDbuoRxGw&s"
                       alt={user?.name}
-                      className="w-10 h-10 rounded-full object-cover border-2 border-blue-500 cursor-pointer"
+                      className="h-10 w-10 cursor-pointer rounded-full border-2 border-blue-500 object-cover"
                     />
                     {showDropdown && (
-                      <div
-                        className="absolute top-full right-0 mt-2 w-48 bg-white shadow-lg rounded-md border border-gray-200 z-10"
-                        onMouseEnter={() => setShowDropdown(true)} // Giữ menu mở khi di chuột vào dropdown
-                        onMouseLeave={() => setShowDropdown(false)} // Ẩn menu khi rời toàn bộ container
-                      >
-                        <p className="px-4 py-2 text-sm text-gray-800 font-medium border-b">
+                      <div className="absolute right-0 top-full z-10 mt-2 w-48 rounded-md border border-gray-200 bg-white shadow-lg">
+                        <p className="border-b px-4 py-2 text-sm font-medium text-gray-800">
                           {user?.name}
                         </p>
                         <button
-                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                          className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100"
                           onClick={() => navigate("/edit_profile")}
                         >
                           Chỉnh sửa hồ sơ
                         </button>
                         <button
-                          className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                          className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-100"
                           onClick={handleLogout}
                         >
                           Đăng xuất
@@ -244,9 +247,9 @@ const Header = () => {
               ) : (
                 <a
                   href="/loginemail"
-                  className="flex items-center gap-2 text-white bg-blue-600 px-4 py-2 rounded-full hover:bg-blue-700"
+                  className="flex items-center gap-2 rounded-full bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
                 >
-                  <UserCircle className="w-5 h-5" />
+                  <UserCircle className="h-5 w-5" />
                   <span className="hidden md:inline">Đăng nhập</span>
                 </a>
               )}
@@ -254,47 +257,34 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Navigation Menu - full width background */}
-        <div className="w-full bg-[#0abaff] h-16">
-          <div className="max-w-6xl mx-auto">
+        {/* Navigation Menu */}
+        <div className="h-16 w-full bg-[#0abaff]">
+          <div className="mx-auto max-w-6xl">
             <nav>
               <ul className="flex justify-center">
                 <li className="group relative px-4 py-4 hover:bg-custom">
-                  <a
-                    href="/"
-                    className="flex items-center text-large uppercase text-[#fff] p-1.5  font-medium"
-                  >
+                  <a href="/" className="flex items-center p-1.5 text-large font-medium uppercase text-white">
                     Trang chủ
                   </a>
                 </li>
 
                 <li className="group relative px-4 py-4 hover:bg-custom">
-                  <a
-                    href="/news"
-                    className="flex items-center text-large uppercase text-[#fff] p-1.5 font-medium"
-                  >
+                  <a href="/news" className="flex items-center p-1.5 text-large font-medium uppercase text-white">
                     Tin tức
-                    <ChevronDown className="w-4 h-4 ml-1" />
+                    <ChevronDown className="ml-1 h-4 w-4" />
                   </a>
                 </li>
 
-                <li className="group  px-4 py-4 hover:bg-custom">
-                  <a
-                    href="/category"
-                    className="flex items-center text-large uppercase text-[#fff] p-1.5  font-medium"
-                  >
+                <li className="group px-4 py-4 hover:bg-custom">
+                  <a href="/category" className="flex items-center p-1.5 text-large font-medium uppercase text-white">
                     Danh mục
-                    <ChevronDown className="w-4 h-4 ml-1" />
+                    <ChevronDown className="ml-1 h-4 w-4" />
                   </a>
-                  {/* Thêm MegaMenu component ở đây */}
                   <MegaMenu categories={categories} />
                 </li>
 
                 <li className="group relative px-4 py-4 hover:bg-custom">
-                  <a
-                    href="/shopcart"
-                    className="flex items-center text-large uppercase text-[#fff] p-1.5  font-medium"
-                  >
+                  <a href="/shopcart" className="flex items-center p-1.5 text-large font-medium uppercase text-white">
                     Giỏ sách
                   </a>
                 </li>
@@ -304,8 +294,8 @@ const Header = () => {
         </div>
       </header>
 
-      {/* Spacer để tránh content bị che bởi fixed header */}
-      <div className="h-32"></div>
+      {/* Spacer */}
+      <div className="h-32" />
     </>
   );
 };

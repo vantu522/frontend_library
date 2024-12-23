@@ -112,8 +112,9 @@ const AdminDashboard = () => {
       }
 
       // Fetch top borrowed books
-      const topBooksResponse = await axios.get('http://127.0.0.1:5000/api/top-book-borrow');
+      const topBooksResponse = await axios.get('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/transactions/topBorrow');
       const topBooksData = topBooksResponse.data;
+      console.log("test ",topBooksData);
 
       setBookCategoryStats({
         labels: topBooksData.map(book => book.title),

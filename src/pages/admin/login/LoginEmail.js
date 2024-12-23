@@ -2,62 +2,36 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { HiMail as MailIcon, HiLockClosed as LockIcon, HiEye as EyeIcon, HiEyeOff as EyeOffIcon } from 'react-icons/hi'
+import { HiUser as UserIcon, HiLockClosed as LockIcon, HiEye as EyeIcon, HiEyeOff as EyeOffIcon } from 'react-icons/hi'
 import { toast } from 'react-toastify'
 
 export default function AuthForm() {
   const [showPassword, setShowPassword] = useState(false)
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
-  const [emailError, setEmailError] = useState('')
-
-  const validateEmail = (email) => {
-    // Kiểm tra email rỗng
-    if (!email) {
-      setEmailError('Email không được để trống')
-      return false
-    }
-
-    // Kiểm tra định dạng email với domain cụ thể
-    const emailRegex = /^[a-zA-Z0-9._-]+@(gmail\.com|stu\.ptit\.edu\.vn)$/
-    if (!emailRegex.test(email)) {
-      setEmailError('Email phải có định dạng @gmail.com hoặc @stu.ptit.edu.vn')
-      return false
-    }
-
-    setEmailError('')
-    return true
-  }
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-
-    // Validate before submission
-    const isEmailValid = validateEmail(email)
-    if (!isEmailValid) {
-      return
-    }
-
     try {
       const response = await axios.post('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/librarians/login', {
-        email,
-        password
+        username,
+        password,
       })
 
       localStorage.setItem('admin', JSON.stringify({
         name: response.data.name || 'Người dùng',
-        email: response.data.email,
+        username: response.data.username,
         librarianId: response.data.librarianId,
         phoneNumber: response.data.phoneNumber,
         avatar: response.data.avatar || 'https://via.placeholder.com/150',
-        token: response.data.token
+        token: response.data.token,
       }))
 
       toast.success("Đăng nhập thành công!")
-      window.location.href = "/"
+      window.location.href = "/admin"
     } catch (error) {
       console.error('Lỗi:', error.response?.data || error.message)
       setErrorMessage('Đăng nhập thất bại, vui lòng kiểm tra lại thông tin.')
@@ -80,44 +54,38 @@ export default function AuthForm() {
             onSubmit={handleSubmit}
           >
             <div className="space-y-2">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700">Tên đăng nhập</label>
               <div className="relative">
-                <MailIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                <input 
-                  id="email" 
-                  type="email" 
-                  value={email} 
-                  onChange={(e) => {
-                    setEmail(e.target.value)
-                    validateEmail(e.target.value)
-                  }}
-                  placeholder="example@stu.ptit.edu.vn" 
-                  className={`pl-10 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-                    emailError ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                <UserIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <input
+                  id="username"
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Tên đăng nhập"
+                  className="pl-10 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 />
               </div>
-              {emailError && <p className="text-red-500 text-xs mt-1">{emailError}</p>}
             </div>
 
             <div className="space-y-2">
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">Mật khẩu</label>
               <div className="relative">
                 <LockIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                <input 
-                  id="password" 
-                  type={showPassword ? "text" : "password"} 
-                  value={password} 
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••" 
-                  className="pl-10 pr-10 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" 
+                  placeholder="••••••••"
+                  className="pl-10 pr-10 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                   required
                   minLength={6}
                 />
-                <button 
-                  type="button" 
-                  onClick={togglePasswordVisibility} 
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
                   {showPassword ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
@@ -130,8 +98,8 @@ export default function AuthForm() {
               </div>
             </div>
             {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
             >
               Đăng nhập

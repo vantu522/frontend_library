@@ -198,19 +198,26 @@ const BookList = () => {
 
   const handleDeleteBook = async () => {
     if (bookToDelete) {
+      // Cập nhật UI ngay lập tức bằng cách xóa sách khỏi danh sách
+      const updatedBooks = books.filter(book => book.id !== bookToDelete.bookId);
+      setBooks(updatedBooks);
+  
       try {
-        await bookService.deleteBook(bookToDelete.id);
-        setBooks(books.filter(book => book.id !== bookToDelete.id));
+        await bookService.deleteBook(bookToDelete.bookId);
         toast.success("Xóa sách thành công");
       } catch (error) {
-        console.error("Failed to delete book", error);
+        console.error("Xóa sách thất bại", error);
         toast.error("Không thể xóa sách");
+        // Nếu xóa thất bại, khôi phục lại danh sách sách
+        setBooks(books);
       } finally {
         setShowDeleteConfirm(false);
         setBookToDelete(null);
       }
     }
   };
+  
+  
 
   return (
     <div className="p-4">

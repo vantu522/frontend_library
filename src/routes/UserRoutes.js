@@ -3,12 +3,12 @@ import { Routes, Route } from "react-router-dom";
 import UserLayout from '../components/user/layout/UserLayout';
 
 // Import các pages
-import HomePage from "../pages/user/HomePage/HomePage";
-import NewsPage from "../pages/user/NewsPage/NewsPage";
+import HomePage from "../pages/user/HomePage";
+import NewsPage from "../pages/user/NewsPage";
 import CategoryPage from "../pages/user/CategoryPage/CategoryPage";
 import SubCategoryPage from "../pages/user/CategoryPage/SubCategoryPage";
 import BooksBySubCategory from "../pages/user/CategoryPage/BooksBySubCategory";
-import ShopcartPage from "../pages/user/ShopcartPage/ShopcartPage";
+import ShopcartPage from "../pages/user/ShopcartPage";
 import LoginEmail from "../pages/user/Login/LoginEmail";
 import FavoriteBooks from "../pages/user/CategoryPage/FavoriteBooks";
 import EditProfile from "../pages/user/Login/EditProfile";

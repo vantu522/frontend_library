@@ -9,7 +9,7 @@ import {
     faExchangeAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-import logo from '../../../../assets/images/logo-preview.png';
+import logo from '../../../assets/images/logo-preview.png';
 
 const Sidebar = () => {
     const [openSubmenu, setOpenSubmenu] = useState(null);

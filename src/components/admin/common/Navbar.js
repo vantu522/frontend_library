@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import logo from '../../../../assets/images/adminimg.jpg';
-import Modal from '../../../../common/admin/Modal/Modal';  // Nhập Modal từ file đã tạo
+import logo from '../../../assets/images/adminimg.jpg';
+import Modal from '../../../common/admin/Modal/Modal';  // Nhập Modal từ file đã tạo
+import { toast } from 'react-toastify';
+
+
 
 const Navbar = () => {
     const [dateTime, setDateTime] = useState(new Date());
@@ -28,11 +31,26 @@ const Navbar = () => {
         setLogoutModalOpen(true);  // Mở modal xác nhận đăng xuất
     };
 
-    const handleLogoutConfirm = () => {
-        console.log("Đã đăng xuất");
-        // Logic đăng xuất (xóa token, redirect, v.v...)
-        setLogoutModalOpen(false);  // Đóng modal sau khi xác nhận đăng xuất
-    };
+   // Trong component Navbar, thay đổi hàm handleLogoutConfirm
+const handleLogoutConfirm = () => {
+    try {
+        // Xóa thông tin admin khỏi localStorage
+        localStorage.removeItem('admin');
+        
+        // Hiển thị thông báo thành công
+        toast.success("Đăng xuất thành công!");
+        
+        // Chuyển hướng về trang đăng nhập
+        window.location.href = "/admin/login";
+        
+    } catch (error) {
+        console.error("Lỗi khi đăng xuất:", error);
+        toast.error("Có lỗi xảy ra khi đăng xuất!");
+    }
+    
+    // Đóng modal
+    setLogoutModalOpen(false);
+};
 
     const handleLogoutCancel = () => {
         setLogoutModalOpen(false);  // Đóng modal khi huỷ bỏ
@@ -47,6 +65,7 @@ const Navbar = () => {
     };
 
     return (
+        
         <div className="fixed top-0 left-64 sm:left-48 md:left-64 w-[1880px] h-16 bg-gray-800 text-white flex justify-between items-center px-5 z-20 shadow-md">
             <div className="flex items-center space-x-4">
                 {/* Hình ảnh tròn */}
