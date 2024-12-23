@@ -13,7 +13,7 @@ const ForgotPassword = () => {
   // Gửi email để nhận OTP
   const handleSendOTP = async () => {
     try {
-      const response = await axios.post("https://library-mana.azurewebsites.net/librarians/send-otp", {
+      const response = await axios.post("https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/librarians/send-otp", {
         email,
       });
       console.log(response.data.message);
@@ -27,7 +27,7 @@ const ForgotPassword = () => {
   // Gửi OTP và cập nhật mật khẩu mới
   const handleResetPassword = async () => {
     try {
-      const response = await axios.post("https://library-mana.azurewebsites.net/librarians/reset", {
+      const response = await axios.post("https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/librarians/reset", {
         email,
         otp,
         newPassword,
