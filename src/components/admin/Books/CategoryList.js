@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Table from "../../../../common/admin/Table/Table"; 
+import Table from "../../../common/admin/Table/Table"; 
 import { FaCheck, FaTimes } from "react-icons/fa"; 
 
 const LiteratureCategoryList = () => {

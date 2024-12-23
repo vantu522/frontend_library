@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateBook } from "../../../../redux/admin/booksReducer";
+import { updateBook } from "../../../redux/admin/booksReducer";
 
 const EditBookForm = ({ setVisibleForm, bookId }) => {
   const book = useSelector((state) =>
