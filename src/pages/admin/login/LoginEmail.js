@@ -42,7 +42,7 @@ export default function AuthForm() {
     }
 
     try {
-      const response = await axios.post('https://library-mana.azurewebsites.ne/librarians/login', {
+      const response = await axios.post('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/librarians/login', {
         email,
         password
       })
@@ -50,7 +50,7 @@ export default function AuthForm() {
       localStorage.setItem('admin', JSON.stringify({
         name: response.data.name || 'Người dùng',
         email: response.data.email,
-        memberId: response.data.memberId,
+        librarianId: response.data.librarianId,
         phoneNumber: response.data.phoneNumber,
         avatar: response.data.avatar || 'https://via.placeholder.com/150',
         token: response.data.token
@@ -124,7 +124,7 @@ export default function AuthForm() {
                 </button>
               </div>
               <div className="text-right">
-                <Link to="/forgotpassword" className="text-sm text-purple-600 hover:underline">
+                <Link to="/admin/ForgotPassword" className="text-sm text-purple-600 hover:underline">
                   Quên mật khẩu?
                 </Link>
               </div>

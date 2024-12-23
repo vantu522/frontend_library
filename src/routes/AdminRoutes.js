@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import AdminLayout from '../components/admin/layout/AdminLayout/AdminLayout';
 import Dashboard from '../components/admin/AdminDashboard/AdminDashboard';
 import ChangePassword from '../components/admin/ChangePassword/ChangePassword';
@@ -12,26 +12,36 @@ import CategoryList from '../components/admin/Books/CategoryList/CategoryList';
 import PostList from '../components/admin/PostList/PostList';
 import PendingBorrowList from '../components/admin/Borrow/PendingBorrowList';
 import RenewHistoryList from '../components/admin/Borrow/RenewHistoryList';
+import ForgotPassword from '../pages/admin/login/ForgotPassword';
 
 const AdminRoutes = () => {
+  // Kiểm tra nếu có thông tin đăng nhập (token)
+  const token = localStorage.getItem('admin');
+
+  if (!token) {
+    // Nếu không có token, điều hướng đến trang login của admin
+    return <Navigate to="/admin/login" />;
+  }
+
   return (
-    <AdminLayout >
+    <AdminLayout>
       <Routes>
-      <Route path="/" element={<Dashboard/>} />
-        <Route path="/readers" element={<Reader/>} />
-        <Route path="/PendingBorrowList" element={<PendingBorrowList/>} />
-        <Route path="/RenewHistoryList" element={<RenewHistoryList/>} />
-        <Route path="/postlist" element={<PostList/>} />
-        <Route path="/feedback" element={<FeedBack/>} />
-        <Route path="/borrowhistory" element={<BorrowHistory/>} />
-        <Route path="/categorylist" element={<CategoryList/>} />
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/readers" element={<Reader />} />
+        <Route path="/PendingBorrowList" element={<PendingBorrowList />} />
+        <Route path="/ForgotPassword" element={<ForgotPassword />} />
+        <Route path="/RenewHistoryList" element={<RenewHistoryList />} />
+        <Route path="/postlist" element={<PostList />} />
+        <Route path="/feedback" element={<FeedBack />} />
+        <Route path="/borrowhistory" element={<BorrowHistory />} />
+        <Route path="/categorylist" element={<CategoryList />} />
         <Route path="/books" element={<BookList />} />
         <Route path="/stored-borrows" element={<BorrowList />} />
         <Route path="/change-password" element={<ChangePassword />} />
+
       </Routes>
     </AdminLayout>
   );
 };
 
 export default AdminRoutes;
-
