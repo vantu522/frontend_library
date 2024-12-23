@@ -134,7 +134,7 @@ function HomePage() {
           điều đang biến mất nhanh hơn nước băng tan ở vùng cực.”
         </p>
         <button
-          className="bg-blue-500 text-white px-30 py-4 border border-gray-600 rounded font-bold mt-5 w-32 transition-all duration-300 hover:bg-blue-700 hover:scale-105"
+          className="bg-blue-500 text-white px-30 py-4 border border-gray-600 rounded font-bold mt-5 w-32 transition-all duration-300 hover:bg-blue-700 hover:scale-105 ml-[-10px]"
           data-aos="zoom-in"
           onClick={() => navigate("/category")}
         >

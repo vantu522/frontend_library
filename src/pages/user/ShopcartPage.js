@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import borrowService from "../../services/admin/borrowService";
 
 const Booklist = () => {
   const [cart, setCart] = useState([]);
@@ -15,26 +16,49 @@ const Booklist = () => {
     setHistory(savedHistory);
   }, []);
 
-  const updateStatus = (index, newStatus) => {
+  const updateStatus = async (index, newStatus) => {
     const updatedCart = [...cart];
-    updatedCart[index].status = newStatus;
+    const book = updatedCart[index];
+    book.status = newStatus;
 
-    if (newStatus === "Đã trả") {
-      const returnedBook = updatedCart.splice(index, 1)[0];
-      setHistory([returnedBook, ...history]);
-      localStorage.setItem(
-        "history",
-        JSON.stringify([returnedBook, ...history])
-      );
+    if (newStatus === "Đang mượn") {
+      // Thêm phiếu mượn mới vào danh sách chờ
+      try {
+        await borrowService.borrowBook({
+          memberName: "Tên người dùng", // Thay thế bằng tên người dùng từ state hoặc props
+          phoneNumber: "Số điện thoại người dùng", // Lấy từ state hoặc props
+          bookTitle: book.title,
+          transactionDate: book.borrowDate,
+          dueDate: book.returnDate,
+        });
+        toast.success("Yêu cầu mượn sách đã được gửi!");
+      } catch (error) {
+        toast.error("Lỗi khi gửi yêu cầu mượn sách.");
+        return;
+      }
+    } else if (newStatus === "Đã trả") {
+      try {
+        // Xử lý trả sách
+        await borrowService.returnBook({
+          bookTitle: book.title,
+          transactionDate: book.borrowDate,
+          returnDate: new Date().toISOString().split("T")[0], // Ngày trả sách là hôm nay
+        });
+        const returnedBook = updatedCart.splice(index, 1)[0];
+        setHistory([returnedBook, ...history]);
+        localStorage.setItem(
+          "history",
+          JSON.stringify([returnedBook, ...history])
+        );
+        toast.success("Sách đã được trả thành công!");
+      } catch (error) {
+        toast.error("Lỗi khi trả sách.");
+        return;
+      }
     }
 
     setCart(updatedCart);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
-    toast.success(
-      newStatus === "Đang mượn"
-        ? "Yêu cầu mượn sách đã được gửi!"
-        : "Sách đã được chuyển sang lịch sử!"
-    );
   };
 
   const filteredBooks = (viewHistory ? history : cart).filter((book) =>
@@ -43,7 +67,7 @@ const Booklist = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">
+      <h2 className="text-2xl font-bold mb-4 pt-20">
         {viewHistory ? "Lịch sử sách đã mượn" : "Giỏ sách của bạn"}
       </h2>
 
@@ -112,26 +136,21 @@ const Booklist = () => {
                 {new Date(book.returnDate).toLocaleDateString()}
               </td>
               <td className="border border-gray-300 p-2 text-center">
-                {book.status}
+                {book.status === "Đang chờ" ? (
+                  <span className="text-yellow-500 font-bold">Đang chờ</span>
+                ) : (
+                  <span className="text-green-500 font-bold">
+                    {book.status}
+                  </span>
+                )}
               </td>
               <td className="border border-gray-300 p-2 text-center">
-                {book.status === "Đang chờ" && !viewHistory ? (
-                  <button
-                    onClick={() => updateStatus(index, "Đang mượn")}
-                    className="px-3 py-1 bg-yellow-500 text-white rounded-md hover:bg-yellow-600"
-                  >
-                    Yêu cầu mượn
-                  </button>
-                ) : book.status === "Đang mượn" && !viewHistory ? (
-                  <button
-                    onClick={() => updateStatus(index, "Đã trả")}
-                    className="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600"
-                  >
-                    Trả sách
-                  </button>
-                ) : (
-                  <span>-</span>
-                )}
+                <button
+                  onClick={() => updateStatus(index, "Đã trả")}
+                  className="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600"
+                >
+                  Trả sách
+                </button>
               </td>
             </tr>
           ))}
