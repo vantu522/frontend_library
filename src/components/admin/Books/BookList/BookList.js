@@ -16,7 +16,7 @@ const BookList = () => {
   const [bookId, setBookId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [booksPerPage] = useState(10);
   const [isLoading, setIsLoading] = useState(true);
