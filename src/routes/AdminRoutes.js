@@ -7,7 +7,6 @@ import BookList from '../components/admin/Books/BookList';
 import BorrowList from '../components/admin/Borrow/BorrowList';
 import Reader from '../components/admin/Reader/ReaderList';
 import FeedBack from '../components/admin/Feedback/FeedbackList';
-import ArchivedFeedback from '../components/admin/Feedback/ArchivedFeedbackList';
 import BorrowHistory from '../components/admin/Borrow/BorrowHistory';
 import CategoryList from '../components/admin/Books/CategoryList';
 import PostList from '../components/admin/PostList/PostList';
@@ -26,7 +25,6 @@ const AdminRoutes = () => {
         <Route path="/feedback" element={<FeedBack/>} />
         <Route path="/borrowhistory" element={<BorrowHistory/>} />
         <Route path="/categorylist" element={<CategoryList/>} />
-        <Route path="/archivedfeedback" element={<ArchivedFeedback/>} />
         <Route path="/books" element={<BookList />} />
         <Route path="/stored-borrows" element={<BorrowList />} />
         <Route path="/change-password" element={<ChangePassword />} />

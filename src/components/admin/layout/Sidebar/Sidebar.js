@@ -3,8 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faHome,
     faBook,
-    faUsers,
-    faEnvelope,
+    faDatabase,
     faChevronDown,
     faChevronUp,
     faExchangeAlt,
@@ -143,7 +142,7 @@ const Sidebar = () => {
                         onClick={() => toggleSubmenu('management')}
                         className="flex items-center px-5 py-3 text-white hover:bg-gray-600 transition"
                     >
-                        <FontAwesomeIcon icon={faUsers} className="mr-4 text-xl" />
+                        <FontAwesomeIcon icon={faDatabase} className="mr-4 text-xl" />
                         <span>Quản Lý</span>
                         <FontAwesomeIcon
                             icon={openSubmenu === 'management' ? faChevronUp : faChevronDown}
@@ -168,40 +167,12 @@ const Sidebar = () => {
                                     Bài Đăng
                                 </Link>
                             </li>
-                        </ul>
-                    )}
-                </li>
-
-                {/* Phản hồi */}
-                <li className="group">
-                    <a
-                        href="#"
-                        onClick={() => toggleSubmenu('feedback')}
-                        className="flex items-center px-5 py-3 text-white hover:bg-gray-600 transition"
-                    >
-                        <FontAwesomeIcon icon={faEnvelope} className="mr-4 text-xl" />
-                        <span>Phản Hồi</span>
-                        <FontAwesomeIcon
-                            icon={openSubmenu === 'feedback' ? faChevronUp : faChevronDown}
-                            className="ml-auto text-sm"
-                        />
-                    </a>
-                    {openSubmenu === 'feedback' && (
-                        <ul className="bg-gray-700 pl-8 space-y-1">
-                            <li>
+                                                        <li>
                                 <Link
                                     to="/admin/feedback"
                                     className="block px-5 py-2 text-gray-300 hover:text-white"
                                 >
                                     Ý Kiến Độc Giả
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
-                                    to="/admin/archivedfeedback"
-                                    className="block px-5 py-2 text-gray-300 hover:text-white"
-                                >
-                                    Lịch Sử Phản Hồi
                                 </Link>
                             </li>
                         </ul>
