@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import Modal from "../../../../common/admin/Modal/Modal";
-import Table from "../../../../common/admin/Table/Table";
-import Tooltip from "../../../../common/admin/Tooltip/Tooltip";
-import AddBookForm from "../AddBookForm/AddBookForm";
-import EditBookForm from "../EditBookForm/EditBookForm";
+import Modal from "../../../common/admin/Modal/Modal";
+import Table from "../../../common/admin/Table/Table";
+import Tooltip from "../../../common/admin/Tooltip/Tooltip";
+import AddBookForm from "./AddBookForm";
+import EditBookForm from "./EditBookForm";
 import { FaEdit, FaTrashAlt, FaPlus, FaExclamationCircle, FaTimes } from "react-icons/fa";
-import bookService from "../../../../services/admin/booksService";
+import bookService from "../../../services/admin/booksService";
 import { toast } from "react-toastify";
-import Pagination from "../../../../common/admin/Pagination";
+import Pagination from "../../../common/admin/Pagination";
 
 const BookList = () => {
   const [books, setBooks] = useState([]);
@@ -296,7 +296,7 @@ const BookList = () => {
           <select
             onChange={(e) => {
               setSelectedBigCategory(e.target.value);
-              setCurrentPage(0);
+              setCurrentPage(1);
             }}
             value={selectedBigCategory}
             className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -313,7 +313,7 @@ const BookList = () => {
             <select
               onChange={(e) => {
                 setSelectedSubCategory(e.target.value);
-                setCurrentPage(0);
+                setCurrentPage(1);
               }}
               value={selectedSubCategory}
               className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"

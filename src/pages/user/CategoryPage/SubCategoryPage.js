@@ -30,6 +30,7 @@ function SubCategoryPage() {
       const slug = createSlug(bigCategoryName);
       const data = await categoryService.fetchSubCategories(slug);
       setSubCategories(data);
+      console.log(data);
       localStorage.setItem("subCategories", JSON.stringify(data));
 
       const categories = JSON.parse(localStorage.getItem("categories") || "[]");
