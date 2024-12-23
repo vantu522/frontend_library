@@ -26,6 +26,8 @@ const BookList = () => {
   const [selectedSubCategory, setSelectedSubCategory] = useState("all");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [bookToDelete, setBookToDelete] = useState(null);
+  const [selectedBook, setSelectedBook] = useState(null);
+  
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -136,7 +138,7 @@ const BookList = () => {
       label: "Tác giả", 
       field: "author", 
       width: "5%",
-      render: (val) => <span className="text-gray-700">{val}</span>
+      render: (val) => <span className="text-gray-700">{val.join(",")}</span>
     },
     { 
       label: "Thể loại", 
@@ -173,7 +175,7 @@ const BookList = () => {
               onClick={() => {
                 setVisibleForm(true);
                 setIsEdit(true);
-                setBookId(row.id);
+                setSelectedBook(row);
               }}
               className="text-blue-500 hover:text-blue-700"
             >
@@ -196,21 +198,25 @@ const BookList = () => {
     }
   ];
 
-  const handleDeleteBook = async () => {
-    if (bookToDelete) {
-      try {
-        await bookService.deleteBook(bookToDelete.id);
-        setBooks(books.filter(book => book.id !== bookToDelete.id));
-        toast.success("Xóa sách thành công");
-      } catch (error) {
-        console.error("Failed to delete book", error);
-        toast.error("Không thể xóa sách");
-      } finally {
-        setShowDeleteConfirm(false);
-        setBookToDelete(null);
-      }
-    }
-  };
+ const handleDeleteBook = async () => {
+  try {
+    await bookService.deleteBook(bookToDelete.bookId);
+    // Lọc bỏ quyển sách vừa xóa, so sánh bookId với bookId
+    const updatedBooks = books.filter(book => book.bookId !== bookToDelete.bookId);
+    // Cập nhật state books với danh sách đã lọc
+    setBooks(updatedBooks);
+    toast.success("Xóa sách thành công");
+  } catch (error) {
+    console.error("Xóa sách thất bại", error);
+    toast.error("Không thể xóa sách");
+  } finally {
+    setShowDeleteConfirm(false);
+    setBookToDelete(null);
+  }
+};
+  
+  
+  
 
   return (
     <div className="p-4">
@@ -229,12 +235,13 @@ const BookList = () => {
       <Modal onClose={() => setVisibleForm(false)} isOpen={visibleForm}>
         {isEdit ? (
           <EditBookForm
-            bookId={bookId}
+            book={selectedBook}
             setVisibleForm={setVisibleForm}
             onUpdate={async (book) => {
               try {
                 await bookService.updateBook(bookId, book);
-                setBooks(books.map(b => b.id === bookId ? book : b));
+                console.log(book)
+                setBooks(books.map(b => b.bookId === bookId ? book : b));
                 toast.success(`Cập nhật sách "${book.title}" thành công`);
                 setVisibleForm(false);
               } catch (error) {
@@ -355,3 +362,4 @@ const BookList = () => {
 };
 
 export default BookList;
+
