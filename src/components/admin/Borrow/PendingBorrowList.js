@@ -68,6 +68,7 @@ const PendingBorrowList = () => {
       borrow.phoneNumber.includes(searchLower)
     );
   });
+  console.log(filteredBorrows);
 
 
   const columns = [
@@ -88,7 +89,7 @@ const PendingBorrowList = () => {
               : "text-gray-500"
           }`}
         >
-          {val?.status || "khong xac dinh"}
+          {val?.status || "Đang chờ"}
         </span>
       ),
     },

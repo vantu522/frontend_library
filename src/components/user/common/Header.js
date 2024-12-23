@@ -138,7 +138,7 @@ const Header = () => {
       >
         {/* Top Header Section */}
         <div className="mx-auto max-w-7xl px-2">
-          <div className="flex items-center justify-between py-4">
+          <div className="flex items-center justify-between py-0">
             {/* Logo Section */}
             <a href="/" className="flex items-center gap-4">
               <img
