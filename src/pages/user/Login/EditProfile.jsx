@@ -25,9 +25,9 @@ const EditProfile = () => {
         const response = await axios.get(`https://library-mana.azurewebsites.net/members/${memberId}`);
         setUserData({
           ...response.data,
-          gender: '', // Thêm thông tin giới tính mặc định
-          birthDate: '', // Thêm ngày sinh mặc định
-          address: '', // Thêm địa chỉ mặc định
+          gender: '', 
+          birthDate: '', 
+          address: '', 
         });
         setLoading(false);
       } catch (error) {
