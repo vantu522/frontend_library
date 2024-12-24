@@ -4,8 +4,18 @@ import { API_ENDPOINTS } from '../../config/apiConfig';
 const feedbackService = {
   fetchFeedbacks: async () => {
     try {
-      const response = await axios.get(`${API_ENDPOINTS.BASE_URL}/feedback`);
-      return response.data;
+      // Lấy tất cả phản hồi với trạng thái "Pending"
+      const pendingResponse = await axios.get(`${API_ENDPOINTS.BASE_URL}/feedback?status=Pending`);
+      // Lấy tất cả phản hồi với trạng thái "Responded"
+      const respondedResponse = await axios.get(`${API_ENDPOINTS.BASE_URL}/feedback?status=Responded`);
+      
+      // Kết hợp dữ liệu của cả hai trạng thái
+      const allFeedbacks = [
+        ...pendingResponse.data.map(feedback => ({ ...feedback, status: "Pending" })),
+        ...respondedResponse.data.map(feedback => ({ ...feedback, status: "Responded" }))
+      ];
+
+      return allFeedbacks;
     } catch (error) {
       console.error('Lỗi khi lấy phản hồi:', error.response || error);
       throw error;
