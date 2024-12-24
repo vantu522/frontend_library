@@ -7,7 +7,7 @@ import Pagination from "../../../common/admin/Pagination";
 import AddReaderForm from "./AddReaderForm";
 import EditReaderForm from "./EditReaderForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash, faInfoCircle, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrash, faInfoCircle, faPlus, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import memberService from "../../../services/admin/memberService";
 import { toast } from 'react-toastify';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -106,10 +106,25 @@ const ReaderList = () => {
   const [deleteTargetId, setDeleteTargetId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [borrowingInfo, setBorrowingInfo] = useState([]);
+  const [hiddenReaders, setHiddenReaders] = useState(new Set());
+  const [showHidden, setShowHidden] = useState(false);
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 17;
+
+  
+  useEffect(() => {
+    const storedHiddenReaders = localStorage.getItem("hiddenReaders");
+    if (storedHiddenReaders) {
+      setHiddenReaders(new Set(JSON.parse(storedHiddenReaders)));
+    }
+  }, []);
+
+  // Lưu trạng thái hiddenReaders vào localStorage khi thay đổi
+  useEffect(() => {
+    localStorage.setItem("hiddenReaders", JSON.stringify(Array.from(hiddenReaders)));
+  }, [hiddenReaders]);
 
   useEffect(() => {
     const fetchMembers = async () => {
@@ -137,7 +152,8 @@ const ReaderList = () => {
     const nameMatch = reader.name && reader.name.toLowerCase().includes(search);
     const emailMatch = reader.email && reader.email.toLowerCase().includes(search);
     const phoneMatch = reader.phoneNumber && reader.phoneNumber.toLowerCase().includes(search);
-    return nameMatch || emailMatch || phoneMatch;
+    const isVisible = showHidden || !hiddenReaders.has(reader.memberId);
+    return (nameMatch || emailMatch || phoneMatch) && isVisible;
   });
 
   // Pagination
@@ -151,6 +167,17 @@ const ReaderList = () => {
     setCurrentPage(1);
   }, [searchTerm]);
 
+  const toggleReaderVisibility = (readerId) => {
+    setHiddenReaders(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(readerId)) {
+        newSet.delete(readerId);
+      } else {
+        newSet.add(readerId);
+      }
+      return newSet;
+    });
+  };
   const columns = [
    
     { label: "Tên", field: "name" },
@@ -200,7 +227,22 @@ const ReaderList = () => {
         </div>
       ),
     },
-  ];
+    {
+      label: "Ẩn/Hiện",
+      render: (val, row) => (
+        <Tooltip content={hiddenReaders.has(row.memberId) ? "Hiện" : "Ẩn"} position="left">
+          <button
+            onClick={() => toggleReaderVisibility(row.memberId)}
+            className={`text-${hiddenReaders.has(row.memberId) ? 'green' : 'gray'}-500 hover:text-${hiddenReaders.has(row.memberId) ? 'green' : 'gray'}-700`}
+          >
+            <FontAwesomeIcon icon={hiddenReaders.has(row.memberId) ? faEye : faEyeSlash} size="lg" />
+          </button>
+        </Tooltip>
+      ),
+    },
+  ]
+  
+  
 
   const fetchBorrowingInfo = async (memberId) => {
     try {
@@ -243,6 +285,18 @@ const ReaderList = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+          <div className="flex items-center space-x-3 bg-gray-100 p-3 rounded-lg shadow-sm">
+          <input
+            type="checkbox"
+            id="showHidden"
+            checked={showHidden}
+            onChange={(e) => setShowHidden(e.target.checked)}
+            className="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 transition duration-150 ease-in-out"
+          />
+          <label htmlFor="showHidden" className="text-sm font-medium text-gray-700 select-none cursor-pointer">
+            Hiển thị độc giả đã ẩn
+          </label>
+        </div>
         <button
           className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
           onClick={() => {

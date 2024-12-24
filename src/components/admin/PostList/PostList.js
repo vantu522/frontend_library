@@ -9,6 +9,7 @@ import Table from "../../../common/admin/Table/Table";
 const PostList = () => {
   const [posts, setPosts] = useState([]);
   const [visibleForm, setVisibleForm] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
     id: null,
@@ -23,10 +24,13 @@ const PostList = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        setLoading(true)
         const data = await postService.fetchAllPosts(); // Gọi API lấy tất cả bài viết
         setPosts(data); // Cập nhật dữ liệu bài viết
       } catch (error) {
         console.error("Lỗi khi lấy bài viết:", error);
+      } finally{
+        setLoading(false)
       }
     };
     fetchPosts();
