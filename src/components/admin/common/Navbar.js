@@ -68,7 +68,7 @@ const Navbar = () => {
   const handleChangePassword = () => setChangePasswordModalOpen(true);
 
   return (
-    <div className="fixed top-0 left-64 sm:left-48 md:left-64 w-[1460px] h-16 bg-gray-800 text-white flex justify-between items-center px-5 z-20 shadow-md">
+    <div className="fixed top-0 left-64 sm:left-48 md:left-64 w-100% h-16 bg-gray-800 text-white flex justify-between items-center px-5 z-20 shadow-md">
       {/* Hình ảnh và tên admin */}
       <div className="flex items-center space-x-4">
         <img src={logo} alt="Avatar" className="w-10 h-10 rounded-full object-cover" />
