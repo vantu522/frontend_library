@@ -11,7 +11,7 @@ const AdminLayout = ({ children }) => {
             </div>
             <div className="flex-grow ml-64 flex flex-col h-screen">
                 {/* Navbar */}
-                <div className="h-16 bg-gray-700 fixed top-0 left-64 right-0 z-50 px-5 flex items-center justify-between">
+                <div className="h-16 bg-gray-700 fixed top-0 left-0 right-0 z-40 px-5 flex items-center justify-between">
                     <Navbar />
                 </div>
                 {/* Main content */}
@@ -24,4 +24,3 @@ const AdminLayout = ({ children }) => {
 };
 
 export default AdminLayout;
-

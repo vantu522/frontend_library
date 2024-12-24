@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCog } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../../common/admin/Modal/Modal';
-import logo from '../../../assets/images/adminlogo.jpg';
+import logo from '../../../assets/images/adminlogo.jpg'; // Ảnh admin
 import { toast } from 'react-toastify';
 import ChangePassword from '../../../components/admin/ChangePassword/ChangePassword';  // Import ChangePassword
 
@@ -69,24 +67,22 @@ const Navbar = () => {
 
   return (
     <div className="fixed top-0 left-64 sm:left-48 md:left-64 w-[1460px] h-16 bg-gray-800 text-white flex justify-between items-center px-5 z-20 shadow-md">
-      {/* Hình ảnh và tên admin */}
-      <div className="flex items-center space-x-4">
-        <img src={logo} alt="Avatar" className="w-10 h-10 rounded-full object-cover" />
-        <h1 className="text-lg font-semibold">{adminName}</h1>
-      </div>
-
-      {/* Hiển thị thời gian */}
-      <div className="flex items-center gap-4">
+      {/* Hiển thị thời gian và menu bên phải */}
+      <div className="flex items-center gap-4 ml-auto">
         <span className="text-sm">
           {dateTime.toLocaleDateString()} - {dateTime.toLocaleTimeString()}
         </span>
-        <FontAwesomeIcon
-          icon={faCog}
+        <img
+          src={logo}  // Sử dụng ảnh admin thay vì icon cài đặt
+          alt="Settings"
           onClick={toggleMenu}
-          className="text-xl cursor-pointer hover:text-gray-400 transition menu"
+          className="w-6 h-6 cursor-pointer rounded-full hover:text-gray-400 transition menu"
         />
         {isMenuOpen && (
           <div className="absolute top-16 right-0 bg-gray-700 p-2 rounded-lg shadow-lg flex flex-col gap-2 z-10 menu">
+            <div className="text-white text-sm px-4 py-2">
+              <strong>{adminName}</strong> {/* Tên admin */}
+            </div>
             <button
               onClick={handleChangePassword}
               className="text-white text-sm px-4 py-2 hover:bg-gray-600 rounded-lg"

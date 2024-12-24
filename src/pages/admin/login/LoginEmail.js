@@ -92,7 +92,7 @@ export default function AuthForm() {
                 </button>
               </div>
               <div className="text-right">
-                <Link to="/admin/ForgotPassword" className="text-sm text-purple-600 hover:underline">
+                <Link to="/admin/forgotpassword" className="text-sm text-purple-600 hover:underline">
                   Quên mật khẩu?
                 </Link>
               </div>

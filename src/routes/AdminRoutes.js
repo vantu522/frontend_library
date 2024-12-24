@@ -29,7 +29,7 @@ const AdminRoutes = () => {
         <Route path="/" element={<Dashboard />} />
         <Route path="/readers" element={<Reader />} />
         <Route path="/PendingBorrowList" element={<PendingBorrowList />} />
-        <Route path="/ForgotPassword" element={<ForgotPassword />} />
+        <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/RenewHistoryList" element={<RenewHistoryList />} />
         <Route path="/postlist" element={<PostList />} />
         <Route path="/feedback" element={<FeedBack />} />
