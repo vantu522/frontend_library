@@ -1,24 +1,13 @@
+"use client"
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Bar } from 'react-chartjs-2';
-import { FaBook, FaBookOpen, FaUsers, FaUserCheck } from 'react-icons/fa';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement } from 'chart.js';
+import { FaBook, FaBookOpen, FaUsers, FaUserCheck, FaTrendingUp } from 'react-icons/fa';
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, LineChart, Line, ResponsiveContainer } from 'recharts';
 import DonutChart from '../DonutChart ';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
-
-ChartJS.register(
-  ArcElement, 
-  Tooltip, 
-  Legend, 
-  BarElement, 
-  CategoryScale, 
-  LinearScale, 
-  PointElement, 
-  LineElement
-);
 
 const AdminDashboard = () => {
-  // State quản lý các thống kê dashboard
+  const [isLoading, setIsLoading] = useState(true);
   const [dashboardStats, setDashboardStats] = useState({
     totalBooks: 0,
     borrowedBooks: 0,
@@ -26,51 +15,27 @@ const AdminDashboard = () => {
     returnedBooks: 0
   });
 
-  // State cho các biểu đồ
   const [weeklyStats, setWeeklyStats] = useState([]);
   const [monthlyStats, setMonthlyStats] = useState([]);
-  const [bookCategoryStats, setBookCategoryStats] = useState({
-    labels: [],
-    datasets: [
-      {
-        label: 'Số Lượng Sách',
-        data: [],
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.6)',
-          'rgba(54, 162, 235, 0.6)',
-          'rgba(255, 206, 86, 0.6)',
-          'rgba(75, 192, 192, 0.6)',
-          'rgba(153, 102, 255, 0.6)'
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)'
-        ]
-      }
-    ]
-  });
+  const [topBorrowedBooks, setTopBorrowedBooks] = useState([]);
 
-  // Fetch dữ liệu thống kê dashboard
   const fetchDashboardStats = async () => {
     try {
       const [totalBooks, borrowedBooks, totalUsers, returnedBooks] = await Promise.all([
-        axios.get('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/books/total').then(res => res.data),
-        axios.get('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/transactions/count-borrowed').then(res => res.data),
-        axios.get('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/members/count').then(res => res.data),
-        axios.get('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/transactions/count-returned').then(res => res.data)
+        axios.get('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/books/total'),
+        axios.get('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/transactions/count-borrowed'),
+        axios.get('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/members/count'),
+        axios.get('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/transactions/count-returned')
       ]);
 
       setDashboardStats({
-        totalBooks: typeof totalBooks === 'number' ? totalBooks : 500,
-        borrowedBooks: typeof borrowedBooks === 'number' ? borrowedBooks : 150,
-        totalUsers: typeof totalUsers === 'number' ? totalUsers : 1234,
-        returnedBooks: typeof returnedBooks === 'number' ? returnedBooks : 456
+        totalBooks: totalBooks.data || 500,
+        borrowedBooks: borrowedBooks.data || 150,
+        totalUsers: totalUsers.data || 1234,
+        returnedBooks: returnedBooks.data || 456
       });
     } catch (error) {
-      console.error('Lỗi tải thống kê dashboard:', error);
+      console.error('Dashboard stats loading error:', error);
       setDashboardStats({
         totalBooks: 500,
         borrowedBooks: 150,
@@ -80,63 +45,27 @@ const AdminDashboard = () => {
     }
   };
 
-  // Fetch dữ liệu biểu đồ
   const fetchChartStats = async () => {
     try {
-      // Fetch weekly data
-      const weeklyResponse = await axios.get('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/transactions/weekly-stats');
-      const weeklyData = weeklyResponse.data;
+      const [weeklyResponse, monthlyResponse, topBooksResponse] = await Promise.all([
+        axios.get('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/transactions/weekly-stats'),
+        axios.get('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/transactions/statistics'),
+        axios.get('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/transactions/topBorrow')
+      ]);
 
-      if (Array.isArray(weeklyData)) {
-        setWeeklyStats(weeklyData.map(item => ({
-          day: item.day,
-          borrowed: item.borrowed,
-          returned: item.returned
-        })));
-      } else {
-        console.error('Dữ liệu tuần không hợp lệ:', weeklyData);
-      }
-
-      // Fetch monthly data
-      const monthlyResponse = await axios.get('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/transactions/statistics');
-      const monthlyData = monthlyResponse.data;
-
-      if (Array.isArray(monthlyData)) {
-        setMonthlyStats(monthlyData.map(item => ({
-          month: item.month,
-          borrowed: item.borrowed,
-          returned: item.returned
-        })));
-      } else {
-        console.error('Dữ liệu tháng không hợp lệ:', monthlyData);
-      }
-
-      // Fetch top borrowed books
-      const topBooksResponse = await axios.get('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/transactions/topBorrow');
-      const topBooksData = topBooksResponse.data;
-      console.log("test ",topBooksData);
-
-      setBookCategoryStats({
-        labels: topBooksData.map(book => book.title),
-        datasets: [
-          {
-            ...bookCategoryStats.datasets[0],
-            data: topBooksData.map(book => book.borrowCount)
-          }
-        ]
-      });
-
+      setWeeklyStats(weeklyResponse.data || []);
+      setMonthlyStats(monthlyResponse.data || []);
+      setTopBorrowedBooks(topBooksResponse.data || []);
     } catch (error) {
-      console.error('Lỗi tải dữ liệu biểu đồ:', error);
-      // Set some sample data in case of error
+      console.error('Chart data loading error:', error);
       setWeeklyStats([
-        { day: 'T2', borrowed: 45, returned: 32 },
-        { day: 'T3', borrowed: 55, returned: 45 },
-        { day: 'T4', borrowed: 40, returned: 38 },
-        { day: 'T5', borrowed: 65, returned: 50 },
-        { day: 'T6', borrowed: 35, returned: 40 },
-        { day: 'T7', borrowed: 50, returned: 45 },
-        { day: 'CN', borrowed: 30, returned: 25 }
+        { day: 'Mon', borrowed: 45, returned: 32 },
+        { day: 'Tue', borrowed: 55, returned: 45 },
+        { day: 'Wed', borrowed: 40, returned: 38 },
+        { day: 'Thu', borrowed: 65, returned: 50 },
+        { day: 'Fri', borrowed: 35, returned: 40 },
+        { day: 'Sat', borrowed: 50, returned: 45 },
+        { day: 'Sun', borrowed: 30, returned: 25 }
       ]);
       
       setMonthlyStats([
@@ -146,78 +75,169 @@ const AdminDashboard = () => {
         { month: 'Apr', borrowed: 160, returned: 150 },
         { month: 'May', borrowed: 190, returned: 170 }
       ]);
+
+      setTopBorrowedBooks([
+        { title: "The Great Gatsby", borrowCount: 186 },
+        { title: "To Kill a Mockingbird", borrowCount: 305 },
+        { title: "1984", borrowCount: 237 },
+        { title: "Pride and Prejudice", borrowCount: 73 },
+        { title: "The Catcher in the Rye", borrowCount: 209 },
+        { title: "Lord of the Flies", borrowCount: 214 }
+      ]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Component thẻ thống kê
-  const StatCard = ({ icon: Icon, title, value }) => {
-    return (
-      <div className="bg-white p-6 rounded-lg shadow-md flex items-center">
-        <div className="bg-blue-100 p-4 rounded-full mr-4">
-          <Icon className="text-blue-500 text-2xl" />
-        </div>
-        <div>
-          <h3 className="text-sm text-gray-500 mb-1">{title}</h3>
-          <span className="text-xl font-bold">{value.toLocaleString()}</span>
-        </div>
+  const StatCard = ({ icon: Icon, title, value }) => (
+    <div className="bg-white rounded-lg shadow-md p-6 flex items-center">
+      <div className="bg-blue-100 p-4 rounded-full mr-4">
+        <Icon className="text-blue-500 text-2xl" />
       </div>
-    );
-  };
-
-  // Component biểu đồ đường
-  const LineChartComponent = ({ data, title }) => (
-    <div className="bg-white p-6 rounded-lg shadow-md h-80">
-      <div className="text-lg font-semibold mb-4">{title}</div>
-      {data.length > 0 ? (
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis 
-              dataKey={data === weeklyStats ? "day" : "month"}
-              tickLine={false}
-              axisLine={true}
-            />
-            <YAxis 
-              tickLine={false}
-              axisLine={true}
-              width={40}
-            />
-            <RechartsTooltip />
-            <Line 
-              type="monotone" 
-              dataKey="borrowed" 
-              stroke="#2563eb" 
-              strokeWidth={2} 
-              name="Sách mượn"
-              dot={{ fill: '#2563eb', strokeWidth: 2 }}
-            />
-            <Line 
-              type="monotone" 
-              dataKey="returned" 
-              stroke="#16a34a" 
-              strokeWidth={2} 
-              name="Sách trả"
-              dot={{ fill: '#16a34a', strokeWidth: 2 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      ) : (
-        <div className="flex items-center justify-center h-full">
-          <div className="text-gray-500">Đang tải dữ liệu...</div>
-        </div>
-      )}
+      <div>
+        <h3 className="text-sm text-gray-500 mb-1">{title}</h3>
+        <span className="text-xl font-bold">{value.toLocaleString()}</span>
+      </div>
     </div>
   );
 
-  // Fetch dữ liệu khi component mount
+  const ChartCard = ({ title, description, children }) => (
+    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="p-6">
+        <h2 className="text-xl font-semibold mb-2">{title}</h2>
+        {description && <p className="text-sm text-gray-500 mb-4">{description}</p>}
+        {children}
+      </div>
+    </div>
+  );
+
+  const CustomBarChart = ({ data }) => (
+    <ChartCard
+      title="Top sách mượn nhiều nhất"
+      description="6 tháng gần nhất"
+    >
+      <div className="h-[400px] w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={data}
+            layout="horizontal"
+            margin={{
+              top: 20,
+              right: 30,
+              left: 20,
+              bottom: 5,
+            }}
+          >
+            <CartesianGrid 
+              strokeDasharray="3 3" 
+              horizontal={true} 
+              vertical={false}
+              stroke="#e5e7eb"
+              className="opacity-50"
+            />
+            <XAxis
+              type="category"
+              dataKey="title"
+              tickLine={false}
+              axisLine={false}
+              tick={false}
+            />
+            <YAxis
+              type="number"
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: '#6b7280', fontSize: 12 }}
+              className="text-gray-500"
+            />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: '#1f2937',
+                border: 'none',
+                borderRadius: '0.375rem',
+                color: '#fff',
+                padding: '0.75rem'
+              }}
+              cursor={{ fill: 'rgba(59, 130, 246, 0.1)' }}
+            />
+            <Bar
+              dataKey="borrowCount"
+              fill="#3b82f6"
+              radius={[4, 4, 4, 4]}
+              barSize={30}
+            >
+              {data.map((entry, index) => (
+                <text
+                  key={`label-${index}`}
+                  x={10}
+                  y={index * 45 + 35}
+                  fill="#4b5563"
+                  className="text-sm font-medium"
+                  textAnchor="start"
+                >
+                  {entry.title}
+                </text>
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </ChartCard>
+  );
+
+  const LineChartComponent = ({ data, title, dataKeyX, dataKeyY1, dataKeyY2 }) => (
+    <ChartCard title={title}>
+      <div className="h-[400px] w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+            <CartesianGrid strokeDasharray="3 3" className="opacity-50" />
+            <XAxis 
+              dataKey={dataKeyX} 
+              tick={{ fill: '#6b7280', fontSize: 12 }}
+              axisLine={{ stroke: '#e5e7eb' }}
+              className="text-gray-500"
+            />
+            <YAxis 
+              tick={{ fill: '#6b7280', fontSize: 12 }}
+              axisLine={{ stroke: '#e5e7eb' }}
+              className="text-gray-500"
+            />
+            <Tooltip 
+              contentStyle={{
+                backgroundColor: '#1f2937',
+                border: 'none',
+                borderRadius: '0.375rem',
+                color: '#fff',
+                padding: '0.75rem'
+              }}
+            />
+            <Legend />
+            <Line type="monotone" dataKey={dataKeyY1} stroke="#3b82f6" name="Sách mượn" />
+            <Line type="monotone" dataKey={dataKeyY2} stroke="#10b981" name="Sách trả" />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </ChartCard>
+  );
+
   useEffect(() => {
-    fetchDashboardStats();
-    fetchChartStats();
+    const fetchData = async () => {
+      setIsLoading(true);
+      await Promise.all([fetchDashboardStats(), fetchChartStats()]);
+    };
+    fetchData();
   }, []);
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen mt-[-150px]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+        <span className="ml-4 text-gray-700">Đang tải danh sách...</span>
+      </div>
+    );
+  }
+
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      {/* Thẻ thống kê */}
+    <div className="min-h-screen bg-gray-50 p-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard icon={FaBook} title="Tổng Số Sách" value={dashboardStats.totalBooks} />
         <StatCard icon={FaBookOpen} title="Sách Đang Cho Mượn" value={dashboardStats.borrowedBooks} />
@@ -225,49 +245,29 @@ const AdminDashboard = () => {
         <StatCard icon={FaUserCheck} title="Sách Đã Trả" value={dashboardStats.returnedBooks} />
       </div>
 
-      {/* Biểu đồ */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <DonutChart />
+        <ChartCard title="Biểu đồ Tròn">
+          <div className="h-[400px]">
+            <DonutChart />
+          </div>
+        </ChartCard>
         <LineChartComponent 
           data={weeklyStats} 
-          title="Biểu đồ Mượn Trả Theo Tuần" 
+          title="Biểu đồ Mượn Trả Theo Tuần"
+          dataKeyX="day"
+          dataKeyY1="borrowed"
+          dataKeyY2="returned"
         />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-        <div className="bg-white p-6 rounded-lg shadow-md h-80">
-          <div className="text-lg font-semibold mb-4">Top sách mượn nhiều nhất</div>
-          {bookCategoryStats.labels.length > 0 ? (
-            <Bar 
-              data={bookCategoryStats} 
-              options={{ 
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                  y: {
-                    beginAtZero: true,
-                    title: {
-                      display: true,
-                      text: 'Số Lượng Sách'
-                    }
-                  }
-                },
-                plugins: {
-                  legend: {
-                    display: false
-                  }
-                }
-              }}
-            />
-          ) : (
-            <div className="flex items-center justify-center h-full">
-              <div className="text-gray-500">Đang tải dữ liệu...</div>
-            </div>
-          )}
-        </div>
+        <CustomBarChart data={topBorrowedBooks} />
         <LineChartComponent 
           data={monthlyStats} 
-          title="Biểu đồ Mượn Trả Theo Tháng" 
+          title="Biểu đồ Mượn Trả Theo Tháng"
+          dataKeyX="month"
+          dataKeyY1="borrowed"
+          dataKeyY2="returned"
         />
       </div>
     </div>
