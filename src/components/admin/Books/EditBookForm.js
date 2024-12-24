@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { updateBook } from "../../../redux/admin/booksReducer";
 import { toast } from "react-toastify";
 import bookService from "../../../services/admin/booksService";
 
@@ -38,7 +36,7 @@ const EditBookForm = ({ book, setVisibleForm, onUpdate }) => {
     setError(null);
   
     const updatedBook = {
-      id: book.bookId,
+      bookId: book.bookId,
       title,
       description,
       author: [author],

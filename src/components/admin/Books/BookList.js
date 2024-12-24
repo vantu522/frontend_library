@@ -8,6 +8,7 @@ import { FaEdit, FaTrashAlt, FaPlus, FaExclamationCircle, FaTimes } from "react-
 import bookService from "../../../services/admin/booksService";
 import { toast } from "react-toastify";
 import Pagination from "../../../common/admin/Pagination";
+import { createSlug } from "../../../utils/slugify";
 
 const BookList = () => {
   const [books, setBooks] = useState([]);
@@ -34,6 +35,7 @@ const BookList = () => {
       try {
         const categories = await bookService.fetchCategories();
         setBigCategories(categories || []);
+        console.log(bigCategories);
       } catch (error) {
         console.error("Failed to load categories", error);
         toast.error("Không thể tải danh mục");
@@ -176,6 +178,7 @@ const BookList = () => {
                 setVisibleForm(true);
                 setIsEdit(true);
                 setSelectedBook(row);
+                console.log(row)
               }}
               className="text-blue-500 hover:text-blue-700"
             >
@@ -237,18 +240,14 @@ const BookList = () => {
           <EditBookForm
             book={selectedBook}
             setVisibleForm={setVisibleForm}
-            onUpdate={async (book) => {
-              try {
-                await bookService.updateBook(bookId, book);
-                console.log(book)
-                setBooks(books.map(b => b.bookId === bookId ? book : b));
-                toast.success(`Cập nhật sách "${book.title}" thành công`);
-                setVisibleForm(false);
-              } catch (error) {
-                console.error("Failed to update book", error);
-                toast.error("Không thể cập nhật sách");
-              }
-            }}
+            onUpdate={(updatedBook) => {
+              // Cập nhật trực tiếp vào state books
+              setBooks(prevBooks => 
+                prevBooks.map(book => 
+                  book.bookId === updatedBook.bookId ? updatedBook : book
+                )
+              )}
+            }
           />
         ) : (
           <AddBookForm
@@ -299,7 +298,6 @@ const BookList = () => {
             <option value="available">Còn sách</option>
             <option value="unavailable">Hết sách</option>
           </select>
-
           <select
             onChange={(e) => {
               setSelectedBigCategory(e.target.value);
@@ -309,8 +307,8 @@ const BookList = () => {
             className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
           >
             <option value="all">Tất cả thể loại</option>
-            {bigCategories.map((category,index) => (
-              <option key={category.id} value={category}>
+            {bigCategories.map((category, index) => (
+              <option key={index} value={category}>
                 {category}
               </option>
             ))}
@@ -326,9 +324,9 @@ const BookList = () => {
               className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
             >
               <option value="all">Tất cả thể loại con</option>
-              {subCategories.map(category => (
-                <option key={category.id} value={category}>
-                  {category}
+              {subCategories.map((subCategory, index) => (
+                <option key={index} value={subCategory}>
+                  {subCategory}
                 </option>
               ))}
             </select>

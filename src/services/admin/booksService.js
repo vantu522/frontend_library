@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { API_ENDPOINTS } from "../../config/apiConfig";
+import { createSlug } from '../../utils/slugify';
 
 const bookService = {
   fetchAllBooks: async (page = 1, size = 10) => {
@@ -41,7 +42,7 @@ const bookService = {
   fetchSubCategories: async (bigCategoryName) => {
     try {
       const response = await axios.get(
-        `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.CATEGORIES}/${bigCategoryName}`,
+        `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.CATEGORIES}/${createSlug(bigCategoryName)}`,
         {
           headers: {
             'Accept': 'application/json',
@@ -58,7 +59,7 @@ const bookService = {
   fetchBooksBySubCategory: async (bigCategoryName, subCategoryName) => {
     try {
       const response = await axios.get(
-        `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.CATEGORIES}/${bigCategoryName}/${subCategoryName}/books`,
+        `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.CATEGORIES}/${createSlug(bigCategoryName)}/${createSlug(subCategoryName)}/books`,
         {
           headers: {
             'Accept': 'application/json',
