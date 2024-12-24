@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Calendar, X } from 'lucide-react';
 import DatePickerInput from './DatePickerInput';
 import { toast } from 'react-toastify';
@@ -6,6 +7,7 @@ import { toast } from 'react-toastify';
 const ReservationPopup = ({ book, onClose, onConfirm }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [borrowDate, setBorrowDate] = useState(null);
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 50);
@@ -19,12 +21,31 @@ const ReservationPopup = ({ book, onClose, onConfirm }) => {
 
   const handleConfirm = () => {
     if (borrowDate) {
-      onConfirm(borrowDate);
-      toast.success("Đặt lịch thành công!");
+      const returnDate = new Date(borrowDate);
+      returnDate.setMonth(returnDate.getMonth() + 3);
+  
+      const bookData = {
+        img: book.img,
+        title: book.title,
+        category: book.bigCategory[0]?.name || 'Không rõ',
+        borrowDate,
+        returnDate,
+        status: 'Đang chờ',
+      };
+  
+      // Lấy giỏ sách hiện tại từ Local Storage
+      const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
+      // Thêm sách mới vào đầu danh sách
+      const updatedCart = [bookData, ...savedCart];
+      // Lưu danh sách mới vào Local Storage
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
+  
+      toast.success('Đặt lịch thành công!');
+      navigate('/shopcart'); // Chuyển hướng tới trang giỏ sách
     } else {
       toast.error('Vui lòng chọn ngày mượn sách');
     }
-  };
+  };  
 
   return (
     <div className={`fixed inset-0 bg-black flex justify-center items-center z-50 p-4 transition-opacity duration-300 ease-out ${isVisible ? 'bg-opacity-50' : 'bg-opacity-0'}`}>

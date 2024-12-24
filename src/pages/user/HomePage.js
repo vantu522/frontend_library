@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+// import { Link } from 'react-router-dom';
 import axios from "axios";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -103,7 +104,7 @@ function HomePage() {
           body: JSON.stringify(formData),
         }
       );
- 
+
       if (response.ok) {
         setStatus("Thông tin của bạn đã được gửi đi!");
         setFormData({ name: "", phoneNumber: "", email: "", content: "" }); // Reset form
@@ -114,6 +115,10 @@ function HomePage() {
       console.error("Error:", error);
       setStatus("Có lỗi xảy ra, vui lòng thử lại.");
     }
+  };
+  // Hàm xử lý khi click vào cuốn sách
+  const handleBookClick = (bookId) => {
+    navigate(`/book/${bookId}`); // Điều hướng đến trang chi tiết sách
   };
 
   if (isLoading) {
@@ -144,26 +149,38 @@ function HomePage() {
 
       {/* Collections */}
       <div className="px-8 py-5">
-        <h2 className="text-5xl font-bold text-center mb-5" data-aos= "fade-right">
+        <h2
+          className="text-5xl font-bold text-center mb-5"
+          data-aos="fade-right"
+        >
           Danh sách được mượn nhiều
         </h2>
-        <p className="text-2xl text-gray-600 text-center mb-10" data-aos="fade-right">
+        <p
+          className="text-2xl text-gray-600 text-center mb-10"
+          data-aos="fade-right"
+        >
           Những cuốn sách được yêu thích nhất tại thư viện.
         </p>
-        <div className="relative border-2 border-blue-500 rounded-lg p-5" data-aos="fade-right">
+        <div
+          className="relative border-2 border-blue-500 rounded-lg p-5"
+          data-aos="fade-right"
+        >
           <Slider {...settings}>
             {mostBorrowedBooks.map((book, index) => (
               <div
                 key={index}
-                className="px-2 relative group overflow-hidden rounded-lg shadow-lg"
+                className="px-2 relative group overflow-hidden rounded-lg shadow-lg flex flex-col h-[450px]" // chiều cao cố định
+                onClick={() => handleBookClick(book.id)} //click vào cuốn sách thì hiển thị chi tiết cuốn sách đó
               >
-                <img
-                  src={book.img}
-                  alt={book.title}
-                  className="w-full h-[300px] object-cover transform group-hover:scale-105 transition duration-300"
-                />
-                <div className="absolute inset-0 bg-gray-900 bg-opacity-30 opacity-0 group-hover:opacity-100 transition duration-300"></div>
-                <div className="p-4 bg-white">
+                <div className="w-full h-[300px] relative flex-shrink-0">
+                  <img
+                    src={book.img}
+                    alt={book.title}
+                    className="w-full h-full object-cover transform group-hover:scale-105 transition duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gray-900 bg-opacity-30 opacity-0 group-hover:opacity-100 transition duration-300"></div>
+                </div>
+                <div className="p-4 bg-white flex flex-col justify-between flex-grow">
                   <p className="text-sm text-gray-500">{book.author}</p>
                   <h3 className="text-lg font-semibold">{book.title}</h3>
                   <p className="text-sm text-gray-400">
