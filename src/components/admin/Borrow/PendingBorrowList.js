@@ -76,7 +76,7 @@ const PendingBorrowList = () => {
     { label: "Tên sách", field: "bookTitle" },
     { label: "Số điện thoại", field: "phoneNumber" },
     { label: "Ngày mượn", field: "transactionDate" },
-    { label: "Ngày trả dự kiến", field: "dueDate" },
+    { label: "Ngày trả", field: "dueDate" },
     {
       label: "Trạng thái",
       render: (val,row) => {

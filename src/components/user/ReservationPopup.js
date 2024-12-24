@@ -7,7 +7,10 @@ import { toast } from 'react-toastify';
 const ReservationPopup = ({ book, onClose, onConfirm }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [borrowDate, setBorrowDate] = useState(null);
+  const [userName, setUserName] = useState(''); // Lưu tên người mượn
+  const [phoneNumber, setPhoneNumber] = useState(''); // Lưu số điện thoại
   const navigate = useNavigate(); 
+
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 50);
     return () => clearTimeout(timer);
@@ -18,33 +21,50 @@ const ReservationPopup = ({ book, onClose, onConfirm }) => {
     setTimeout(onClose, 300); // Wait for the animation to complete before closing
   };
 
-  const handleConfirm = () => {
-    if (borrowDate) {
+  const handleConfirm = async () => {
+    if (borrowDate && userName.trim() && phoneNumber.trim()) {
       const returnDate = new Date(borrowDate);
       returnDate.setMonth(returnDate.getMonth() + 3);
-  
+
       const bookData = {
         img: book.img,
         title: book.title,
         category: book.bigCategory[0]?.name || 'Không rõ',
         borrowDate,
         returnDate,
-        status: 'Đang chờ',
+        status: 'Đang chờ', // Trạng thái ban đầu
+        userName, // Thêm tên người mượn
+        phoneNumber, // Thêm số điện thoại
       };
-  
-      // Lấy giỏ sách hiện tại từ Local Storage
-      const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
-      // Thêm sách mới vào đầu danh sách
-      const updatedCart = [bookData, ...savedCart];
-      // Lưu danh sách mới vào Local Storage
-      localStorage.setItem('cart', JSON.stringify(updatedCart));
-  
-      toast.success('Đặt lịch thành công!');
-      navigate('/shopcart'); // Chuyển hướng tới trang giỏ sách
+
+      try {
+        // Gửi thông tin sách đến backend
+        const response = await fetch('https://library-mana.azurewebsites.net/transactions/borrow', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(bookData),
+        });
+
+        if (response.ok) {
+          // Lưu sách vào Local Storage (giỏ hàng)
+          const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
+          const updatedCart = [bookData, ...savedCart];
+          localStorage.setItem('cart', JSON.stringify(updatedCart));
+
+          toast.success('Đặt lịch thành công!');
+          navigate('/shopcart'); // Chuyển đến trang giỏ sách
+        } else {
+          throw new Error('Đặt lịch thất bại');
+        }
+      } catch (error) {
+        toast.error(error.message || 'Có lỗi xảy ra');
+      }
     } else {
-      toast.error('Vui lòng chọn ngày mượn sách');
+      toast.error('Vui lòng nhập đầy đủ thông tin và chọn ngày mượn sách');
     }
-  };  
+  };
 
   return (
     <div
@@ -78,6 +98,34 @@ const ReservationPopup = ({ book, onClose, onConfirm }) => {
               src={book.img}
               alt={book.title}
               className="h-48 w-auto object-cover rounded-md shadow-md"
+            />
+          </div>
+
+          {/* Thêm trường nhập liệu cho tên */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Tên người mượn
+            </label>
+            <input
+              type="text"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              placeholder="Nhập tên của bạn"
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+
+          {/* Thêm trường nhập liệu cho số điện thoại */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Số điện thoại
+            </label>
+            <input
+              type="tel"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              placeholder="Nhập số điện thoại của bạn"
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
