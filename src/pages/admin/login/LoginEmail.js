@@ -22,7 +22,7 @@ export default function AuthForm() {
       })
 
       localStorage.setItem('admin', JSON.stringify({
-        name: response.data.name || 'Người dùng',
+        name: response.data.name || 'Quản trị viên',
         username: response.data.username,
         librarianId: response.data.librarianId,
         phoneNumber: response.data.phoneNumber,

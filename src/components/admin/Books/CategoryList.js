@@ -1,32 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Table from "../../../common/admin/Table/Table"; 
 import { FaCheck, FaTimes } from "react-icons/fa"; 
+import axios from 'axios';
+import { API_ENDPOINTS } from "../../../config/apiConfig"; // Import API endpoints
 
 const LiteratureCategoryList = () => {
-  const [categories, setCategories] = useState([
-    {
-      id: 1,
-      name: "Văn học",
-      subCategories: [
-        { id: 1, name: "Thơ" },
-        { id: 2, name: "Truyện" },
-      ],
-    },
-    {
-      id: 2,
-      name: "Khoa học",
-      subCategories: [
-        { id: 1, name: "Vật lý" },
-        { id: 2, name: "Hóa học" },
-      ],
-    },
-  ]);
-
+  const [categories, setCategories] = useState([]);
   const [editCategoryId, setEditCategoryId] = useState(null);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [editSubCategoryId, setEditSubCategoryId] = useState(null);
   const [newSubCategoryName, setNewSubCategoryName] = useState("");
   const [searchTerm, setSearchTerm] = useState(""); 
+
+  // Fetch categories from API when the component mounts
+  useEffect(() => {
+    axios.get(API_ENDPOINTS.ADMIN.CATEGORIES) // Use the API endpoint from API_ENDPOINTS object
+      .then((response) => {
+        setCategories(response.data);
+      })
+      .catch((error) => {
+        console.error("Có lỗi khi lấy dữ liệu thể loại:", error);
+      });
+  }, []);
 
   const handleEditCategory = (id) => {
     setEditCategoryId(id);

@@ -16,17 +16,21 @@ const PendingBorrowList = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [confirmAction, setConfirmAction] = useState({});
   const [deleteTargetId, setDeleteTargetId] = useState(null);
+  const [loading, setLoading] = useState(false);  // Loading state
 
   useEffect(() => {
     fetchPendingBorrowList();
   }, []);
 
   const fetchPendingBorrowList = async () => {
+    setLoading(true);  // Set loading to true before the API call
     try {
       const data = await borrowService.fetchAllPending();
       setBorrows(data);
     } catch (error) {
       toast.error("Không thể tải danh sách phiếu mượn đang chờ");
+    } finally {
+      setLoading(false);  // Set loading to false after the API call completes
     }
   };
 
@@ -68,8 +72,6 @@ const PendingBorrowList = () => {
       borrow.phoneNumber.includes(searchLower)
     );
   });
-  console.log(filteredBorrows);
-
 
   const columns = [
     { label: "Tên người mượn", field: "memberName" },
@@ -79,8 +81,7 @@ const PendingBorrowList = () => {
     { label: "Ngày trả dự kiến", field: "dueDate" },
     {
       label: "Trạng thái",
-      render: (val,row) => {
-        console.log("Giá trị của val:", val); // In ra giá trị của val
+      render: (val, row) => {
         return (
           <span
             className={`font-bold ${
@@ -145,8 +146,12 @@ const PendingBorrowList = () => {
         />
       </div>
 
-      {/* Bảng dữ liệu */}
-      <Table columns={columns} data={filteredBorrows} />
+      {/* Hiển thị loading */}
+      {loading ? (
+        <div className="text-center text-lg">Đang tải dữ liệu...</div>
+      ) : (
+        <Table columns={columns} data={filteredBorrows} />
+      )}
 
       {/* Modal xác nhận */}
       <Modal
