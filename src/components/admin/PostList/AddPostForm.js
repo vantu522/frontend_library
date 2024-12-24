@@ -3,6 +3,7 @@ import Modal from "../../../common/admin/Modal/Modal";
 import postService from "../../../services/admin/postService";
 
 const AddPostForm = ({ visible, onClose, onAddPost }) => {
+  const [img, setImg] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [author, setAuthor] = useState("");
@@ -20,7 +21,7 @@ const AddPostForm = ({ visible, onClose, onAddPost }) => {
       return;
     }
 
-    const newPost = { title, content, author, date, status };
+    const newPost = {img, title, content, author, date, status };
 
     try {
       setLoading(true);
@@ -55,6 +56,18 @@ const AddPostForm = ({ visible, onClose, onAddPost }) => {
         </div>
 
         <div className="space-y-2">
+          <label htmlFor="img" className="block text-sm font-medium text-gray-700">ảnh</label>
+          <input
+            type="text"
+            id="img"
+            value={img}
+            onChange={(e) => setImg(e.target.value)}
+            className="mt-1 p-2 w-full border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            required
+          />
+        </div>
+
+        <div className="space-y-2">
           <label htmlFor="content" className="block text-sm font-medium text-gray-700">Nội dung</label>
           <textarea
             id="content"
@@ -72,18 +85,6 @@ const AddPostForm = ({ visible, onClose, onAddPost }) => {
             id="author"
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
-            className="mt-1 p-2 w-full border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-            required
-          />
-        </div>
-
-        <div className="space-y-2">
-          <label htmlFor="date" className="block text-sm font-medium text-gray-700">Ngày đăng</label>
-          <input
-            type="date"
-            id="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
             className="mt-1 p-2 w-full border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             required
           />

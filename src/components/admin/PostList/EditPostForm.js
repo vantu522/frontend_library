@@ -7,6 +7,7 @@ const EditPostForm = ({ post, onClose, onUpdate }) => {
   const [content, setContent] = useState("");
   const [author, setAuthor] = useState("");
   const [createdAt, setCreatedAt] = useState("");
+  const [img, setImg] = useState("");
   const [status, setStatus] = useState("Công khai");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -16,6 +17,7 @@ const EditPostForm = ({ post, onClose, onUpdate }) => {
       setTitle(post.title);
       setContent(post.content);
       setAuthor(post.author);
+      setImg(post.img);
       setStatus(post.status === "công khai" ? "công khai" : "ẩn");
     }
   }, [post]);
@@ -31,7 +33,7 @@ const EditPostForm = ({ post, onClose, onUpdate }) => {
       return;
     }
 
-    const updatedPost = {id:post.id, title, content, author, status };
+    const updatedPost = {id:post.id, title, content, author, status, img };
 
     try {
       await postService.updatePost(post.id, updatedPost);
@@ -61,6 +63,18 @@ const EditPostForm = ({ post, onClose, onUpdate }) => {
             required
           />
         </div>
+        
+        <div className="space-y-2">
+          <label htmlFor="img" className="block text-sm font-medium text-gray-700">Anhrs</label>
+          <input
+            type="text"
+            id="img"
+            value={img}
+            onChange={(e) => setImg(e.target.value)}
+            className="mt-1 p-3 w-full border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            required
+          />
+        </div>
 
         <div className="space-y-2">
           <label htmlFor="content" className="block text-sm font-medium text-gray-700">Nội dung</label>
@@ -83,19 +97,7 @@ const EditPostForm = ({ post, onClose, onUpdate }) => {
             className="mt-1 p-3 w-full border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             required
           />
-        </div>
-
-        <div className="space-y-2">
-          <label htmlFor="createdAt" className="block text-sm font-medium text-gray-700">Ngày đăng</label>
-          <input
-            type="date"
-            id="createdAt"
-            value={createdAt}
-            onChange={(e) => setCreatedAt(e.target.value)}
-            className="mt-1 p-3 w-full border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-            required
-          />
-        </div>
+        </div> 
 
         <div className="space-y-2">
           <label htmlFor="status" className="block text-sm font-medium text-gray-700">Trạng thái</label>
@@ -131,4 +133,4 @@ const EditPostForm = ({ post, onClose, onUpdate }) => {
   );
 };
 
-export default EditPostForm;
+export default EditPostForm; 

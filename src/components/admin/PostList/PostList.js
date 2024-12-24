@@ -87,6 +87,7 @@ const PostList = () => {
 
   // Cấu hình các cột cho bảng
   const columns = [
+    { label: "Hình ảnh", field: "img",render: (val) => <img src={val} alt="new" className="text-gray-600 font-mono" />, width:"10%"},
     { label: "Tiêu đề", field: "title" },
     { label: "Nội dung", field: "content" },
     { label: "Tác giả", field: "author" },

@@ -21,6 +21,7 @@ const bookService = {
       throw error;
     }
   },
+  
 
   fetchCategories: async () => {
     try {
@@ -91,16 +92,15 @@ const bookService = {
     }
   },
 
-  addBook: async (bookData) => {
+  addBook: async (formData) => {
     try {
       const response = await axios.post(
-        `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.ADDBOOKS}`,
-        bookData,
+        `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.BOOKS}`,
+        formData,
         {
           headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }
+            'Content-Type': 'multipart/form-data',
+          },
         }
       );
       return response.data;
@@ -110,32 +110,32 @@ const bookService = {
     }
   },
 
-    updateBook: async (bookId, bookData) => {
-      try {
-        console.log('Updating book with ID:', bookId); // Debug log
-        console.log('Update data:', bookData); // Debug log
-        
-        if (!bookId) {
-          throw new Error('Book ID is required');
-        }
-  
-        const response = await axios.put(
-          `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.EDITBOOKS}/${bookId}`,
-          bookData,
-          {
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-            }
-          }
-        );
-  
-        return response.data;
-      } catch (error) {
-        console.error('Service error:', error.response || error);
-        throw error;
+  updateBook: async (bookId, bookData) => {
+    try {
+      console.log('Updating book with ID:', bookId); // Debug log
+      console.log('Update data:', bookData); // Debug log
+      
+      if (!bookId) {
+        throw new Error('Book ID is required');
       }
-    },
+
+      const response = await axios.put(
+        `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.ADMIN.EDITBOOKS}/${bookId}`,
+        bookData,
+        {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'multipart/form-data',
+          }
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error('Service error:', error.response || error);
+      throw error;
+    }
+  },
     // ... other methods
 
   deleteBook: async (bookId) => {

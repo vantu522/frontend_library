@@ -1,54 +1,111 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import bookService from "../../../services/admin/booksService";
+import { FaImage } from "react-icons/fa";
 
 const AddBookForm = ({ setVisibleForm }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [description, setDescription] = useState("");
-  const [publicationYear, setPublicationYear] = useState(""); 
-  const [category, setCategory] = useState([{ 
-    name: "", 
-    smallCategory: [] 
-  }]);
-  const [img, setImg] = useState("");
+  const [publicationYear, setPublicationYear] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [customCategory, setCustomCategory] = useState("");
+  const [subCategories, setSubCategories] = useState([]);
+  const [selectedSubCategory, setSelectedSubCategory] = useState("");
+  const [category, setCategory] = useState([
+    {
+      name: "",
+      smallCategory: [],
+    },
+  ]);
   const [nxb, setNxb] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [pageCount, setPageCount] = useState(0);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await bookService.fetchCategories();
+        setCategories(response); // Lưu danh sách thể loại vào state
+      } catch (error) {
+        console.error("Lỗi khi tải thể loại:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    if (selectedCategory) {
+      const fetchSubCategories = async () => {
+        try {
+          const response = await bookService.fetchSubCategories(selectedCategory);
+          setSubCategories(response);
+        } catch (error) {
+          console.error("Lỗi khi tải thể loại con:", error);
+        }
+      };
+      fetchSubCategories();
+    } else {
+      setSubCategories([]);
+    }
+  }, [selectedCategory]);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newBook = {
+
+    const formData = new FormData();
+
+    const bookData = {
       title,
       description,
-      author: [author], // Wrap single author in array to match API
+      author: [author],
       publicationYear: parseInt(publicationYear),
-      category, // Using the category array structure
+      bigCategory: category,
       quantity: parseInt(quantity),
       nxb,
-      img,
+      pageCount: parseInt(pageCount),
+      availability: true,
+      likedByMembers: [],
     };
 
+    formData.append("book", JSON.stringify(bookData));
+
+    if (imageFile) {
+      formData.append("image", imageFile);
+    }
+
     try {
-      const response = await bookService.addBook(newBook);
-      console.log('Sách đã được thêm:', response);
+      const response = await bookService.addBook(formData);
+      console.log("Sách đã được thêm:", response);
       setVisibleForm(false);
     } catch (error) {
-      console.error('Thêm sách thất bại:', error);
+      console.error("Thêm sách thất bại:", error);
     }
   };
 
   const handleCategoryChange = (e) => {
-    setCategory([{
-      ...category[0],
-      name: e.target.value
-    }]);
+    const value = e.target.value;
+    setSelectedCategory(value);
+    setCategory([{ name: value, smallCategory: selectedSubCategory ? [selectedSubCategory] : [] }]);
   };
-
+  
   const handleSmallCategoryChange = (e) => {
-    setCategory([{
-      ...category[0],
-      smallCategory: e.target.value.split(",").map(cat => cat.trim())
-    }]);
+    const value = e.target.value;
+    setSelectedSubCategory(value);
+    setCategory([{ name: selectedCategory, smallCategory: value ? [value] : [] }]);
   };
+  
 
   return (
     <div className="p-4 max-w-2xl mx-auto bg-white rounded-lg shadow-md overflow-y-auto max-h-[90vh]">
@@ -65,6 +122,7 @@ const AddBookForm = ({ setVisibleForm }) => {
             className="w-full p-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
+
         <div className="col-span-2 sm:col-span-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">Tác giả</label>
           <input
@@ -76,6 +134,7 @@ const AddBookForm = ({ setVisibleForm }) => {
             className="w-full p-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
+
         <div className="col-span-2 sm:col-span-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">Số lượng</label>
           <input
@@ -86,6 +145,18 @@ const AddBookForm = ({ setVisibleForm }) => {
             className="w-full p-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
+
+        <div className="col-span-2 sm:col-span-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Số trang</label>
+          <input
+            type="number"
+            value={pageCount}
+            onChange={(e) => setPageCount(e.target.value)}
+            min="1"
+            className="w-full p-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+
         <div className="col-span-2 sm:col-span-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">Năm xuất bản</label>
           <input
@@ -96,6 +167,7 @@ const AddBookForm = ({ setVisibleForm }) => {
             className="w-full p-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
+
         <div className="col-span-2">
           <label className="block text-sm font-medium text-gray-700 mb-1">Mô tả</label>
           <textarea
@@ -106,16 +178,42 @@ const AddBookForm = ({ setVisibleForm }) => {
             rows={3}
           ></textarea>
         </div>
+
         <div className="col-span-2 sm:col-span-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">Hình ảnh</label>
-          <input
-            type="text"
-            value={img}
-            onChange={(e) => setImg(e.target.value)}
-            placeholder="URL hình ảnh"
-            className="w-full p-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          />
+          <div className="flex items-center space-x-4">
+            <label className="cursor-pointer flex items-center justify-center w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500">
+              <input
+                type="file"
+                onChange={handleImageChange}
+                accept="image/*"
+                className="hidden"
+              />
+              {imagePreview ? (
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              ) : (
+                <FaImage className="w-8 h-8 text-gray-400" />
+              )}
+            </label>
+            {imagePreview && (
+              <button
+                type="button"
+                onClick={() => {
+                  setImageFile(null);
+                  setImagePreview(null);
+                }}
+                className="text-red-500 hover:text-red-700"
+              >
+                Xóa ảnh
+              </button>
+            )}
+          </div>
         </div>
+
         <div className="col-span-2 sm:col-span-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">Nhà xuất bản</label>
           <input
@@ -126,25 +224,83 @@ const AddBookForm = ({ setVisibleForm }) => {
             className="w-full p-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
-        <div className="col-span-2 sm:col-span-1">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Thể loại</label>
-          <input
+
+         <div className="col-span-2 sm:col-span-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Thể loại lớn</label>
+          {selectedCategory === "other" ? (
+            <input
             type="text"
             value={category[0].name}
-            onChange={handleCategoryChange}
-            placeholder="Thể loại"
+            onChange={(e) => {
+              setSelectedCategory("other");
+              setCategory([{ name: e.target.value, smallCategory: selectedSubCategory ? [selectedSubCategory] : [] }]);
+            }}
+              className="w-full p-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Nhập thể loại lớn"
+            />
+          ) : (
+          <select
+            value={selectedCategory}
+            onChange={(e) => {
+              setSelectedCategory(e.target.value);
+              if (e.target.value !== "other") {
+                // Fetch subcategories nếu không phải "other"
+                bookService.fetchSubCategories(e.target.value)
+                  .then((response) => setSubCategories(response))
+                  .catch((error) => console.error("Lỗi khi tải thể loại con:", error));
+              } else {
+                setSubCategories([]); // Xóa thể loại con nếu chọn "other"
+              }
+            }}
             className="w-full p-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-        <div className="col-span-2 sm:col-span-1">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Thể loại con</label>
-          <input
-            type="text"
-            onChange={handleSmallCategoryChange}
-            placeholder="Thể loại con (ngăn cách bằng dấu phẩy)"
-            className="w-full p-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
+          >
+            <option value="">Chọn thể loại</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category} onChange={handleCategoryChange}>
+                {category}
+              </option>
+            ))}
+            <option value="other">Thể loại khác</option>
+          </select>
+        )}
+         </div>
+
+            {selectedCategory && (
+          <div className="col-span-2 sm:col-span-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Thể loại con</label>
+            {selectedSubCategory === "other" ? (
+              // Nếu chọn "Thể loại con khác", hiển thị input để người dùng điền
+              <input
+                type="text"
+                value={category[0].smallCategory[0] || ""}
+                onChange={(e) => {
+                setSelectedSubCategory("other");
+                setCategory([{ name: selectedCategory, smallCategory: [e.target.value] }]);
+              }}
+                className="w-full p-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Nhập thể loại con"
+              />
+            ) : (
+              // Nếu không phải "Thể loại con khác", hiển thị select như bình thường
+              <select
+                value={selectedSubCategory}
+                onChange={(e) => setSelectedSubCategory(e.target.value)}
+                className="w-full p-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">Chọn thể loại con</option>
+                {subCategories.map((subCategory) => (
+                  <option key={subCategory.id} value={subCategory.name} >
+                    {subCategory}
+                  </option>
+                ))}
+                <option value="other" >Thể loại con khác</option>
+              </select>
+            )}
+          </div>
+        )}
+
+
+    
         <div className="col-span-2 text-center">
           <button
             type="submit"

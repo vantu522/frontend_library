@@ -123,12 +123,30 @@ const BookList = () => {
     return matchesSearch && matchesStatus;
   });
 
+  const renderImage = (image) => {
+  if (!image) return "Không có hình ảnh";
+
+  // Kiểm tra nếu là URL
+  if (image.startsWith("http://") || image.startsWith("https://")) {
+    return <img src={image} alt="Hình ảnh" className="text-gray-600 font-mono" />;
+  }
+
+  // Kiểm tra nếu là base64
+  if (image.startsWith("data:image")) {
+    return <img src={image} alt="Hình ảnh Base64" className="text-gray-600 font-mono" />;
+  }
+
+  // Nếu là chuỗi base64 không có tiền tố
+  const base64Image = `data:image/png;base64,${image}`;
+  return <img src={base64Image} alt="Hình ảnh Base64" className="text-gray-600 font-mono" />;
+};
+
   const columns = [
     { 
       label: "Hình ảnh", 
       field: "img", 
       width: "10%",
-      render: (val) => <img src={val} alt="Book" className="text-gray-600 font-mono" />
+      render:(img) => renderImage(img)
     },
     { 
       label: "Tên sách", 
