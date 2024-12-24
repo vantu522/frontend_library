@@ -46,7 +46,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
           type="number"
           min="1"
           max={totalPages}
-          value={inputPage}
+          value={currentPage}
           onChange={handleInputChange}
           onKeyPress={handleKeyPress}
           className="w-16 px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"

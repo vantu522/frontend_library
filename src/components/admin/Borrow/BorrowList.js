@@ -39,18 +39,26 @@ const BorrowList = () => {
     setIsLoading(true);
     const { borrowData } = confirmModal;
     try {
+      // Gọi API trả sách
       await borrowService.returnBook({
         name: borrowData.memberName,
         title: borrowData.bookTitle,
         phoneNumber: borrowData.phoneNumber,
       });
-
-      // Cập nhật danh sách mượn (trực tiếp)
-      setBorrows((prevBorrows) =>
-        prevBorrows.filter((borrow) => borrow.id !== borrowData.id)
+  
+      // Cập nhật state trực tiếp bằng cách lọc ra phiếu mượn cần xóa
+      setBorrows(prevBorrows => 
+        prevBorrows.filter(borrow => {
+          // So sánh các trường dữ liệu để đảm bảo xóa đúng phiếu mượn
+          return !(
+            borrow.memberName === borrowData.memberName &&
+            borrow.bookTitle === borrowData.bookTitle &&
+            borrow.phoneNumber === borrowData.phoneNumber
+          );
+        })
       );
-
-      // Hiển thị thông báo
+  
+      // Hiển thị thông báo thành công
       toast.success(`Sách "${borrowData.bookTitle}" đã được trả thành công.`);
     } catch (error) {
       toast.error('Lỗi khi trả sách.');
@@ -59,7 +67,6 @@ const BorrowList = () => {
       closeConfirmModal();
     }
   };
-
   // Gọi API Gia hạn sách
   const handleRenewBook = async () => {
     setIsLoading(true);
@@ -197,7 +204,7 @@ const BorrowList = () => {
             <Button
               onClick={confirmModal.actionType === 'return' ? handleReturnBook : handleRenewBook}
               disabled={isLoading}
-              className={`bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 text-xl rounded-lg ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              
             >
               {isLoading ? 'Đang xử lý...' : 'Xác nhận'}
             </Button>
@@ -219,14 +226,8 @@ const BorrowList = () => {
         />
       </div>
 
-      {/* Bảng */}
-      {isLoading ? (
-        <div className="flex items-center justify-center h-20">
-          <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full"></div>
-        </div>
-      ) : (
+    
         <Table columns={columns} data={filteredBorrows} className="text-center" />
-      )}
     </div>
   );
 };

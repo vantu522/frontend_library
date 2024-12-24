@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { updateBook } from "../../../redux/admin/booksReducer";
 import { toast } from "react-toastify";
 import bookService from "../../../services/admin/booksService";
 
@@ -8,7 +6,7 @@ const EditBookForm = ({ book, setVisibleForm, onUpdate }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [publicationYear, setPublicationYear] = useState("");
-  const [category, setCategory] = useState([{ 
+  const [bigCategory, setBigCategory] = useState([{ 
     name: "", 
     smallCategory: [] 
   }]);
@@ -24,7 +22,7 @@ const EditBookForm = ({ book, setVisibleForm, onUpdate }) => {
       setTitle(book.title);
       setAuthor(book.author[0]);
       setPublicationYear(book.publicationYear);
-      setCategory(book.category || [{ name: "", smallCategory: [] }]);
+      setBigCategory(book.bigCategory || [{ name: "", smallCategory: [] }]);
       setNxb(book.nxb);
       setQuantity(book.quantity);
       setDescription(book.description);
@@ -36,25 +34,32 @@ const EditBookForm = ({ book, setVisibleForm, onUpdate }) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
-
+  
     const updatedBook = {
-      id: book.bookId,
+      bookId: book.bookId,
       title,
       description,
       author: [author],
       publicationYear: parseInt(publicationYear),
-      category,
+      bigCategory,
       quantity: parseInt(quantity),
       nxb,
-      img
+      img,
+      availability: book.availability, // Add this
+      pageCount: book.pageCount // Add this
     };
-
+  
+    console.log('Sending data:', updatedBook); // Add this log
+    console.log('Book ID:', book.bookId); // Add this log
+  
     try {
-      await bookService.updateBook(book.bookId, updatedBook);
+      const response = await bookService.updateBook(book.bookId, updatedBook);
+      console.log('Response:', response); // Add this log
       onUpdate(updatedBook);
       setVisibleForm(false);
       toast.success("Cập nhật sách thành công!");
     } catch (error) {
+      console.error('Error details:', error); // Add this detailed error log
       setError("Có lỗi xảy ra khi cập nhật. Vui lòng thử lại.");
       toast.error("Cập nhật sách thất bại!");
     } finally {
@@ -123,8 +128,11 @@ const EditBookForm = ({ book, setVisibleForm, onUpdate }) => {
             <label className="block font-medium text-gray-700">Thể loại:</label>
             <input
               type="text"
-              value={category[0].name}
-              onChange={(e) => setCategory([{...category[0], name: e.target.value}])}
+              value={bigCategory[0]?.name || ""}
+              onChange={(e) => setBigCategory([{
+                ...bigCategory[0],
+                name: e.target.value
+              }])}
               className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>

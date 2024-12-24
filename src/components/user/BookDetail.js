@@ -59,8 +59,9 @@ function LibraryBookDetail() {
       };
   
       await transactionsService.addTransaction(requestData); // Gọi API mượn sách
-      setShowReservationPopup(false); // Đóng popup
-      // alert(`Đặt sách thành công! Ngày mượn: ${borrowDateStr}`);
+      setShowReservationPopup(false); 
+      console.log(requestData);
+      // Đóng popup
     } catch (error) {
       console.error('Đặt sách thất bại:', error.response?.data || error.message);
       alert('Đặt sách thất bại, vui lòng thử lại.');
