@@ -176,7 +176,7 @@ const BookList = () => {
       width: "10%",
       render: (val) => (
         <div className="flex flex-col items-center">
-          <span className={`font-bold ${val > 5 ? 'text-green-600' : val > 0 ? 'text-yellow-600' : 'text-red-600'}`}>
+          <span className={`font-bold ${val > 5 ? 'text-green-600' : val > 0 ? 'text-[#5352ed]' : 'text-red-600'}`}>
             {val || 0} quyển
           </span>
           <span className={`text-xs ${(val > 0) ? 'text-green-500' : 'text-red-500'}`}>

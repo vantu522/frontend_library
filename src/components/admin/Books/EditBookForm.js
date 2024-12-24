@@ -218,6 +218,7 @@ const EditBookForm = ({ book, setVisibleForm, onUpdate }) => {
           <input
             type="text"
             onChange={handleSmallCategoryChange}
+            value={category[0].smallCategory[0]}
             placeholder="Thể loại con (ngăn cách bằng dấu phẩy)"
             className="w-full p-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           />

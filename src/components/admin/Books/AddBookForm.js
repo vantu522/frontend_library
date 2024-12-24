@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import bookService from "../../../services/admin/booksService";
 import { FaImage } from "react-icons/fa";
+import { toast } from "react-toastify";
+
 
 const AddBookForm = ({ setVisibleForm }) => {
   const [title, setTitle] = useState("");
@@ -89,6 +91,7 @@ const AddBookForm = ({ setVisibleForm }) => {
       const response = await bookService.addBook(formData);
       console.log("Sách đã được thêm:", response);
       setVisibleForm(false);
+      toast.success("Thêm sách thành công !")
     } catch (error) {
       console.error("Thêm sách thất bại:", error);
     }
@@ -97,13 +100,43 @@ const AddBookForm = ({ setVisibleForm }) => {
   const handleCategoryChange = (e) => {
     const value = e.target.value;
     setSelectedCategory(value);
-    setCategory([{ name: value, smallCategory: selectedSubCategory ? [selectedSubCategory] : [] }]);
+    // Cập nhật category state với format đúng
+    setCategory([
+      {
+        name: value,
+        smallCategory: [], // Reset smallCategory khi thay đổi category chính
+      },
+    ]);
   };
   
-  const handleSmallCategoryChange = (e) => {
+  const handleSubCategoryChange = (e) => {
     const value = e.target.value;
     setSelectedSubCategory(value);
-    setCategory([{ name: selectedCategory, smallCategory: value ? [value] : [] }]);
+    // Cập nhật smallCategory trong category state
+    setCategory([
+      {
+        name: selectedCategory,
+        smallCategory: value ? [value] : [],
+      },
+    ]);
+  };
+
+  const handleCustomCategoryChange = (value) => {
+    setCategory([
+      {
+        name: value,
+        smallCategory: [],
+      },
+    ]);
+  };
+
+  const handleCustomSubCategoryChange = (value) => {
+    setCategory([
+      {
+        name: selectedCategory,
+        smallCategory: [value],
+      },
+    ]);
   };
   
 
@@ -225,79 +258,61 @@ const AddBookForm = ({ setVisibleForm }) => {
           />
         </div>
 
-         <div className="col-span-2 sm:col-span-1">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Thể loại lớn</label>
-          {selectedCategory === "other" ? (
-            <input
+        <div className="col-span-2 sm:col-span-1">
+      <label className="block text-sm font-medium text-gray-700 mb-1">Thể loại lớn</label>
+      {selectedCategory === "other" ? (
+        <input
+          type="text"
+          value={category[0].name}
+          onChange={(e) => handleCustomCategoryChange(e.target.value)}
+          className="w-full p-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Nhập thể loại lớn"
+        />
+      ) : (
+        <select
+          value={selectedCategory}
+          onChange={handleCategoryChange}
+          className="w-full p-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        >
+          <option value="">Chọn thể loại</option>
+          {categories.map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
+          <option value="other">Thể loại khác</option>
+        </select>
+      )}
+    </div>
+
+    {selectedCategory && (
+      <div className="col-span-2 sm:col-span-1">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Thể loại con</label>
+        {selectedSubCategory === "other" ? (
+          <input
             type="text"
-            value={category[0].name}
-            onChange={(e) => {
-              setSelectedCategory("other");
-              setCategory([{ name: e.target.value, smallCategory: selectedSubCategory ? [selectedSubCategory] : [] }]);
-            }}
-              className="w-full p-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Nhập thể loại lớn"
-            />
-          ) : (
+            value={category[0].smallCategory[0] || ""}
+            onChange={(e) => handleCustomSubCategoryChange(e.target.value)}
+            className="w-full p-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Nhập thể loại con"
+          />
+        ) : (
           <select
-            value={selectedCategory}
-            onChange={(e) => {
-              setSelectedCategory(e.target.value);
-              if (e.target.value !== "other") {
-                // Fetch subcategories nếu không phải "other"
-                bookService.fetchSubCategories(e.target.value)
-                  .then((response) => setSubCategories(response))
-                  .catch((error) => console.error("Lỗi khi tải thể loại con:", error));
-              } else {
-                setSubCategories([]); // Xóa thể loại con nếu chọn "other"
-              }
-            }}
+            value={selectedSubCategory}
+            onChange={handleSubCategoryChange}
             className="w-full p-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           >
-            <option value="">Chọn thể loại</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category} onChange={handleCategoryChange}>
-                {category}
+            <option value="">Chọn thể loại con</option>
+            {subCategories.map((subCategory) => (
+              <option key={subCategory} value={subCategory}>
+                {subCategory}
               </option>
             ))}
-            <option value="other">Thể loại khác</option>
+            <option value="other">Thể loại con khác</option>
           </select>
         )}
-         </div>
-
-            {selectedCategory && (
-          <div className="col-span-2 sm:col-span-1">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Thể loại con</label>
-            {selectedSubCategory === "other" ? (
-              // Nếu chọn "Thể loại con khác", hiển thị input để người dùng điền
-              <input
-                type="text"
-                value={category[0].smallCategory[0] || ""}
-                onChange={(e) => {
-                setSelectedSubCategory("other");
-                setCategory([{ name: selectedCategory, smallCategory: [e.target.value] }]);
-              }}
-                className="w-full p-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Nhập thể loại con"
-              />
-            ) : (
-              // Nếu không phải "Thể loại con khác", hiển thị select như bình thường
-              <select
-                value={selectedSubCategory}
-                onChange={(e) => setSelectedSubCategory(e.target.value)}
-                className="w-full p-2 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="">Chọn thể loại con</option>
-                {subCategories.map((subCategory) => (
-                  <option key={subCategory.id} value={subCategory.name} >
-                    {subCategory}
-                  </option>
-                ))}
-                <option value="other" >Thể loại con khác</option>
-              </select>
-            )}
-          </div>
-        )}
+      </div>
+    )}
 
 
     

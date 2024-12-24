@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { UserCircle, Bell, LogOut, Heart, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import bookService from "../../../services/admin/booksService";
+import axios from "axios";
 import { Player } from '@lottiefiles/react-lottie-player';
 import hotline from "../../../assets/aniamations/Animation - loading.json";
 import { createSlug } from "../../../utils/slugify";
@@ -49,6 +50,33 @@ const Header = () => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const navigate = useNavigate();
+
+
+const [searchQuery, setSearchQuery] = useState('');
+const [suggestions, setSuggestions] = useState([]);
+
+
+const handleSearchInput = async (e) => {
+  const query = e.target.value;
+  setSearchQuery(query);
+
+  if (query.length >= 1) {
+    try {
+      const response = await axios.get('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/books/suggest', {
+        params: { query },
+      });
+      setSuggestions(response.data);
+    } catch (error) {
+      console.error('Search error:', error);
+      setSuggestions([]);
+    }
+  } else {
+    setSuggestions([]);
+  }
+};
+const handleBookClick = (bookId) => {
+  navigate(`/book/${bookId}`);
+};
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -157,24 +185,35 @@ const Header = () => {
                 <input
                   type="text"
                   name="query"
-                  aria-label="Tìm sản phẩm"
+                  value={searchQuery}
+                  onChange={handleSearchInput}
                   placeholder={placeholder}
                   autoComplete="off"
                   className="w-full rounded-l-md border border-gray-400 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
-                <button
-                  type="submit"
-                  aria-label="Tìm kiếm"
-                  className="rounded-r-md bg-[#0abaff] px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-                >
+                <button type="submit" className="rounded-r-md bg-[#0abaff] px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-400">
                   <svg viewBox="0 0 451 451" className="h-5 w-5" fill="currentColor">
-                    <g>
-                      <path d="M447.05,428l-109.6-109.6c29.4-33.8,47.2-77.9,47.2-126.1C384.65,86.2,298.35,0,192.35,0C86.25,0,0.05,86.3,0.05,192.3 s86.3,192.3,192.3,192.3c48.2,0,92.3-17.8,126.1-47.2L428.05,447c2.6,2.6,6.1,4,9.5,4s6.9-1.3,9.5-4 C452.25,441.8,452.25,433.2,447.05,428z M26.95,192.3c0-91.2,74.2-165.3,165.3-165.3c91.2,0,165.3,74.2,165.3,165.3 s-74.1,165.4-165.3,165.4C101.15,357.7,26.95,283.5,26.95,192.3z" />
-                    </g>
+                    <g><path d="M447.05,428l-109.6-109.6c29.4-33.8,47.2-77.9,47.2-126.1C384.65,86.2,298.35,0,192.35,0C86.25,0,0.05,86.3,0.05,192.3 s86.3,192.3,192.3,192.3c48.2,0,92.3-17.8,126.1-47.2L428.05,447c2.6,2.6,6.1,4,9.5,4s6.9-1.3,9.5-4 C452.25,441.8,452.25,433.2,447.05,428z M26.95,192.3c0-91.2,74.2-165.3,165.3-165.3c91.2,0,165.3,74.2,165.3,165.3 s-74.1,165.4-165.3,165.4C101.15,357.7,26.95,283.5,26.95,192.3z" /></g>
                   </svg>
                 </button>
               </form>
-            </div>
+              
+              {suggestions.length > 0 && (
+                <div className="absolute top-full left-0 w-full bg-white mt-1 border rounded-md shadow-lg z-50">
+                  {suggestions.map((book, index) => (
+                    <div 
+                      key={index}
+                      // className="p-2 hover:bg-gray-100 cursor-pointer"
+                      onClick={() => handleBookClick(book.bookId)}
+                      className="px-6 py-3 hover:bg-indigo-50 cursor-pointer transition-colors duration-200"
+                    >
+                      <p className="font-medium text-black-700">{book.title}</p>
+                      <p className="text-sm text-gray-500">{book.author}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+          </div>
 
             {/* Hotline Section */}
             <div className="flex items-center">
