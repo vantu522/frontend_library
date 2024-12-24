@@ -57,10 +57,10 @@ const AdminDashboard = () => {
   const fetchDashboardStats = async () => {
     try {
       const [totalBooks, borrowedBooks, totalUsers, returnedBooks] = await Promise.all([
-        axios.get('https://library-mana.azurewebsites.net/books/total').then(res => res.data),
-        axios.get('https://library-mana.azurewebsites.net/transactions/count-borrowed').then(res => res.data),
-        axios.get('https://library-mana.azurewebsites.net/members/count').then(res => res.data),
-        axios.get('https://library-mana.azurewebsites.net/transactions/count-returned').then(res => res.data)
+        axios.get('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/books/total').then(res => res.data),
+        axios.get('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/transactions/count-borrowed').then(res => res.data),
+        axios.get('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/members/count').then(res => res.data),
+        axios.get('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/transactions/count-returned').then(res => res.data)
       ]);
 
       setDashboardStats({
@@ -84,7 +84,7 @@ const AdminDashboard = () => {
   const fetchChartStats = async () => {
     try {
       // Fetch weekly data
-      const weeklyResponse = await axios.get('http://127.0.0.1:5000/api/data');
+      const weeklyResponse = await axios.get('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/transactions/weekly-stats');
       const weeklyData = weeklyResponse.data;
 
       if (Array.isArray(weeklyData)) {
@@ -98,7 +98,7 @@ const AdminDashboard = () => {
       }
 
       // Fetch monthly data
-      const monthlyResponse = await axios.get('http://127.0.0.1:5000/api/monthly-data');
+      const monthlyResponse = await axios.get('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/transactions/statistics');
       const monthlyData = monthlyResponse.data;
 
       if (Array.isArray(monthlyData)) {
