@@ -73,12 +73,17 @@ const PendingBorrowList = () => {
     );
   });
 
+  const formatDate = (date) => {
+    const d = new Date(date);
+    return d.toLocaleDateString(); // Trả về định dạng ngày (DD/MM/YYYY)
+  };
+
   const columns = [
     { label: "Tên người mượn", field: "memberName" },
-    { label: "Tên sách", field: "bookTitle" },
+    { label: "Tên sách", field: "bookTitle", render: (val) => <span className="font-semibold">{val}</span> },
     { label: "Số điện thoại", field: "phoneNumber" },
-    { label: "Ngày mượn", field: "transactionDate" },
-    { label: "Ngày trả", field: "dueDate" },
+    { label: "Ngày mượn", field: "transactionDate", render:(val) => formatDate(val) },
+    { label: "Ngày trả", field: "dueDate", render:(val) => formatDate(val) },
     {
       label: "Trạng thái",
       render: (val, row) => {

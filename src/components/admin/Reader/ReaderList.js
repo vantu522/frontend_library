@@ -178,9 +178,15 @@ const ReaderList = () => {
       return newSet;
     });
   };
+  const formatDate = (date) => {
+    const d = new Date(date);
+    return d.toLocaleDateString(); // Trả về định dạng ngày (DD/MM/YYYY)
+  };
+
+
   const columns = [
    
-    { label: "Tên", field: "name" },
+    { label: "Tên", field: "name", render: (val) => <span className="font-semibold">{val}</span>   },
     { label: "Email", field: "email",  },
     { label: "Địa Chỉ", field: "address",},
     { label: "Số Điện Thoại", field: "phoneNumber",},

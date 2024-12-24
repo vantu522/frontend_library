@@ -14,15 +14,15 @@ const postService = {
   },
 
   // Thêm bài viết mới
-  addPost: async (data) => {
+  addPost: async (formData) => {
     try {
       const response = await axios.post(
         `${API_ENDPOINTS.BASE_URL}/posts`,
-        data,
+        formData,
         {
           headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
+
           }
         }
       );
@@ -34,9 +34,16 @@ const postService = {
   },
 
   // Cập nhật bài viết
-  updatePost: async (id, updatedPost) => {
+  updatePost: async (id, postData) => {
     try {
-      const response = await axios.put(`${API_ENDPOINTS.BASE_URL}/posts/update/${id}`, updatedPost);
+      const response = await axios.put(`${API_ENDPOINTS.BASE_URL}/posts/update/${id}`,
+         postData,
+         {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'multipart/form-data',
+          }
+        });
       return response.data;
     } catch (error) {
       console.error("Lỗi khi gọi API cập nhật:", error);

@@ -35,15 +35,21 @@ const RenewHistoryList = () => {
     );
   });
 
+  const formatDate = (date) => {
+    const d = new Date(date);
+    return d.toLocaleDateString(); // Trả về định dạng ngày (DD/MM/YYYY)
+  };
+
+
   
   // Cấu hình bảng
   const columns = [
     { label: 'Tên người mượn', field: 'memberName' },
-    { label: 'Tên sách', field: 'bookTitle' },
+    { label: 'Tên sách', field: 'bookTitle', render: (val) => <span className="font-semibold">{val}</span> },
     { label: 'Tác giả', field: 'author' },
     { label: 'Số điện thoại', field: 'phoneNumber' },
-    { label: 'Ngày gia hạn', field: 'transactionDate' },
-    { label: 'Hạn mới ', field: 'dueDate' },
+    { label: 'Ngày gia hạn', field: 'transactionDate', render:(val) => formatDate(val) },
+    { label: 'Hạn mới ', field: 'dueDate', render:(val) => formatDate(val) },
   ];
 
   return (

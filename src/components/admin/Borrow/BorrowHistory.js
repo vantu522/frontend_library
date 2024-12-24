@@ -33,15 +33,20 @@ const BorrowHistory = () => {
     );
   });
 
+  const formatDate = (date) => {
+    const d = new Date(date);
+    return d.toLocaleDateString(); // Trả về định dạng ngày (DD/MM/YYYY)
+  };
+
 
   // Cấu trúc cột cho bảng
   const columns = [
     { label: 'Tên người mượn', field: 'memberName' },
-    { label: 'Tên sách', field: 'bookTitle' },
+    { label: 'Tên sách', field: 'bookTitle', render: (val) => <span className="font-semibold">{val}</span> },
     { label: 'Tác giả', field: 'author' },
     { label: 'Số điện thoại', field: 'phoneNumber' },
-    { label: 'Ngày mượn', field: 'transactionDate' },
-    { label: 'Ngày dự kiến trả', field: 'dueDate' },
+    { label: 'Ngày mượn', field: 'transactionDate', render:(val) => formatDate(val) },
+    { label: 'Ngày dự kiến trả', field: 'dueDate',render:(val) => formatDate(val)  },
     {
       label: 'Trạng thái',
       field: 'status',
