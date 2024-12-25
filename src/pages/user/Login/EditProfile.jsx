@@ -20,7 +20,7 @@ const EditProfile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`https://library-mana.azurewebsites.net/members/${memberId}`);
+        const response = await axios.get(`https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/members/${memberId}`);
         setUserData({
           name: response.data.name || '',
           email: response.data.email || '',
