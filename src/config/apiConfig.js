@@ -34,4 +34,9 @@ export const API_ENDPOINTS = {
   TRANSACTIONS: {
     BORROW: '/transactions/borrow',
   },
+  RATINGS: {
+    SUBMIT: '/ratings/submit',
+    GETRATINGS: '/ratings/book',
+    GETAVG: "/ratings/book/average",
+  }
 };
