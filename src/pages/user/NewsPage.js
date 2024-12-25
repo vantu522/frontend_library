@@ -126,7 +126,9 @@ function NewsPage() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get("https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/posts"); // Thay bằng API thật của bạn
+        const response = await axios.get(
+          "https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/posts"
+        ); // Thay bằng API thật của bạn
         setPosts(response.data);
         setLoading(false);
       } catch (error) {
@@ -158,27 +160,34 @@ function NewsPage() {
       <NewsBanner />
 
       <div className="mt-10 bg-white shadow-lg rounded-lg overflow-hidden">
-      <h1 className="text-4xl font-extrabold text-blue-900 text-left pl-8 pt-6">
-        Bài viết mới
-      </h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-[90%] mx-auto">
-        {posts.map((post, index) => (
-          <div key={index} className="p-6 rounded-lg shadow-lg">
-            <div
-              className="w-full h-48 bg-cover bg-center rounded-lg"
-              style={{
-                backgroundImage: `url('${post.image}')`,
-              }}
-            ></div>
-            <h3 className="text-2xl font-bold text-blue-700 mt-4 mb-2">
-              {post.title}
-            </h3>
-            <p className="text-md text-gray-500 mb-4">{post.date}</p>
-            <p className="text-gray-600 italic">{post.description}</p>
-          </div>
-        ))}
+        <h1 className="text-4xl font-extrabold text-blue-900 text-left pl-8 pt-6">
+          Bài viết mới
+        </h1>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-[90%] mx-auto">
+          {posts.map((post, index) => (
+            <div key={index} className="p-6 rounded-lg shadow-lg">
+              <div
+                className="w-full h-48 bg-cover bg-center rounded-lg"
+                style={{
+                  backgroundImage: `url('${post.image}')`,
+                }}
+              ></div>
+              <h3 className="text-2xl font-bold text-blue-700 mt-4 mb-2">
+                {post.title}
+              </h3>
+              <p className="text-md text-gray-500 mb-4">{post.date}</p>
+              <p className="text-gray-600 italic">{post.description}</p>
+            </div>
+          ))}
+        </div>
+        {/* Nút Scroll to Top */}
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="fixed bottom-5 right-5 bg-blue-500 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition"
+        >
+          ⬆
+        </button>
       </div>
-    </div>
 
       {/* Old Cards Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-10 w-[90%] mx-auto">
