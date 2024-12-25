@@ -19,7 +19,7 @@ function PieChartComponent() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://library-mana.azurewebsites.net/books/category-distribution');
+        const response = await axios.get('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/books/category-distribution');
         const rawData = response.data;
 
         // Chuyển đổi dữ liệu từ object sang array

@@ -37,7 +37,7 @@ const BarChart = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          'https://library-mana.azurewebsites.net/books/category-distribution'
+          'https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/books/category-distribution'
         );
 
         const apiData = response.data;
@@ -81,7 +81,7 @@ const BarChart = () => {
       },
       title: {
         display: true,
-        text: 'Biểu đồ thống kê số lượng sách đã được mượn theo từng thể loại',
+        text: 'Biểu đồ thống kê số lượng sách theo từng thể loại',
       },
       tooltip: {
         callbacks: {

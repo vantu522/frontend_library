@@ -19,16 +19,16 @@ function LineChartComponent() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          'https://library-mana.azurewebsites.net/transactions/statistics'
+          'https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/transactions/weekly-stats'
         );
 
         const apiData = response.data;
 
-        // Chuyển đổi dữ liệu API thành định dạng recharts
-        const formattedData = Object.keys(apiData).map((key) => ({
-          month: `Tháng ${key}`, 
-          borrow: apiData[key]?.borrow || 0,
-          return: apiData[key]?.return || 0,
+        // Sử dụng trực tiếp dữ liệu từ API
+        const formattedData = apiData.map((item) => ({
+          day: item.day, // Lấy trực tiếp ngày trong tuần từ API
+          borrow: item.borrowed || 0, // Số lượng sách mượn
+          return: item.returned || 0, // Số lượng sách trả
         }));
 
         setData(formattedData);
@@ -45,7 +45,7 @@ function LineChartComponent() {
   return (
     <div>
       <h3 style={{ textAlign: 'center' }}>
-        Biểu đồ số lượng sách mượn và trả lại theo tháng
+        Biểu đồ số lượng sách mượn và trả lại theo ngày trong tuần
       </h3>
       {loading ? (
         <p style={{ textAlign: 'center' }}>Đang tải dữ liệu...</p>
@@ -53,7 +53,7 @@ function LineChartComponent() {
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" />
+            <XAxis dataKey="day" /> {/* Hiển thị ngày trong tuần trên trục X */}
             <YAxis />
             <Tooltip />
             <Legend />

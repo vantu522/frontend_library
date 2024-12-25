@@ -60,7 +60,7 @@ export default function AuthForm() {
 
     try {
       if (isLogin) {
-        const response = await axios.post('https://library-mana.azurewebsites.net/members/login', {
+        const response = await axios.post('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/members/login', {
           email,
           password
         })
