@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { Calendar, X } from 'lucide-react';
 import DatePickerInput from './DatePickerInput';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 
 const ReservationPopup = ({ book, onClose, onConfirm }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -14,7 +13,6 @@ const ReservationPopup = ({ book, onClose, onConfirm }) => {
     return () => clearTimeout(timer);
   }, []);
 
-  const navigate = useNavigate();
 
   const handleClose = () => {
     setIsVisible(false);

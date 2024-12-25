@@ -110,7 +110,7 @@ const AdminDashboard = () => {
       </div>
     </div>
   );
-
+ 
   const CustomBarChart = ({ data }) => (
     <ChartCard
       title="Top sách mượn nhiều nhất"
@@ -234,7 +234,7 @@ const AdminDashboard = () => {
         <span className="ml-4 text-gray-700">Đang tải danh sách...</span>
       </div>
     );
-  }
+  } 
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">

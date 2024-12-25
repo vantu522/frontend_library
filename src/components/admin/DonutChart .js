@@ -60,13 +60,10 @@ const DonutChart = () => {
   }
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-lg">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-        Phân Bố Sách Theo Thể Loại
-      </h2>
+      
       <div className=" ">
         {/* Biểu đồ tròn */}
-        <div className="w-full h-[400px]">
+        <div className="w-full h-[300px] ">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -103,7 +100,6 @@ const DonutChart = () => {
         </div>
 
       </div>
-    </div>
   );
 };
 

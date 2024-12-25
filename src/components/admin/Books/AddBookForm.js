@@ -144,6 +144,42 @@ const AddBookForm = ({ setVisibleForm }) => {
     <div className="p-4 max-w-2xl mx-auto bg-white rounded-lg shadow-md overflow-y-auto max-h-[90vh]">
       <h2 className="text-xl font-bold mb-4">Thêm Sách</h2>
       <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
+      <div className="col-span-2 sm:col-span-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Hình ảnh</label>
+          <div className="flex items-center space-x-4">
+            <label className="cursor-pointer flex items-center justify-center w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500">
+              <input
+                type="file"
+                onChange={handleImageChange}
+                accept="image/*"
+                className="hidden"
+              />
+              {imagePreview ? (
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              ) : (
+                <FaImage className="w-8 h-8 text-gray-400" />
+              )}
+            </label>
+            {imagePreview && (
+              <button
+                type="button"
+                onClick={() => {
+                  setImageFile(null);
+                  setImagePreview(null);
+                }}
+                className="text-red-500 hover:text-red-700"
+              >
+                Xóa ảnh
+              </button>
+            )}
+          </div>
+        </div>
+
+
         <div className="col-span-2 sm:col-span-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">Tên Sách</label>
           <input
@@ -212,41 +248,7 @@ const AddBookForm = ({ setVisibleForm }) => {
           ></textarea>
         </div>
 
-        <div className="col-span-2 sm:col-span-1">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Hình ảnh</label>
-          <div className="flex items-center space-x-4">
-            <label className="cursor-pointer flex items-center justify-center w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500">
-              <input
-                type="file"
-                onChange={handleImageChange}
-                accept="image/*"
-                className="hidden"
-              />
-              {imagePreview ? (
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="w-full h-full object-cover rounded-lg"
-                />
-              ) : (
-                <FaImage className="w-8 h-8 text-gray-400" />
-              )}
-            </label>
-            {imagePreview && (
-              <button
-                type="button"
-                onClick={() => {
-                  setImageFile(null);
-                  setImagePreview(null);
-                }}
-                className="text-red-500 hover:text-red-700"
-              >
-                Xóa ảnh
-              </button>
-            )}
-          </div>
-        </div>
-
+       
         <div className="col-span-2 sm:col-span-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">Nhà xuất bản</label>
           <input

@@ -149,7 +149,7 @@ const AdminDashboard = () => {
     }
   };
 
-  // Component thẻ thống kê
+ 
   const StatCard = ({ icon: Icon, title, value }) => {
     return (
       <div className="bg-white p-6 rounded-lg shadow-md flex items-center">
@@ -164,48 +164,50 @@ const AdminDashboard = () => {
     );
   };
 
-  // Component biểu đồ đường
+  // Component biểu đồ đường với chiều cao cố định
   const LineChartComponent = ({ data, title }) => (
-    <div className="bg-white p-6 rounded-lg shadow-md h-80">
+    <div className="bg-white p-6 rounded-lg shadow-md h-96">
       <div className="text-lg font-semibold mb-4">{title}</div>
-      {data.length > 0 ? (
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis 
-              dataKey={data === weeklyStats ? "day" : "month"}
-              tickLine={false}
-              axisLine={true}
-            />
-            <YAxis 
-              tickLine={false}
-              axisLine={true}
-              width={40}
-            />
-            <RechartsTooltip />
-            <Line 
-              type="monotone" 
-              dataKey="borrowed" 
-              stroke="#2563eb" 
-              strokeWidth={2} 
-              name="Sách mượn"
-              dot={{ fill: '#2563eb', strokeWidth: 2 }}
-            />
-            <Line 
-              type="monotone" 
-              dataKey="returned" 
-              stroke="#16a34a" 
-              strokeWidth={2} 
-              name="Sách trả"
-              dot={{ fill: '#16a34a', strokeWidth: 2 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      ) : (
-        <div className="flex items-center justify-center h-full">
-          <div className="text-gray-500">Đang tải dữ liệu...</div>
-        </div>
-      )}
+      <div className="h-[calc(100%-2rem)]">
+        {data.length > 0 ? (
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis 
+                dataKey={data === weeklyStats ? "day" : "month"}
+                tickLine={false}
+                axisLine={true}
+              />
+              <YAxis 
+                tickLine={false}
+                axisLine={true}
+                width={40}
+              />
+              <RechartsTooltip />
+              <Line 
+                type="monotone" 
+                dataKey="borrowed" 
+                stroke="#2563eb" 
+                strokeWidth={2} 
+                name="Sách mượn"
+                dot={{ fill: '#2563eb', strokeWidth: 2 }}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="returned" 
+                stroke="#16a34a" 
+                strokeWidth={2} 
+                name="Sách trả"
+                dot={{ fill: '#16a34a', strokeWidth: 2 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-gray-500">Đang tải dữ liệu...</div>
+          </div>
+        )}
+      </div>
     </div>
   );
 
@@ -225,53 +227,63 @@ const AdminDashboard = () => {
         <StatCard icon={FaUserCheck} title="Sách Đã Trả" value={dashboardStats.returnedBooks} />
       </div>
 
-      {/* Biểu đồ */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <DonutChart />
+      {/* Biểu đồ hàng đầu */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div className="bg-white p-6 rounded-lg shadow-md h-96">
+          <div className="text-lg font-semibold mb-4">Biểu đồ phân bổ sách</div>
+          <div className="h-[calc(100%-2rem)]">
+            <DonutChart />
+          </div>
+        </div>
         <LineChartComponent 
           data={weeklyStats} 
           title="Biểu đồ Mượn Trả Theo Tuần" 
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-        <div className="bg-white p-6 rounded-lg shadow-md h-80">
+      {/* Biểu đồ hàng dưới */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white p-6 rounded-lg shadow-md h-96">
           <div className="text-lg font-semibold mb-4">Top sách mượn nhiều nhất</div>
-          {bookCategoryStats.labels.length > 0 ? (
-            <Bar 
-              data={bookCategoryStats} 
-              options={{ 
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                  y: {
-                    beginAtZero: true,
-                    title: {
-                      display: true,
-                      text: 'Số Lượng Sách'
+          <div className="h-[calc(100%-2rem)]">
+            {bookCategoryStats.labels.length > 0 ? (
+              <Bar 
+                data={bookCategoryStats} 
+                options={{ 
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      title: {
+                        display: true,
+                        text: 'Số Lượng Sách'
+                      }
+                    }
+                  },
+                  plugins: {
+                    legend: {
+                      display: false
                     }
                   }
-                },
-                plugins: {
-                  legend: {
-                    display: false
-                  }
-                }
-              }}
-            />
-          ) : (
-            <div className="flex items-center justify-center h-full">
-              <div className="text-gray-500">Đang tải dữ liệu...</div>
-            </div>
-          )}
+                }}
+              />
+            ) : (
+              <div className="flex items-center justify-center h-full">
+                <div className="text-gray-500">Đang tải dữ liệu...</div>
+              </div>
+            )}
+          </div>
         </div>
         <LineChartComponent 
           data={monthlyStats} 
           title="Biểu đồ Mượn Trả Theo Tháng" 
         />
       </div>
+      
     </div>
   );
 };
+
 
 export default AdminDashboard;
