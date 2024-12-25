@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const NewsBanner = () => {
@@ -20,6 +21,8 @@ const NewsBanner = () => {
 
 function NewsPage() {
   const [showAll, setShowAll] = React.useState(false);
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const cards = [
     {
       date: "December 21, 2024",
@@ -120,6 +123,59 @@ function NewsPage() {
         "Tác phẩm này là lời nhắc nhở rằng cuộc sống là một chuỗi các mảnh ghép giữa niềm vui và nỗi buồn. 'Khi bạn học cách tận hưởng những điều nhỏ bé, cuộc sống sẽ trở nên phong phú và ý nghĩa hơn.' Đây là quyển sách dành cho những ai đang tìm kiếm cách cân bằng trong cuộc sống hiện đại bận rộn.",
     },
   ];
+  const renderImage = (image) => {
+    if (!image) return "Không có hình ảnh";
+    // URL hợp lệ
+    if (image.startsWith("http://") || image.startsWith("https://")) {
+      return (
+        <img
+          src={image}
+          alt="Hình ảnh"
+          className="object-cover w-full h-full rounded-lg"
+        />
+      );
+    }
+    // Base64 có tiền tố
+    if (image.startsWith("data:image")) {
+      return (
+        <img
+          src={image}
+          alt="Hình ảnh Base64"
+          className="object-cover w-full h-full rounded-lg"
+        />
+      );
+    }
+    // Base64 không có tiền tố
+    const base64Image = `data:image/png;base64,${image}`;
+    return (
+      <img
+        src={base64Image}
+        alt="Hình ảnh Base64"
+        className="object-cover w-full h-full rounded-lg"
+      />
+    );
+  };
+  
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get(
+          "https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/posts"
+        ); // Thay bằng API thật của bạn
+        setPosts(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
+  if (loading) {
+    return <p className="text-center text-gray-500">Đang tải...</p>;
+  }
 
   return (
     <div className="p-8">
@@ -135,53 +191,41 @@ function NewsPage() {
 
       {/* Banner Section */}
       <NewsBanner />
-
       <div className="mt-10 bg-white shadow-lg rounded-lg overflow-hidden">
         <h1 className="text-4xl font-extrabold text-blue-900 text-left pl-8 pt-6">
           Bài viết mới
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-[90%] mx-auto">
-          {[
-            {
-              title: "The Evolution of Digital Art in the 21st Century",
-              date: "December 15, 2024",
-              description:
-                "Explore how digital art has transformed in the modern age and its implications for creative expression.",
-              image:
-                "https://i.pinimg.com/474x/07/8e/02/078e0212bce731f1f7a202767ffd5ca8.jpg",
-            },
-            {
-              title: "Wisdom's Beacon: A Journey Through History",
-              date: "December 14, 2024",
-              description:
-                "Discover the untold stories of Wisdom's Beacon Library and its impact on preserving historical treasures.",
-              image:
-                "https://i.pinimg.com/474x/de/48/a2/de48a213f60861a343930890d40f87ed.jpg",
-            },
-            {
-              title: "The Future of Artificial Intelligence in Libraries",
-              date: "December 13, 2024",
-              description:
-                "Delve into the potential of AI technologies in revolutionizing library systems worldwide.",
-              image:
-                "https://i.pinimg.com/474x/1a/fe/17/1afe17ee750143879cefa3357a4a74f9.jpg",
-            },
-          ].map((event, index) => (
-            <div key={index} className="p-6 rounded-lg shadow-lg">
-              <div
-                className="w-full h-48 bg-cover bg-center rounded-lg"
-                style={{
-                  backgroundImage: `url('${event.image}')`,
-                }}
-              ></div>
+          {posts.map((post, index) => (
+            <div
+              key={post.id || index}
+              className="p-6 rounded-lg shadow-lg bg-white"
+            >
+              {/* Hình ảnh */}
+              <div className="w-full h-48 flex items-center justify-center rounded-lg bg-gray-200">
+                {renderImage(post.img)}
+              </div>
+              {/* Tiêu đề */}
               <h3 className="text-2xl font-bold text-blue-700 mt-4 mb-2">
-                {event.title}
+                {post.title}
               </h3>
-              <p className="text-md text-gray-500 mb-4">{event.date}</p>
-              <p className="text-gray-600 italic">{event.description}</p>
+              {/* Tác giả */}
+              <p className="text-sm text-gray-500">Tác giả: {post.author}</p>
+              {/* Nội dung */}
+              <p className="text-gray-600 mt-2">{post.content}</p>
+              {/* Ngày tạo */}
+              <p className="text-gray-500 italic mt-2">
+                Ngày tạo: {new Date(post.createdAt).toLocaleDateString("vi-VN")}
+              </p>
             </div>
           ))}
         </div>
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="fixed bottom-5 right-5 bg-blue-500 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition"
+        >
+          ⬆
+        </button>
       </div>
 
       {/* Old Cards Section */}
