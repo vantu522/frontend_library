@@ -23,12 +23,11 @@ function Footer() {
       } else {
         clearInterval(interval);
       }
-    }, 20); // Điều chỉnh thời gian giữa mỗi bước cuộn
+    }, 30); // Điều chỉnh thời gian giữa mỗi bước cuộn
   };
 
   return (
     <footer className="bg-gray-900 text-white py-8 relative">
-      {/* Gradient bar */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-green-500 to-blue-500"></div>
 
       {/* Main content */}

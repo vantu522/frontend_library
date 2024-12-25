@@ -69,7 +69,7 @@ const ForgotPassword = () => {
               {errorMessage && <p className="text-red-500 text-sm mb-3">{errorMessage}</p>}
               <button
                 onClick={handleSendOTP}
-                className="w-full py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition duration-300"
+                className="w-full py-3 bg-purple-600 text-white rounded-lg hover:bg-blue-700 transition duration-300"
               >
                 Gửi OTP
               </button>

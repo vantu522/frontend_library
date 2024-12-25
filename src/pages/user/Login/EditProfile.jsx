@@ -8,10 +8,8 @@ const EditProfile = () => {
   const [userData, setUserData] = useState({
     name: '',
     email: '',
+    phoneNumber: '',
     password: '',
-    gender: '',
-    birthDate: '',
-    address: '',
   });
 
   const [loading, setLoading] = useState(true);
@@ -24,10 +22,10 @@ const EditProfile = () => {
       try {
         const response = await axios.get(`https://library-mana.azurewebsites.net/members/${memberId}`);
         setUserData({
-          ...response.data,
-          gender: '', 
-          birthDate: '', 
-          address: '', 
+          name: response.data.name || '',
+          email: response.data.email || '',
+          phoneNumber: response.data.phoneNumber || '',
+          password: '', // Do not prefill password for security reasons
         });
         setLoading(false);
       } catch (error) {
@@ -114,6 +112,21 @@ const EditProfile = () => {
           </div>
 
           <div>
+            <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
+              Số điện thoại
+            </label>
+            <input
+              type="tel"
+              id="phoneNumber"
+              name="phoneNumber"
+              value={userData.phoneNumber}
+              onChange={handleChange}
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              required
+            />
+          </div>
+
+          <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
               Mật khẩu
             </label>
@@ -124,55 +137,6 @@ const EditProfile = () => {
               value={userData.password}
               onChange={handleChange}
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
-              Giới tính
-            </label>
-            <select
-              id="gender"
-              name="gender"
-              value={userData.gender}
-              onChange={handleChange}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              required
-            >
-              <option value="">Chọn giới tính</option>
-              <option value="male">Nam</option>
-              <option value="female">Nữ</option>
-              <option value="other">Khác</option>
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="birthDate" className="block text-sm font-medium text-gray-700">
-              Ngày sinh
-            </label>
-            <input
-              type="date"
-              id="birthDate"
-              name="birthDate"
-              value={userData.birthDate}
-              onChange={handleChange}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="address" className="block text-sm font-medium text-gray-700">
-              Địa chỉ
-            </label>
-            <textarea
-              id="address"
-              name="address"
-              value={userData.address}
-              onChange={handleChange}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              rows="3"
               required
             />
           </div>
