@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, X } from 'lucide-react';
 import DatePickerInput from './DatePickerInput';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const ReservationPopup = ({ book, onClose, onConfirm }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -12,6 +13,8 @@ const ReservationPopup = ({ book, onClose, onConfirm }) => {
     return () => clearTimeout(timer);
   }, []);
 
+  const navigate = useNavigate();
+
   const handleClose = () => {
     setIsVisible(false);
     setTimeout(onClose, 300); // Wait for the animation to complete before closing
@@ -21,6 +24,7 @@ const ReservationPopup = ({ book, onClose, onConfirm }) => {
     if (borrowDate) {
       onConfirm(borrowDate);
       toast.success("Đặt lịch thành công!");
+      navigate("/shopcart")
     } else {
       toast.error('Vui lòng chọn ngày mượn sách');
     }

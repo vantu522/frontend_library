@@ -265,7 +265,7 @@ const handleBookClick = (bookId) => {
                     {showDropdown && (
                       <div className="absolute right-0 top-full z-10 mt-2 w-48 rounded-md border border-gray-200 bg-white shadow-lg">
                         <p className="border-b px-4 py-2 text-sm font-medium text-gray-800">
-                          {user?.name}
+                          {user.name}
                         </p>
                         <button
                           className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100"
@@ -331,6 +331,7 @@ const handleBookClick = (bookId) => {
             </nav>
           </div>
         </div>
+
       </header>
 
       {/* Spacer */}

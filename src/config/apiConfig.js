@@ -33,5 +33,6 @@ export const API_ENDPOINTS = {
   },
   TRANSACTIONS: {
     BORROW: '/transactions/borrow',
+    USER: '/transactions/user'
   },
 };
