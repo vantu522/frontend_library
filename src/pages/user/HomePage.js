@@ -145,13 +145,6 @@ function HomePage() {
           >
             MƯỢN NGAY
           </button>
-          {/* Nút Scroll to Top */}
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="fixed bottom-5 right-5 bg-blue-500 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition"
-          >
-            ⬆
-          </button>
         </main>
       </section>
 
@@ -200,13 +193,6 @@ function HomePage() {
                 </div>
               ))}
             </Slider>
-            {/* Nút Scroll to Top */}
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="fixed bottom-5 right-5 bg-blue-500 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition"
-          >
-            ⬆
-          </button>
           </div>
         </div>
       </section>
