@@ -68,14 +68,7 @@ const Sidebar = () => {
                                     Danh Sách Sách
                                 </Link>
                             </li>
-                            <li>
-                                <Link
-                                    to="/admin/categorylist"
-                                    className="block px-5 py-2 text-gray-300 hover:text-white"
-                                >
-                                    Thể Loại
-                                </Link>
-                            </li>
+                        
                         </ul>
                     )}
                 </li>

@@ -8,7 +8,6 @@ import BorrowList from '../components/admin/Borrow/BorrowList';
 import Reader from '../components/admin/Reader/ReaderList';
 import FeedBack from '../components/admin/Feedback/FeedbackList';
 import BorrowHistory from '../components/admin/Borrow/BorrowHistory';
-import CategoryList from '../components/admin/Books/CategoryList';
 import PostList from '../components/admin/PostList/PostList';
 import PendingBorrowList from '../components/admin/Borrow/PendingBorrowList';
 import RenewHistoryList from '../components/admin/Borrow/RenewHistoryList';
@@ -34,7 +33,6 @@ const AdminRoutes = () => {
         <Route path="/postlist" element={<PostList />} />
         <Route path="/feedback" element={<FeedBack />} />
         <Route path="/borrowhistory" element={<BorrowHistory />} />
-        <Route path="/categorylist" element={<CategoryList />} />
         <Route path="/books" element={<BookList />} />
         <Route path="/stored-borrows" element={<BorrowList />} />
         <Route path="/change-password" element={<ChangePassword />} />
