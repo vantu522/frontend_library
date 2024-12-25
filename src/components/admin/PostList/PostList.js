@@ -72,9 +72,26 @@ const PostList = () => {
     setConfirmModal({ isOpen: false, id: null });
     setEditModal({ isOpen: false, id: null });
   };
+  const renderImage = (image) => {
+    if (!image) return "Không có hình ảnh";
+  
+    // Kiểm tra nếu là URL
+    if (image.startsWith("http://") || image.startsWith("https://")) {
+      return <img src={image} alt="Hình ảnh" className="text-gray-600 font-mono" />;
+    }
+  
+    // Kiểm tra nếu là base64
+    if (image.startsWith("data:image")) {
+      return <img src={image} alt="Hình ảnh Base64" className="text-gray-600 font-mono" />;
+    }
+  
+    // Nếu là chuỗi base64 không có tiền tố
+    const base64Image = `data:image/png;base64,${image}`;
+    return <img src={base64Image} alt="Hình ảnh Base64" className="text-gray-600 font-mono" />;
+  };
 
   const columns = [
-    { label: "Hình ảnh", field: "img", render: (val) => <img src={val} alt="new" className="text-gray-600 font-mono" />, width: "10%" },
+    { label: "Hình ảnh", field: "img", render:(img) => renderImage(img) },
     { label: "Tiêu đề", field: "title" },
     { label: "Nội dung", field: "content" },
     { label: "Tác giả", field: "author" },
