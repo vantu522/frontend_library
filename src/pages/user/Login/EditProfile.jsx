@@ -50,7 +50,7 @@ const EditProfile = () => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `https://library-mana.azurewebsites.net/members/update/${memberId}`,
+        `https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/members/update/${memberId}`,
         userData
       );
       if (response.status === 200) {

@@ -77,7 +77,7 @@ export default function AuthForm() {
         toast.success("Đăng nhập thành công!")
         window.location.href = "/"
       } else {
-        await axios.post('https://library-mana.azurewebsites.net/members/register', {
+        await axios.post('https://librarybe-f7dpbmd5fte9ggd7.southeastasia-01.azurewebsites.net/members/register', {
           name,
           email,
           password,
