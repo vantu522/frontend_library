@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Calendar, X } from 'lucide-react';
 import DatePickerInput from './DatePickerInput';
 import { toast } from 'react-toastify';
@@ -7,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 const ReservationPopup = ({ book, onClose, onConfirm }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [borrowDate, setBorrowDate] = useState(null);
-
+  const navigate = useNavigate(); 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 50);
     return () => clearTimeout(timer);
@@ -28,7 +29,7 @@ const ReservationPopup = ({ book, onClose, onConfirm }) => {
     } else {
       toast.error('Vui lòng chọn ngày mượn sách');
     }
-  };
+  };  
 
   return (
     <div className={`fixed inset-0 bg-black flex justify-center items-center z-50 p-4 transition-opacity duration-300 ease-out ${isVisible ? 'bg-opacity-50' : 'bg-opacity-0'}`}>
