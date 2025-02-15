@@ -184,7 +184,7 @@ function HomePage() {
                   </div>
                   <div className="p-4 bg-white flex flex-col justify-between flex-grow">
                     <p className="text-sm text-gray-500">{book.author}</p>
-                    <h3 className="text-lg font-semibold">{book.title}</h3>
+                    <h3 className="text-lg text-black font-semibold">{book.title}</h3>
                     <p className="text-sm text-gray-400">
                       Số lượt mượn:{" "}
                       <span className="font-bold">{book.borrowCount}</span>
