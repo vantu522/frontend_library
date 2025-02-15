@@ -307,12 +307,6 @@ const handleBookClick = (bookId) => {
                   </a>
                 </li>
 
-                <li className="group relative px-4 py-4 hover:bg-custom">
-                  <a href="/news" className="flex items-center p-1.5 text-large font-medium uppercase text-white">
-                    Tin tức
-                  </a>
-                </li>
-
                 <li className="group px-4 py-4 hover:bg-custom">
                   <a href="/category" className="flex items-center p-1.5 text-large font-medium uppercase text-white">
                     Danh mục
@@ -320,6 +314,14 @@ const handleBookClick = (bookId) => {
                   </a>
                   <MegaMenu categories={categories} />
                 </li>
+
+                <li className="group relative px-4 py-4 hover:bg-custom">
+                  <a href="/news" className="flex items-center p-1.5 text-large font-medium uppercase text-white">
+                    Tin tức
+                  </a>
+                </li>
+
+                
 
                 <li className="group relative px-4 py-4 hover:bg-custom">
                   <a href="/shopcart" className="flex items-center p-1.5 text-large font-medium uppercase text-white">
