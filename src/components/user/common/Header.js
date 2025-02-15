@@ -310,7 +310,6 @@ const handleBookClick = (bookId) => {
                 <li className="group relative px-4 py-4 hover:bg-custom">
                   <a href="/news" className="flex items-center p-1.5 text-large font-medium uppercase text-white">
                     Tin tức
-                    <ChevronDown className="ml-1 h-4 w-4" />
                   </a>
                 </li>
 
