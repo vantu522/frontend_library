@@ -187,17 +187,18 @@ const BorrowList = () => {
               : 'Xác nhận gia hạn sách'}
           </h2>
           <p className="mb-4">
-            Bạn có chắc muốn{' '}
+            {' '}
+            <span className="text-green-500">
+              {confirmModal.borrowData.memberName}
+            </span>
+            {' '}
+            muốn{' '}
             <strong>
               {confirmModal.actionType === 'return' ? 'trả sách' : 'gia hạn sách'}
             </strong>{' '}
             <span className="text-blue-500">
               "{confirmModal.borrowData.bookTitle}"
             </span>{' '}
-            cho{' '}
-            <span className="text-green-500">
-              {confirmModal.borrowData.memberName}
-            </span>
             ?
           </p>
           <div className="flex justify-end gap-3">
