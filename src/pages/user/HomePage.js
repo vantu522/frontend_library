@@ -172,7 +172,7 @@ function HomePage() {
                 <div
                   key={index}
                   className="px-2 relative group overflow-hidden rounded-lg shadow-lg flex flex-col h-[450px]" // chiều cao cố định
-                  onClick={() => handleBookClick(book.id)} //click vào cuốn sách thì hiển thị chi tiết cuốn sách đó
+                  onClick={() => handleBookClick(book._id)} //click vào cuốn sách thì hiển thị chi tiết cuốn sách đó
                 >
                   <div className="w-full h-[300px] relative flex-shrink-0">
                     <img
